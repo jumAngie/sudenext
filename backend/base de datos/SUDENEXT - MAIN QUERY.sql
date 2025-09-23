@@ -18,7 +18,7 @@ GO
 CREATE TABLE Gral.tbEstudiantes
 (
 	est_ID				INT IDENTITY(1,1),
-	est_NumeroCuenta	VARCHAR(11),
+	est_NumeroCuenta	VARCHAR(11)		NOT NULL,
 	est_NombreCompleto	NVARCHAR(200)	NOT NULL,
 	est_Correo			NVARCHAR(50)	NOT NULL,
 	est_Celular			VARCHAR(20)		NOT NULL,
