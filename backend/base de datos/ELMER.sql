@@ -35,13 +35,13 @@ CREATE TABLE Psi.tbSolicitudApoyo
     sol_HorarioPref TIME,
 
     CONSTRAINT PK_Psi_tbSolicitudApoyo_sol_ID PRIMARY KEY(sol_ID),
-    CONSTRAINT FK_Psi_tbSolicitudApoyo_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudintes (est_ID)
+    CONSTRAINT FK_Psi_tbSolicitudApoyo_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID)
 );
 
 CREATE TABLE Psi.tbPlanAccion
 (
     pla_ID INT IDENTITY (1,1),
-    ses_ID INT,
+    sol_ID INT,
     pla_ResumenSesion NVARCHAR(200) NOT NULL,
     pla_Objetivo NVARCHAR(200) NOT NULL,
     pla_ActividadSug NVARCHAR(200) NOT NULL,
@@ -49,4 +49,5 @@ CREATE TABLE Psi.tbPlanAccion
     pla_Observacion NVARCHAR(200) NOT NULL,
 
     CONSTRAINT PK_Psi_tbPlanAccion_pla_ID PRIMARY KEY(pla_ID),
+	CONSTRAINT FK_Psi_tbPlanAccion_ses_ID_Psi_tbSolicitudApoyo_sol_ID	FOREIGN KEY (sol_ID) REFERENCES Psi.tbSolicitudApoyo(sol_ID)
 );
