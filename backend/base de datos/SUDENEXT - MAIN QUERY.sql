@@ -167,7 +167,7 @@ CREATE TABLE Odon.tbTratamientos
 CREATE TABLE Odon.tbDiagnosticoOdonto
 (
 	trd_ID				INT IDENTITY(1,1),
-	sco_ID				INT,
+	est_ID				INT,
 	tra_ID				INT,
 	trd_Descripcion		NVARCHAR(MAX)	NOT NULL,
 	trd_Diagnostico		NVARCHAR(255)	NOT NULL,
@@ -179,7 +179,7 @@ CREATE TABLE Odon.tbDiagnosticoOdonto
 	trd_Observaciones	NVARCHAR(255)
 
 	CONSTRAINT PK_Odon_tbTratamientoDiagnosticado_trd_ID PRIMARY KEY(trd_ID),
-	CONSTRAINT FK_Odon_tbTratamientoDiagnosticado_sco_ID_Odon_tbSolicitudCitaOdon_sco_ID FOREIGN KEY(sco_ID) REFERENCES Odon.tbSolicitudCitaOdon(sco_ID),
+	CONSTRAINT FK_Odon_tbTratamientoDiagnosticado_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY(est_ID) REFERENCES Gral.tbEstudiantes(est_ID),
 	CONSTRAINT FK_odon_tbTratamientoDiagnosticado_tra_ID_Odon_tbTratamientos_tra_ID	FOREIGN KEY(tra_ID) REFERENCES Odon.tbTratamientos(tra_ID)
 );
 -----------------------------------------Med---------------------------------------------------------------------
