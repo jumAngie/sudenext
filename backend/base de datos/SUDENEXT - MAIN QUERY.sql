@@ -16,15 +16,6 @@ GO
 
 ---------------------------------------------------  GRAL  -----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
---- Tabla de Ciudades
-CREATE TABLE Gral.tbCiudades
-(
-	ciu_ID		INT IDENTITY(1,1),
-	ciu_Nombre	NVARCHAR(100)		NOT NULL
-
-	CONSTRAINT PK_Gral_tbCiudades_ciud_ID	PRIMARY KEY(ciu_ID)
-);
-
 -- Tabla de Areas
 CREATE TABLE Gral.tbAreas
 (	
@@ -62,7 +53,6 @@ CREATE TABLE Gral.tbPersonal
 		per_FechaNac		DATE			NOT NULL,
 		per_Telefono		VARCHAR(15)		NOT NULL,
 		per_Direccion		NVARCHAR(200)	NOT NULL,
-		ciu_ID				INT,
 		per_Correo			NVARCHAR(80)	NOT NULL,
 		are_ID				INT,
 
@@ -71,7 +61,6 @@ CREATE TABLE Gral.tbPersonal
 		CONSTRAINT CK_Gral_tbPersonal_per_Sexo				CHECK		(per_Sexo IN('F', 'M')),
 		CONSTRAINT UQ_Gral_tbPersonal_per_Telefono			UNIQUE		(per_Telefono),
 		CONSTRAINT UQ_Gral_tbPersonal_per_Correo			UNIQUE		(per_Correo),
-		CONSTRAINT FK_Gral_tbPersonal_ciu_ID_Gral_tbCiudades_ciu_ID		FOREIGN KEY (ciu_ID) REFERENCES Gral.tbCiudades (ciu_ID),
 		CONSTRAINT FK_Gral_tbPersonal_are_ID_Gral_tbAreas_are_ID		FOREIGN KEY (are_ID) REFERENCES Gral.tbAreas(are_ID)
 );
 ---------------------------------------------------  ACCE  -----------------------------------------------------
@@ -83,10 +72,8 @@ CREATE TABLE Acce.tbPantallas
 	pan_URL				NVARCHAR(255),
 	pan_Identificador	VARCHAR(5),
 	pan_Icono			VARCHAR(15),
-	are_ID				INT
 
-	CONSTRAINT PK_Acce_tbPantallas_pan_ID	PRIMARY KEY (pan_ID),
-	CONSTRAINT FK_Acce_tbPantallas_are_ID_Gral_tbAreas_are_ID	FOREIGN KEY (are_ID) REFERENCES Gral.tbAreas (are_ID)
+	CONSTRAINT PK_Acce_tbPantallas_pan_ID	PRIMARY KEY (pan_ID)
 );
 -- Tabla de Roles
 CREATE TABLE Acce.tbRoles
@@ -152,22 +139,6 @@ CREATE TABLE Acad.tbConsultasAcademicas
 );
 ---------------------------------------------------  ODON  ----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
--- Tabla de tipos de procedimientos odontologicos
-CREATE TABLE Odon.tbProcedimientos(
-	pro_ID		INT IDENTITY(1,1),
-	pro_Descripcion	NVARCHAR(100)	NOT NULL
-
-	CONSTRAINT PK_Odon_tbProcedimientos_pro_ID PRIMARY KEY(pro_ID)
-);
-
--- Tabla de materiales
-CREATE TABLE Odon.tbMateriales(
-	mat_ID		INT IDENTITY(1,1),
-	mat_Descripcion	NVARCHAR(100)	NOT NULL
-
-	CONSTRAINT PK_Odon_tbMateriales_mat_ID	PRIMARY KEY(mat_ID)
-);
-
 --- Tabla de Solicitudes de Cita Odontologica
 CREATE TABLE Odon.tbSolicitudCitaOdon
 (
@@ -193,7 +164,7 @@ CREATE TABLE Odon.tbTratamientos
 );
 
 -- Tabla de Tratamiento diagnosticado
-CREATE TABLE Odon.tbTratamientoDiagnosticado
+CREATE TABLE Odon.tbDiagnosticoOdonto
 (
 	trd_ID				INT IDENTITY(1,1),
 	sco_ID				INT,
@@ -211,58 +182,21 @@ CREATE TABLE Odon.tbTratamientoDiagnosticado
 	CONSTRAINT FK_Odon_tbTratamientoDiagnosticado_sco_ID_Odon_tbSolicitudCitaOdon_sco_ID FOREIGN KEY(sco_ID) REFERENCES Odon.tbSolicitudCitaOdon(sco_ID),
 	CONSTRAINT FK_odon_tbTratamientoDiagnosticado_tra_ID_Odon_tbTratamientos_tra_ID	FOREIGN KEY(tra_ID) REFERENCES Odon.tbTratamientos(tra_ID)
 );
-
---- Tabla de Procedimientos usados en un Tratamiento
-CREATE TABLE Odon.tbProcedimientosXTratamiento
-(
-	prt_ID	INT IDENTITY(1,1),
-	trd_ID	INT,
-	pro_ID	INT
-	
-	CONSTRAINT PK_Odon_tbProcedimientosXTratamiento_prt_ID	PRIMARY KEY(prt_ID),
-	CONSTRAINT FK_Odon_tbProcedimientosXTratamiento_trd_ID_Odon_tbTratamientoDiagnosticado_trd_ID FOREIGN KEY(trd_ID) REFERENCES Odon.tbTratamientoDiagnosticado(trd_ID),
-	CONSTRAINT FK_Odon_tbProcedimientosXTratamiento_pro_ID_Odon_tbProcedimientos_pro_ID	FOREIGN KEY(pro_ID)	REFERENCES Odon.tbProcedimientos(pro_ID)
-);
-
---- Tabla de materiales usados en un Tratamiento
-CREATE TABLE Odon.tbMaterialesXTratamiento
-(
-	mtr_ID	INT IDENTITY(1,1),
-	trd_ID	INT,
-	mat_ID	INT
-	
-	CONSTRAINT PK_Odon_tbMaterialesXTratamiento_mtr_ID	PRIMARY KEY(mtr_ID),
-	CONSTRAINT FK_Odon_tbMaterialesXTratamiento_trd_ID_Odon_tbTratamientoDiagnosticado_trd_ID FOREIGN KEY(trd_ID) REFERENCES Odon.tbTratamientoDiagnosticado(trd_ID),
-	CONSTRAINT FK_Odon_tbMaterialesXTratamiento_mat_ID_Odon_tbMateriales_mat_ID	FOREIGN KEY(mat_ID)	REFERENCES Odon.tbMateriales(mat_ID)
-);
 -----------------------------------------Med---------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------
-
--- Tabla de registros de llegada--
-
-CREATE TABLE Med.tbRegistro
-(
-    reg_ID INT IDENTITY (1,1),
-    est_ID INT       NOT NULL,
-    reg_FechaHora DATE  NOT NULL,
-
-    CONSTRAINT PK_Med_tbRegistro_reg_ID PRIMARY KEY (reg_ID),
-	CONSTRAINT FK_Med_tbRegistro_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes(est_ID)
-);  
-
-CREATE TABLE Med.tbDiagnosticos
+CREATE TABLE Med.tbDiagnosticosMedicos
 (
     dia_ID INT IDENTITY (1,1),
+	est_ID	INT,
     reg_ID INT,
     dia_DiagnosticoPrin NVARCHAR (200) NULL,
     dia_EstadoConsulta BIT NOT NULL,
 
-    CONSTRAINT PK_Med_tbDiagnosticos_dia_ID PRIMARY KEY (dia_ID),
-    CONSTRAINT FK_Med_tbDiagnosticos_reg_ID_Med_tbRegistro_reg_ID FOREIGN KEY (reg_ID) REFERENCES Med.tbRegistro (reg_ID)
+    CONSTRAINT PK_Med_tbDiagnosticosMedicos_dia_ID PRIMARY KEY (dia_ID),
+	CONSTRAINT FK_Med_tbDiagnosticosMedicos_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY(est_ID) REFERENCES Gral.tbEstudiantes(est_ID)
 );
-
-----------------------------------------Psi--------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------
+----------------------------------------Psi--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
 CREATE TABLE Psi.tbSolicitudApoyo
 (
     sol_ID INT IDENTITY (1,1),
@@ -280,13 +214,25 @@ CREATE TABLE Psi.tbSolicitudApoyo
 CREATE TABLE Psi.tbPlanAccion
 (
     pla_ID INT IDENTITY (1,1),
-    sol_ID INT,
     pla_ResumenSesion NVARCHAR(200) NOT NULL,
     pla_Objetivo NVARCHAR(200) NOT NULL,
     pla_ActividadSug NVARCHAR(200) NOT NULL,
     pla_FechaSeguimiento DATE,
     pla_Observacion NVARCHAR(200) NOT NULL,
 
-    CONSTRAINT PK_Psi_tbPlanAccion_pla_ID PRIMARY KEY(pla_ID),
-	CONSTRAINT FK_Psi_tbPlanAccion_ses_ID_Psi_tbSolicitudApoyo_sol_ID	FOREIGN KEY (sol_ID) REFERENCES Psi.tbSolicitudApoyo(sol_ID)
+    CONSTRAINT PK_Psi_tbPlanAccion_pla_ID PRIMARY KEY(pla_ID)
+);
+
+-- Tabla de Solicitudes por planes
+CREATE TABLE Psi.SolicitudesXPlanes
+(
+
+	spl_ID	INT IDENTITY(1,1),
+	sol_ID	INT,
+	pla_ID	INT
+
+	CONSTRAINT PK_Psi_SolicitudesXPlanes_spl_ID PRIMARY KEY(spl_ID),
+	CONSTRAINT FK_Psi_SolicitudesXPlanes_sol_ID_Psi_tbSolicitudApoyo_sol_ID FOREIGN KEY(sol_ID) REFERENCES Psi.tbSolicitudApoyo(sol_ID),
+	CONSTRAINT FK_Psi_SolicitudesXPlanes_pla_ID_Psi_tbPlanAccion_pla_ID	FOREIGN KEY (pla_ID) REFERENCES Psi.tbPlanAccion (pla_ID)
+
 );
