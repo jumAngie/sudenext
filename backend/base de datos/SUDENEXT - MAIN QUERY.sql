@@ -117,11 +117,13 @@ CREATE TABLE Acce.tbUsuarios
 	usu_Usuario			NVARCHAR(80)		NOT NULL,
 	usu_Contrasena		NVARCHAR(255)		NOT NULL,
 	est_ID				INT,
-	per_ID				INT
+	per_ID				INT,
+	rol_ID				INT
 
 	CONSTRAINT PK_Acce_tbUsuarios_usu_ID	PRIMARY KEY (usu_ID),
 	CONSTRAINT FK_Acce_tbUsuarios_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID),
-	CONSTRAINT FK_Acce_tbUsuarios_per_ID_Gral_tbPersonal_per_ID		FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID)
+	CONSTRAINT FK_Acce_tbUsuarios_per_ID_Gral_tbPersonal_per_ID		FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID),
+	CONSTRAINT FK_Acce_tbUsuarios_rol_ID_Acce_tbRoles_rol_ID		FOREIGN KEY(rol_ID)	REFERENCES Acce.tbRoles(rol_ID)
 );
 ---------------------------------------------------  ACAD  -----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------

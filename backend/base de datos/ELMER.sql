@@ -9,18 +9,18 @@ CREATE TABLE Med.tbRegistro
     est_ID INT       NOT NULL,
     reg_FechaHora DATE  NOT NULL,
 
-    CONSTRAINT PK_Med_tbRegistro_reg_ID PRIMARY KEY (reg_ID),
+    CONSTRAINT PK_Med_tbRegistro_reg_ID PRIMARY KEY (reg_ID)
 );  
 
 CREATE TABLE Med.tbDiagnosticos
 (
     dia_ID INT IDENTITY (1,1),
     reg_ID INT,
-    dia_DiagnosticoPrin NVARCHAR (200) NOT NULL,
+    dia_DiagnosticoPrin NVARCHAR (200) NULL,
     dia_EstadoConsulta BIT NOT NULL,
 
     CONSTRAINT PK_Med_tbDiagnosticos_dia_ID PRIMARY KEY (dia_ID),
-    CONSTRAINT FK_Med_tbDiagnosticos_reg_ID_Med_tbRegistro_reg_ID FOREIGN KEY (reg_ID) REFERENCES Med_tbDiagnosticos_reg_ID_Med_tbRegistro (reg_ID), 
+    CONSTRAINT FK_Med_tbDiagnosticos_reg_ID_Med_tbRegistro_reg_ID FOREIGN KEY (reg_ID) REFERENCES Med.tbRegistro (reg_ID)
 );
 
 ----------------------------------------Psi-----------------------------------------------------------------------------------------------------------------------
@@ -30,12 +30,12 @@ CREATE TABLE Psi.tbSolicitudApoyo
     est_ID INT,
     sol_ResumenSesion NVARCHAR (200) NOT NULL,
     sol_MotivoConsulta NVARCHAR (200) NOT NULL,
-    sol_MalestarEmocional CHECK (sol_MalestarEmocional BETWEEN 1 AND 5), --Este que seria--
+    sol_MalestarEmocional INT CHECK (sol_MalestarEmocional BETWEEN 1 AND 5), --Este que seria--
     sol_Asistencia BIT DEFAULT 0,
     sol_HorarioPref TIME,
 
     CONSTRAINT PK_Psi_tbSolicitudApoyo_sol_ID PRIMARY KEY(sol_ID),
-    CONSTRAINT FK_Psi_tbSolicitudApoyo_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Psi_tbSolicitudApoyo_est_ID_Gral_tbEstudiantes (est_ID),
+    CONSTRAINT FK_Psi_tbSolicitudApoyo_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudintes (est_ID)
 );
 
 CREATE TABLE Psi.tbPlanAccion
