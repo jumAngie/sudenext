@@ -14,6 +14,78 @@ GO
 CREATE SCHEMA Odon
 GO
 
+---------------------------------------------------  ACCE  -----------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+-- Tabla de Usuarios
+CREATE TABLE Acce.tbUsuarios
+(
+	usu_ID				INT IDENTITY(1,1),
+	usu_Usuario			NVARCHAR(80)		NOT NULL,
+	usu_Contrasena		NVARCHAR(255)		NOT NULL,
+	est_ID				INT,
+	per_ID				INT,
+	rol_ID				INT,
+
+	usu_UsuarioCreacion				INT NOT NULL,
+	usu_FechaCreacion			    DATETIME NOT NULL,
+	usu_UsuarioModificacion 		INT DEFAULT NULL,
+	usu_FechaModificacion		    DATETIME DEFAULT NULL,
+	usu_UsuarioEliminacion			INT	DEFAULT NULL,
+	usu_FechaEliminacion			DATETIME DEFAULT NULL,
+	usu_Estado 				        BIT DEFAULT 1
+
+	CONSTRAINT PK_Acce_tbUsuarios_usu_ID	PRIMARY KEY (usu_ID),
+	CONSTRAINT FK_Acce_tbUsuarios_usu_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Acce_tbUsuarios_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Acce_tbUsuarios_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
+
+	--CONSTRAINT FK_Acce_tbUsuarios_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID),
+	--CONSTRAINT FK_Acce_tbUsuarios_per_ID_Gral_tbPersonal_per_ID		FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID),
+	--CONSTRAINT FK_Acce_tbUsuarios_rol_ID_Acce_tbRoles_rol_ID		FOREIGN KEY(rol_ID)	REFERENCES Acce.tbRoles(rol_ID)
+);
+
+CREATE TABLE Acce.tbPantallas
+(
+	pan_ID				INT IDENTITY(1,1),
+	pan_Nombre			VARCHAR(25),
+	pan_URL				NVARCHAR(255),
+	pan_Identificador	VARCHAR(5),
+	pan_Icono			VARCHAR(15),
+	
+	usu_UsuarioCreacion				INT NOT NULL,
+	pan_FechaCreacion			    DATETIME NOT NULL,
+	usu_UsuarioModificacion 		INT DEFAULT NULL,
+	pan_FechaModificacion		    DATETIME DEFAULT NULL,
+	usu_UsuarioEliminacion			INT	DEFAULT NULL,
+	pan_FechaEliminacion			DATETIME DEFAULT NULL,
+	pan_Estado 				        BIT DEFAULT 1
+
+	CONSTRAINT PK_Acce_tbPantallas_pan_ID	PRIMARY KEY (pan_ID),
+	CONSTRAINT FK_Acce_tbPantallas_usu_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Acce_tbPantallas_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Acce_tbPantallas_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID),
+);
+-- Tabla de Roles
+CREATE TABLE Acce.tbRoles
+(
+	rol_ID			INT IDENTITY(1,1),
+	rol_Descripcion	NVARCHAR(30)
+
+	CONSTRAINT PK_Acce_tbRoles_rol_ID			PRIMARY KEY (rol_ID),
+	CONSTRAINT UQ_Acce_tbRoles_rol_Descripcion	UNIQUE (rol_Descripcion)
+);
+
+-- Tabla de Roles por Pantallas
+CREATE TABLE Acce.tbRolesXPantallas
+(
+		rop_ID		INT IDENTITY(1,1),
+		rol_ID		INT,
+		pan_ID		INT
+
+		CONSTRAINT PK_Acce_tbRolesxPantallas_rop_ID PRIMARY KEY(rop_ID),
+		CONSTRAINT FK_Acce_tbRolesxPantallas_rol_ID_Acce_tbRoles_rol_ID FOREIGN KEY (rol_ID) REFERENCES Acce.tbRoles (rol_ID),
+		CONSTRAINT FK_Acce_tbRolesxPantallas_pan_ID_Acce_tbPantallas_pan_ID FOREIGN KEY (pan_ID) REFERENCES Acce.tbPantallas (pan_ID)
+);
 ---------------------------------------------------  GRAL  -----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 -- Tabla de Areas
@@ -63,55 +135,7 @@ CREATE TABLE Gral.tbPersonal
 		CONSTRAINT UQ_Gral_tbPersonal_per_Correo			UNIQUE		(per_Correo),
 		CONSTRAINT FK_Gral_tbPersonal_are_ID_Gral_tbAreas_are_ID		FOREIGN KEY (are_ID) REFERENCES Gral.tbAreas(are_ID)
 );
----------------------------------------------------  ACCE  -----------------------------------------------------
-----------------------------------------------------------------------------------------------------------------
-CREATE TABLE Acce.tbPantallas
-(
-	pan_ID				INT IDENTITY(1,1),
-	pan_Nombre			VARCHAR(25),
-	pan_URL				NVARCHAR(255),
-	pan_Identificador	VARCHAR(5),
-	pan_Icono			VARCHAR(15),
 
-	CONSTRAINT PK_Acce_tbPantallas_pan_ID	PRIMARY KEY (pan_ID)
-);
--- Tabla de Roles
-CREATE TABLE Acce.tbRoles
-(
-	rol_ID			INT IDENTITY(1,1),
-	rol_Descripcion	NVARCHAR(30)
-
-	CONSTRAINT PK_Acce_tbRoles_rol_ID			PRIMARY KEY (rol_ID),
-	CONSTRAINT UQ_Acce_tbRoles_rol_Descripcion	UNIQUE (rol_Descripcion)
-);
-
--- Tabla de Roles por Pantallas
-CREATE TABLE Acce.tbRolesXPantallas
-(
-		rop_ID		INT IDENTITY(1,1),
-		rol_ID		INT,
-		pan_ID		INT
-
-		CONSTRAINT PK_Acce_tbRolesxPantallas_rop_ID PRIMARY KEY(rop_ID),
-		CONSTRAINT FK_Acce_tbRolesxPantallas_rol_ID_Acce_tbRoles_rol_ID FOREIGN KEY (rol_ID) REFERENCES Acce.tbRoles (rol_ID),
-		CONSTRAINT FK_Acce_tbRolesxPantallas_pan_ID_Acce_tbPantallas_pan_ID FOREIGN KEY (pan_ID) REFERENCES Acce.tbPantallas (pan_ID)
-);
-
--- Tabla de Usuarios
-CREATE TABLE Acce.tbUsuarios
-(
-	usu_ID				INT IDENTITY(1,1),
-	usu_Usuario			NVARCHAR(80)		NOT NULL,
-	usu_Contrasena		NVARCHAR(255)		NOT NULL,
-	est_ID				INT,
-	per_ID				INT,
-	rol_ID				INT
-
-	CONSTRAINT PK_Acce_tbUsuarios_usu_ID	PRIMARY KEY (usu_ID),
-	CONSTRAINT FK_Acce_tbUsuarios_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID),
-	CONSTRAINT FK_Acce_tbUsuarios_per_ID_Gral_tbPersonal_per_ID		FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID),
-	CONSTRAINT FK_Acce_tbUsuarios_rol_ID_Acce_tbRoles_rol_ID		FOREIGN KEY(rol_ID)	REFERENCES Acce.tbRoles(rol_ID)
-);
 ---------------------------------------------------  ACAD  -----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 -- Tabla de tipos de consultas academicas
