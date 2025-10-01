@@ -38,10 +38,6 @@ CREATE TABLE Acce.tbUsuarios
 	CONSTRAINT FK_Acce_tbUsuarios_usu_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
 	CONSTRAINT FK_Acce_tbUsuarios_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
 	CONSTRAINT FK_Acce_tbUsuarios_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
-
-	--CONSTRAINT FK_Acce_tbUsuarios_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID),
-	--CONSTRAINT FK_Acce_tbUsuarios_per_ID_Gral_tbPersonal_per_ID		FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID),
-	--CONSTRAINT FK_Acce_tbUsuarios_rol_ID_Acce_tbRoles_rol_ID		FOREIGN KEY(rol_ID)	REFERENCES Acce.tbRoles(rol_ID)
 );
 
 CREATE TABLE Acce.tbPantallas
@@ -63,28 +59,55 @@ CREATE TABLE Acce.tbPantallas
 	CONSTRAINT PK_Acce_tbPantallas_pan_ID	PRIMARY KEY (pan_ID),
 	CONSTRAINT FK_Acce_tbPantallas_usu_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
 	CONSTRAINT FK_Acce_tbPantallas_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
-	CONSTRAINT FK_Acce_tbPantallas_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Acce_tbPantallas_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
 );
 -- Tabla de Roles
 CREATE TABLE Acce.tbRoles
 (
 	rol_ID			INT IDENTITY(1,1),
-	rol_Descripcion	NVARCHAR(30)
+	rol_Descripcion	NVARCHAR(30),
+
+	usu_UsuarioCreacion				INT NOT NULL,
+	rol_FechaCreacion			    DATETIME NOT NULL,
+	usu_UsuarioModificacion 		INT DEFAULT NULL,
+	rol_FechaModificacion		    DATETIME DEFAULT NULL,
+	usu_UsuarioEliminacion			INT	DEFAULT NULL,
+	rol_FechaEliminacion			DATETIME DEFAULT NULL,
+	rol_Estado 				        BIT DEFAULT 1
 
 	CONSTRAINT PK_Acce_tbRoles_rol_ID			PRIMARY KEY (rol_ID),
-	CONSTRAINT UQ_Acce_tbRoles_rol_Descripcion	UNIQUE (rol_Descripcion)
+	CONSTRAINT UQ_Acce_tbRoles_rol_Descripcion	UNIQUE (rol_Descripcion),
+	CONSTRAINT FK_Acce_tbRoles_usu_UsuarioCreacion_Acce_tbUsuarios_usu_ID		FOREIGN KEY(usu_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Acce_tbRoles_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Acce_tbRoles_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
+
+GO
+ ALTER TABLE Acce.tbUsuarios
+ ADD CONSTRAINT FK_Acce_tbUsuarios_rol_ID_Acce_tbRoles_rol_ID FOREIGN KEY(rol_ID) REFERENCES Acce.tbRoles(rol_ID)
+ GO
 
 -- Tabla de Roles por Pantallas
 CREATE TABLE Acce.tbRolesXPantallas
 (
 		rop_ID		INT IDENTITY(1,1),
 		rol_ID		INT,
-		pan_ID		INT
+		pan_ID		INT,
+
+		usu_UsuarioCreacion				INT NOT NULL,
+		rop_FechaCreacion			    DATETIME NOT NULL,
+		usu_UsuarioModificacion 		INT DEFAULT NULL,
+		rop_FechaModificacion		    DATETIME DEFAULT NULL,
+		usu_UsuarioEliminacion			INT	DEFAULT NULL,
+		rop_FechaEliminacion			DATETIME DEFAULT NULL,
+		rop_Estado 				        BIT DEFAULT 1
 
 		CONSTRAINT PK_Acce_tbRolesxPantallas_rop_ID PRIMARY KEY(rop_ID),
 		CONSTRAINT FK_Acce_tbRolesxPantallas_rol_ID_Acce_tbRoles_rol_ID FOREIGN KEY (rol_ID) REFERENCES Acce.tbRoles (rol_ID),
-		CONSTRAINT FK_Acce_tbRolesxPantallas_pan_ID_Acce_tbPantallas_pan_ID FOREIGN KEY (pan_ID) REFERENCES Acce.tbPantallas (pan_ID)
+		CONSTRAINT FK_Acce_tbRolesxPantallas_pan_ID_Acce_tbPantallas_pan_ID FOREIGN KEY (pan_ID) REFERENCES Acce.tbPantallas (pan_ID),
+		CONSTRAINT FK_Acce_tbRolesXPantallas_usu_UsuarioCreacion_Acce_tbUsuarios_usu_ID		FOREIGN KEY(usu_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usu_ID),
+		CONSTRAINT FK_Acce_tbRolesXPantallas_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usu_ID),
+		CONSTRAINT FK_Acce_tbRolesXPantallas_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
 ---------------------------------------------------  GRAL  -----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
@@ -92,10 +115,21 @@ CREATE TABLE Acce.tbRolesXPantallas
 CREATE TABLE Gral.tbAreas
 (	
 	are_ID			INT IDENTITY(1,1),
-	are_Nombre		VARCHAR(25)			NOT NULL
+	are_Nombre		VARCHAR(25)			NOT NULL,
+
+	usu_UsuarioCreacion				INT NOT NULL,
+	are_FechaCreacion			    DATETIME NOT NULL,
+	usu_UsuarioModificacion 		INT DEFAULT NULL,
+	are_FechaModificacion		    DATETIME DEFAULT NULL,
+	usu_UsuarioEliminacion			INT	DEFAULT NULL,
+	are_FechaEliminacion			DATETIME DEFAULT NULL,
+	are_Estado 				        BIT DEFAULT 1
 
 	CONSTRAINT PK_Gral_tbAreas_are_ID PRIMARY KEY(are_ID),
-	CONSTRAINT UQ_Gral_tbAreas_are_Nombre UNIQUE (are_Nombre)
+	CONSTRAINT UQ_Gral_tbAreas_are_Nombre UNIQUE (are_Nombre),
+	CONSTRAINT FK_Gral_tbAreas_usu_UsuarioCreacion_Acce_tbUsuarios_usu_ID		FOREIGN KEY(usu_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Gral_tbAreas_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Gral_tbAreas_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
 
 
@@ -108,11 +142,27 @@ CREATE TABLE Gral.tbEstudiantes
 	est_Correo			NVARCHAR(50)	NOT NULL,
 	est_Celular			VARCHAR(20)		NOT NULL,
 	est_Carrera			NVARCHAR(50)	NOT NULL,
-	est_Estado			BIT				NOT NULL
+	est_EstadoM			BIT				NOT NULL,
+
+	usu_UsuarioCreacion				INT NOT NULL,
+	est_FechaCreacion			    DATETIME NOT NULL,
+	usu_UsuarioModificacion 		INT DEFAULT NULL,
+	est_FechaModificacion		    DATETIME DEFAULT NULL,
+	usu_UsuarioEliminacion			INT	DEFAULT NULL,
+	est_FechaEliminacion			DATETIME DEFAULT NULL,
+	est_Estado 				        BIT DEFAULT 1
 	
 	CONSTRAINT PK_Gral_tbEstudiantes_est_ID  PRIMARY KEY (est_ID),
-	CONSTRAINT UQ_Gral_tbEstudiantes_est_NumeroCuenta UNIQUE (est_NumeroCuenta)
+	CONSTRAINT UQ_Gral_tbEstudiantes_est_NumeroCuenta UNIQUE (est_NumeroCuenta),
+	CONSTRAINT FK_Gral_tbEstudiantes_usu_UsuarioCreacion_Acce_tbUsuarios_usu_ID		FOREIGN KEY(usu_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Gral_tbEstudiantes_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usu_ID),
+	CONSTRAINT FK_Gral_tbEstudiantes_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
+
+GO
+ ALTER TABLE Acce.tbUsuarios
+ ADD CONSTRAINT FK_Acce_tbUsuarios_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID)
+GO
 
 -- Tabla de Personal
 CREATE TABLE Gral.tbPersonal
@@ -128,13 +178,28 @@ CREATE TABLE Gral.tbPersonal
 		per_Correo			NVARCHAR(80)	NOT NULL,
 		are_ID				INT,
 
+		usu_UsuarioCreacion				INT NOT NULL,
+		per_FechaCreacion			    DATETIME NOT NULL,
+		usu_UsuarioModificacion 		INT DEFAULT NULL,
+		per_FechaModificacion		    DATETIME DEFAULT NULL,
+		usu_UsuarioEliminacion			INT	DEFAULT NULL,
+		per_FechaEliminacion			DATETIME DEFAULT NULL,
+		per_Estado 				        BIT DEFAULT 1
+
 		CONSTRAINT PK_Gral_tbPersonal_per_ID			    PRIMARY KEY	(per_ID),
 		CONSTRAINT CK_Gral_tbPersonal_per_EstadoCivil		CHECK		(per_EstadoCivil IN('SL','CS', 'DV', 'VD', 'UL', 'SP')),
 		CONSTRAINT CK_Gral_tbPersonal_per_Sexo				CHECK		(per_Sexo IN('F', 'M')),
 		CONSTRAINT UQ_Gral_tbPersonal_per_Telefono			UNIQUE		(per_Telefono),
 		CONSTRAINT UQ_Gral_tbPersonal_per_Correo			UNIQUE		(per_Correo),
-		CONSTRAINT FK_Gral_tbPersonal_are_ID_Gral_tbAreas_are_ID		FOREIGN KEY (are_ID) REFERENCES Gral.tbAreas(are_ID)
+		CONSTRAINT FK_Gral_tbPersonal_are_ID_Gral_tbAreas_are_ID		FOREIGN KEY (are_ID) REFERENCES Gral.tbAreas(are_ID),
+		CONSTRAINT FK_Gral_tbPersonal_usu_UsuarioCreacion_Acce_tbUsuarios_usu_ID		FOREIGN KEY(usu_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usu_ID),
+		CONSTRAINT FK_Gral_tbPersonal_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usu_ID),
+		CONSTRAINT FK_Gral_tbPersonal_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
+GO
+ ALTER TABLE Acce.tbUsuarios
+ ADD CONSTRAINT FK_Acce_tbUsuarios_per_ID_Gral_tbPersonal_per_ID FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID)
+ GO
 
 ---------------------------------------------------  ACAD  -----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
@@ -142,9 +207,20 @@ CREATE TABLE Gral.tbPersonal
 CREATE TABLE Acad.tbTipoConsulta
 (
 		tic_ID	INT IDENTITY(1,1),
-		tic_Descripcion	NVARCHAR(80)	NOT NULL
+		tic_Descripcion	NVARCHAR(80)	NOT NULL,
 
-		CONSTRAINT PK_Acad_tbTipoConsulta_tic_ID	PRIMARY KEY (tic_ID)
+		usu_UsuarioCreacion				INT NOT NULL,
+		tic_FechaCreacion			    DATETIME NOT NULL,
+		usu_UsuarioModificacion 		INT DEFAULT NULL,
+		tic_FechaModificacion		    DATETIME DEFAULT NULL,
+		usu_UsuarioEliminacion			INT	DEFAULT NULL,
+		tic_FechaEliminacion			DATETIME DEFAULT NULL,
+		tic_Estado 				        BIT DEFAULT 1
+
+		CONSTRAINT PK_Acad_tbTipoConsulta_tic_ID	PRIMARY KEY (tic_ID),
+		CONSTRAINT FK_Acad_tbTipoConsulta_usu_UsuarioCreacion_Acce_tbUsuarios_usu_ID		FOREIGN KEY(usu_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usu_ID),
+		CONSTRAINT FK_Acad_tbTipoConsulta_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usu_ID),
+		CONSTRAINT FK_Acad_tbTipoConsulta_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID		FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
 
 --- Tabla de Consultas Academicas
