@@ -333,7 +333,6 @@ CREATE TABLE Med.tbDiagnosticosMedicos
 (
     dia_ID INT IDENTITY (1,1),
 	est_ID	INT,
-    reg_ID INT,
     dia_DiagnosticoPrin NVARCHAR (200) NULL,
     dia_EstadoConsulta BIT NOT NULL,
 
