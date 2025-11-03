@@ -37,8 +37,8 @@ AS
 				 INNER JOIN Gral.tbPersonal personal ON usuario.usu_ID = personal.usu_UsuarioCreacion) AS 'NombreCompleto_C',
 				per_FechaCreacion, 
 				usuM.usu_UsuarioModificacion, 
-				usuM.per_ID AS 'ID_Modificador',
 				usuM.usu_Usuario AS 'Usuario_M',
+				usuM.per_ID AS 'ID_Modificador',
 				(SELECT personal.per_Nombres + ' ' + personal.per_Apellidos AS 'NombreCompleto_M'
 				 FROM Acce.tbUsuarios usuario 
 				 LEFT JOIN Gral.tbPersonal personal ON usuario.usu_ID = personal.usu_UsuarioModificacion) AS 'NombreCompleto_M',
@@ -59,5 +59,3 @@ AS
 		WHERE	per_Estado = 1
 	END
 GO
-
-EXECUTE Gral.Personal_Listar
