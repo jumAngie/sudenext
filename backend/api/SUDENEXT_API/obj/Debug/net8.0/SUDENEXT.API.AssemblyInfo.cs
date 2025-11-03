@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SUDENEXT.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e88d4e5376134ad674ebb368d7db4f28881ea355")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff12732810d545d52c9c3db0563c4ed0f64f4642")]
 [assembly: System.Reflection.AssemblyProductAttribute("SUDENEXT.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SUDENEXT.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

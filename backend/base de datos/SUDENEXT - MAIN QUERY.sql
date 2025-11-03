@@ -1,3 +1,4 @@
+--DROP DATABASE SUDENEXT
 --CREATE DATABASE SUDENEXT
 --USE SUDENEXT
 
@@ -333,7 +334,7 @@ CREATE TABLE Med.tbDiagnosticosMedicos
 (
     dia_ID INT IDENTITY (1,1),
 	est_ID	INT,
-    dia_DiagnosticoPrin NVARCHAR (200) NULL
+    dia_DiagnosticoPrin NVARCHAR (200) NULL,
 
 	usu_UsuarioCreacion				INT NOT NULL,
 	dia_FechaCreacion			    DATETIME NOT NULL,
