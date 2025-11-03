@@ -68,15 +68,15 @@
          "ObjectType": 0
       },
       {
-         "Name": "[Psi].[SolicitudesXPlanes]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[Psi].[tbPlanAccion]",
          "ObjectType": 0
       },
       {
          "Name": "[Psi].[tbSolicitudApoyo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Psi].[tbSolicitudesXPlanes]",
          "ObjectType": 0
       }
    ],

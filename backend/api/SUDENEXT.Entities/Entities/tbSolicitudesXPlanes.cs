@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace SUDENEXT.Entities.Models;
+namespace SUDENEXT.Entities.Entities;
 
-public partial class SolicitudesXPlanes
+public partial class tbSolicitudesXPlanes
 {
     public int spl_ID { get; set; }
 

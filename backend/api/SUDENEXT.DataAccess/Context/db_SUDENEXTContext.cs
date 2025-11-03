@@ -3,21 +3,20 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using SUDENEXT.Entities.Models;
+using SUDENEXT.Entities.Entities;
 
-namespace SUDENEXT.DataAccess.Models;
+namespace SUDENEXT.DataAccess.Context;
 
 public partial class db_SUDENEXTContext : DbContext
 {
     public db_SUDENEXTContext()
     {
     }
+
     public db_SUDENEXTContext(DbContextOptions<db_SUDENEXTContext> options)
         : base(options)
     {
     }
-
-    public virtual DbSet<SolicitudesXPlanes> SolicitudesXPlanes { get; set; }
 
     public virtual DbSet<tbAreas> tbAreas { get; set; }
 
@@ -43,6 +42,8 @@ public partial class db_SUDENEXTContext : DbContext
 
     public virtual DbSet<tbSolicitudCitaOdon> tbSolicitudCitaOdon { get; set; }
 
+    public virtual DbSet<tbSolicitudesXPlanes> tbSolicitudesXPlanes { get; set; }
+
     public virtual DbSet<tbTipoConsulta> tbTipoConsulta { get; set; }
 
     public virtual DbSet<tbTratamientos> tbTratamientos { get; set; }
@@ -51,45 +52,6 @@ public partial class db_SUDENEXTContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<SolicitudesXPlanes>(entity =>
-        {
-            entity.HasKey(e => e.spl_ID).HasName("PK_Psi_SolicitudesXPlanes_spl_ID");
-
-            entity.ToTable("SolicitudesXPlanes", "Psi");
-
-            entity.Property(e => e.spl_Estado).HasDefaultValue(true);
-            entity.Property(e => e.spl_FechaCreacion).HasColumnType("datetime");
-            entity.Property(e => e.spl_FechaEliminacion)
-                .HasDefaultValueSql("(NULL)")
-                .HasColumnType("datetime");
-            entity.Property(e => e.spl_FechaModificacion)
-                .HasDefaultValueSql("(NULL)")
-                .HasColumnType("datetime");
-            entity.Property(e => e.usu_UsuarioEliminacion).HasDefaultValueSql("(NULL)");
-            entity.Property(e => e.usu_UsuarioModificacion).HasDefaultValueSql("(NULL)");
-
-            entity.HasOne(d => d.pla).WithMany(p => p.SolicitudesXPlanes)
-                .HasForeignKey(d => d.pla_ID)
-                .HasConstraintName("FK_Psi_SolicitudesXPlanes_pla_ID_Psi_tbPlanAccion_pla_ID");
-
-            entity.HasOne(d => d.sol).WithMany(p => p.SolicitudesXPlanes)
-                .HasForeignKey(d => d.sol_ID)
-                .HasConstraintName("FK_Psi_SolicitudesXPlanes_sol_ID_Psi_tbSolicitudApoyo_sol_ID");
-
-            entity.HasOne(d => d.usu_UsuarioCreacionNavigation).WithMany(p => p.SolicitudesXPlanesusu_UsuarioCreacionNavigation)
-                .HasForeignKey(d => d.usu_UsuarioCreacion)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Psi_SolicitudesXPlanes_UsuarioCreacion_Acce_tbUsuarios_usu_ID");
-
-            entity.HasOne(d => d.usu_UsuarioEliminacionNavigation).WithMany(p => p.SolicitudesXPlanesusu_UsuarioEliminacionNavigation)
-                .HasForeignKey(d => d.usu_UsuarioEliminacion)
-                .HasConstraintName("FK_Psi_SolicitudesXPlanes_UsuarioEliminacion_Acce_tbUsuarios_usu_ID");
-
-            entity.HasOne(d => d.usu_UsuarioModificacionNavigation).WithMany(p => p.SolicitudesXPlanesusu_UsuarioModificacionNavigation)
-                .HasForeignKey(d => d.usu_UsuarioModificacion)
-                .HasConstraintName("FK_Psi_SolicitudesXPlanes_UsuarioModificacion_Acce_tbUsuarios_usu_ID");
-        });
-
         modelBuilder.Entity<tbAreas>(entity =>
         {
             entity.HasKey(e => e.are_ID).HasName("PK_Gral_tbAreas_are_ID");
@@ -596,6 +558,45 @@ public partial class db_SUDENEXTContext : DbContext
             entity.HasOne(d => d.usu_UsuarioModificacionNavigation).WithMany(p => p.tbSolicitudCitaOdonusu_UsuarioModificacionNavigation)
                 .HasForeignKey(d => d.usu_UsuarioModificacion)
                 .HasConstraintName("FK_Odon_tbSolicitudCitaOdon_UsuarioModificacion_Acce_tbUsuarios_usu_ID");
+        });
+
+        modelBuilder.Entity<tbSolicitudesXPlanes>(entity =>
+        {
+            entity.HasKey(e => e.spl_ID).HasName("PK_Psi_SolicitudesXPlanes_spl_ID");
+
+            entity.ToTable("tbSolicitudesXPlanes", "Psi");
+
+            entity.Property(e => e.spl_Estado).HasDefaultValue(true);
+            entity.Property(e => e.spl_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.spl_FechaEliminacion)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnType("datetime");
+            entity.Property(e => e.spl_FechaModificacion)
+                .HasDefaultValueSql("(NULL)")
+                .HasColumnType("datetime");
+            entity.Property(e => e.usu_UsuarioEliminacion).HasDefaultValueSql("(NULL)");
+            entity.Property(e => e.usu_UsuarioModificacion).HasDefaultValueSql("(NULL)");
+
+            entity.HasOne(d => d.pla).WithMany(p => p.tbSolicitudesXPlanes)
+                .HasForeignKey(d => d.pla_ID)
+                .HasConstraintName("FK_Psi_SolicitudesXPlanes_pla_ID_Psi_tbPlanAccion_pla_ID");
+
+            entity.HasOne(d => d.sol).WithMany(p => p.tbSolicitudesXPlanes)
+                .HasForeignKey(d => d.sol_ID)
+                .HasConstraintName("FK_Psi_SolicitudesXPlanes_sol_ID_Psi_tbSolicitudApoyo_sol_ID");
+
+            entity.HasOne(d => d.usu_UsuarioCreacionNavigation).WithMany(p => p.tbSolicitudesXPlanesusu_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usu_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Psi_SolicitudesXPlanes_UsuarioCreacion_Acce_tbUsuarios_usu_ID");
+
+            entity.HasOne(d => d.usu_UsuarioEliminacionNavigation).WithMany(p => p.tbSolicitudesXPlanesusu_UsuarioEliminacionNavigation)
+                .HasForeignKey(d => d.usu_UsuarioEliminacion)
+                .HasConstraintName("FK_Psi_SolicitudesXPlanes_UsuarioEliminacion_Acce_tbUsuarios_usu_ID");
+
+            entity.HasOne(d => d.usu_UsuarioModificacionNavigation).WithMany(p => p.tbSolicitudesXPlanesusu_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usu_UsuarioModificacion)
+                .HasConstraintName("FK_Psi_SolicitudesXPlanes_UsuarioModificacion_Acce_tbUsuarios_usu_ID");
         });
 
         modelBuilder.Entity<tbTipoConsulta>(entity =>

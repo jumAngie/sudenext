@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SUDENEXT.Entities.Models;
+namespace SUDENEXT.Entities.Entities;
 
 public partial class tbUsuarios
 {
@@ -38,12 +38,6 @@ public partial class tbUsuarios
     public virtual ICollection<tbUsuarios> Inverseusu_UsuarioEliminacionNavigation { get; set; } = new List<tbUsuarios>();
 
     public virtual ICollection<tbUsuarios> Inverseusu_UsuarioModificacionNavigation { get; set; } = new List<tbUsuarios>();
-
-    public virtual ICollection<SolicitudesXPlanes> SolicitudesXPlanesusu_UsuarioCreacionNavigation { get; set; } = new List<SolicitudesXPlanes>();
-
-    public virtual ICollection<SolicitudesXPlanes> SolicitudesXPlanesusu_UsuarioEliminacionNavigation { get; set; } = new List<SolicitudesXPlanes>();
-
-    public virtual ICollection<SolicitudesXPlanes> SolicitudesXPlanesusu_UsuarioModificacionNavigation { get; set; } = new List<SolicitudesXPlanes>();
 
     public virtual tbEstudiantes est { get; set; }
 
@@ -122,6 +116,12 @@ public partial class tbUsuarios
     public virtual ICollection<tbSolicitudCitaOdon> tbSolicitudCitaOdonusu_UsuarioEliminacionNavigation { get; set; } = new List<tbSolicitudCitaOdon>();
 
     public virtual ICollection<tbSolicitudCitaOdon> tbSolicitudCitaOdonusu_UsuarioModificacionNavigation { get; set; } = new List<tbSolicitudCitaOdon>();
+
+    public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanesusu_UsuarioCreacionNavigation { get; set; } = new List<tbSolicitudesXPlanes>();
+
+    public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanesusu_UsuarioEliminacionNavigation { get; set; } = new List<tbSolicitudesXPlanes>();
+
+    public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanesusu_UsuarioModificacionNavigation { get; set; } = new List<tbSolicitudesXPlanes>();
 
     public virtual ICollection<tbTipoConsulta> tbTipoConsultausu_UsuarioCreacionNavigation { get; set; } = new List<tbTipoConsulta>();
 

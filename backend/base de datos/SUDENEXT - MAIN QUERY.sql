@@ -401,7 +401,7 @@ CREATE TABLE Psi.tbPlanAccion
 );
 
 -- Tabla de Solicitudes por planes
-CREATE TABLE Psi.SolicitudesXPlanes
+CREATE TABLE Psi.tbSolicitudesXPlanes
 (
 
 	spl_ID	INT IDENTITY(1,1),

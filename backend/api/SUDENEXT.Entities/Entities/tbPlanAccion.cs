@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SUDENEXT.Entities.Models;
+namespace SUDENEXT.Entities.Entities;
 
 public partial class tbPlanAccion
 {
@@ -33,7 +33,7 @@ public partial class tbPlanAccion
 
     public bool? pla_Estado { get; set; }
 
-    public virtual ICollection<SolicitudesXPlanes> SolicitudesXPlanes { get; set; } = new List<SolicitudesXPlanes>();
+    public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanes { get; set; } = new List<tbSolicitudesXPlanes>();
 
     public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
 

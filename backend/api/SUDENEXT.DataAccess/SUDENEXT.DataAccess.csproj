@@ -18,13 +18,4 @@
     <ProjectReference Include="..\SUDENEXT.Entities\SUDENEXT.Entities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\Acce\" />
-    <Folder Include="Repositories\Gral\" />
-    <Folder Include="Repositories\Acad\" />
-    <Folder Include="Repositories\Med\" />
-    <Folder Include="Repositories\Psi\" />
-    <Folder Include="Repositories\Odon\" />
-  </ItemGroup>
-
 </Project>

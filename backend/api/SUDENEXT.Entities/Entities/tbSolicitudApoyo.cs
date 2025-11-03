@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SUDENEXT.Entities.Models;
+namespace SUDENEXT.Entities.Entities;
 
 public partial class tbSolicitudApoyo
 {
@@ -35,9 +35,9 @@ public partial class tbSolicitudApoyo
 
     public bool? sol_Estado { get; set; }
 
-    public virtual ICollection<SolicitudesXPlanes> SolicitudesXPlanes { get; set; } = new List<SolicitudesXPlanes>();
-
     public virtual tbEstudiantes est { get; set; }
+
+    public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanes { get; set; } = new List<tbSolicitudesXPlanes>();
 
     public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
 

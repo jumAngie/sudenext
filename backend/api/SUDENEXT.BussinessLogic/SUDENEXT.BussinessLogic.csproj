@@ -14,13 +14,4 @@
     <ProjectReference Include="..\SUDENEXT.DataAccess\SUDENEXT.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\AccesoServices\" />
-    <Folder Include="Services\GeneralServices\" />
-    <Folder Include="Services\AcademicoServices\" />
-    <Folder Include="Services\MedicinaServices\" />
-    <Folder Include="Services\PsicologiaServices\" />
-    <Folder Include="Services\OdontologiaServices\" />
-  </ItemGroup>
-
 </Project>

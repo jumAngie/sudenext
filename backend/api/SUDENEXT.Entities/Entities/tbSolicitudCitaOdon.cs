@@ -3,7 +3,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SUDENEXT.Entities.Models;
+namespace SUDENEXT.Entities.Entities;
 
 public partial class tbSolicitudCitaOdon
 {
