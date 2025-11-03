@@ -7,7 +7,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.24" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.10" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SUDENEXT.BussinessLogic\SUDENEXT.BussinessLogic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\ControllersAcceso\" />
+    <Folder Include="Controllers\ControllersAcademico\" />
+    <Folder Include="Controllers\ControllersMedicina\" />
+    <Folder Include="Controllers\ControllersOdontologia\" />
+    <Folder Include="Controllers\ControllersPsicologia\" />
+    <Folder Include="Models\ModelsAcceso\" />
+    <Folder Include="Models\ModelsAcademico\" />
+    <Folder Include="Models\ModelsMedicina\" />
+    <Folder Include="Models\ModelsPsicologia\" />
+    <Folder Include="Models\ModelsOdontologia\" />
   </ItemGroup>
 
 </Project>

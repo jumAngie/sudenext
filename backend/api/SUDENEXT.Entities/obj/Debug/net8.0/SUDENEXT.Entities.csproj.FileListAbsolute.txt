@@ -1,0 +1,12 @@
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\bin\Debug\net8.0\SUDENEXT.Entities.deps.json
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\bin\Debug\net8.0\SUDENEXT.Entities.dll
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\bin\Debug\net8.0\SUDENEXT.Entities.pdb
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\SUDENEXT.Entities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\SUDENEXT.Entities.AssemblyInfoInputs.cache
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\SUDENEXT.Entities.AssemblyInfo.cs
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\SUDENEXT.Entities.csproj.CoreCompileInputs.cache
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\SUDENEXT.Entities.sourcelink.json
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\SUDENEXT.Entities.dll
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\refint\SUDENEXT.Entities.dll
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\SUDENEXT.Entities.pdb
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\ref\SUDENEXT.Entities.dll

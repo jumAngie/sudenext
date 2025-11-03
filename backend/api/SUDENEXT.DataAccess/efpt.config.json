@@ -1,0 +1,110 @@
+﻿{
+   "CodeGenerationMode": 4,
+   "ContextClassName": "SUDENEXTContext",
+   "ContextNamespace": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "MinimumProductVersion": "2.6.1080",
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Context",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "SUDENEXT.DataAccess",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 2,
+   "SelectedToBeGenerated": 1,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[Acad].[tbConsultasAcademicas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acad].[tbTipoConsulta]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbPantallas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbRolesXPantallas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbUsuarios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbAreas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbEstudiantes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbPersonal]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Med].[tbDiagnosticosMedicos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Odon].[tbDiagnosticoOdonto]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Odon].[tbSolicitudCitaOdon]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Odon].[tbTratamientos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Psi].[tbPlanAccion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Psi].[tbSolicitudApoyo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Psi].[tbSolicitudesXPlanes]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": null,
+   "UncountableWords": null,
+   "UseAsyncStoredProcedureCalls": true,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": true,
+   "UseDatabaseNamesForRoutines": true,
+   "UseDateOnlyTimeOnly": true,
+   "UseDbContextSplitting": false,
+   "UseDecimalDataAnnotationForSprocResult": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseInternalAccessModifiersForSprocsAndFunctions": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UsePrefixNavigationNaming": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false,
+   "UseT4Split": false
+}

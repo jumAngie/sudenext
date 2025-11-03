@@ -1,3 +1,4 @@
+--DROP DATABASE SUDENEXT
 --CREATE DATABASE SUDENEXT
 --USE SUDENEXT
 
@@ -39,6 +40,14 @@ CREATE TABLE Acce.tbUsuarios
 	CONSTRAINT FK_Acce_tbUsuarios_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
 	CONSTRAINT FK_Acce_tbUsuarios_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
 );
+GO
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = '0987654321';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+
+INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,	est_ID,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
+VALUES						('Felps',			@Pass,				NULL,		1, 		1,			1,						GETDATE(),			1);
+GO
 
 CREATE TABLE Acce.tbPantallas
 (
@@ -81,6 +90,9 @@ CREATE TABLE Acce.tbRoles
 	CONSTRAINT FK_Acce_tbRoles_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usu_ID),
 	CONSTRAINT FK_Acce_tbRoles_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
+GO
+INSERT INTO Acce.tbRoles (rol_Descripcion, usu_UsuarioCreacion, rol_FechaCreacion)
+VALUES					 ('Administrador',		1,				GETDATE());
 
 GO
  ALTER TABLE Acce.tbUsuarios
@@ -131,7 +143,23 @@ CREATE TABLE Gral.tbAreas
 	CONSTRAINT FK_Gral_tbAreas_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usu_ID),
 	CONSTRAINT FK_Gral_tbAreas_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
-
+GO
+INSERT INTO [Gral].[tbAreas] 
+	  (are_Nombre, usu_UsuarioCreacion, are_FechaCreacion)
+VALUES ('Asesoría Académica', 1, GETDATE())
+GO
+INSERT INTO [Gral].[tbAreas] 
+	  (are_Nombre, usu_UsuarioCreacion, are_FechaCreacion)
+VALUES ('Psicología', 1, GETDATE())
+GO
+INSERT INTO [Gral].[tbAreas] 
+	  (are_Nombre, usu_UsuarioCreacion, are_FechaCreacion)
+VALUES ('Odontología', 1, GETDATE())
+GO
+INSERT INTO [Gral].[tbAreas] 
+	  (are_Nombre, usu_UsuarioCreacion, are_FechaCreacion)
+VALUES ('Medicina General', 1, GETDATE())
+GO
 
 -- Tabla de Estudiantes
 CREATE TABLE Gral.tbEstudiantes
@@ -158,7 +186,9 @@ CREATE TABLE Gral.tbEstudiantes
 	CONSTRAINT FK_Gral_tbEstudiantes_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usu_ID),
 	CONSTRAINT FK_Gral_tbEstudiantes_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
-
+GO
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,			est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('20222000215',	'Angie Yahaira Campos Arias', 'angie.campos@unah.hn', '95887062', 'Informática Administrativa',	 1,				1,					GETDATE());
 GO
  ALTER TABLE Acce.tbUsuarios
  ADD CONSTRAINT FK_Acce_tbUsuarios_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID)
@@ -196,6 +226,9 @@ CREATE TABLE Gral.tbPersonal
 		CONSTRAINT FK_Gral_tbPersonal_usu_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usu_ID),
 		CONSTRAINT FK_Gral_tbPersonal_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
+GO
+INSERT INTO Gral.tbPersonal   (per_Nombres,		per_Apellidos,		per_EstadoCivil, per_Sexo, per_FechaNac, per_Telefono,		per_Direccion,				per_Correo,     are_ID, usu_UsuarioCreacion, per_FechaCreacion)
+VALUES						  ('Luis Alejandro','Sabillón Perez',		'SL',			'M',    '12-12-1995',  98987575, 'Colonia Los Pinos, La Lima',	'luis.sab@unah.hn',		2,			1,				GETDATE());
 GO
  ALTER TABLE Acce.tbUsuarios
  ADD CONSTRAINT FK_Acce_tbUsuarios_per_ID_Gral_tbPersonal_per_ID FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID)
@@ -333,9 +366,7 @@ CREATE TABLE Med.tbDiagnosticosMedicos
 (
     dia_ID INT IDENTITY (1,1),
 	est_ID	INT,
-    reg_ID INT,
     dia_DiagnosticoPrin NVARCHAR (200) NULL,
-    dia_EstadoConsulta BIT NOT NULL,
 
 	usu_UsuarioCreacion				INT NOT NULL,
 	dia_FechaCreacion			    DATETIME NOT NULL,
@@ -402,7 +433,7 @@ CREATE TABLE Psi.tbPlanAccion
 );
 
 -- Tabla de Solicitudes por planes
-CREATE TABLE Psi.SolicitudesXPlanes
+CREATE TABLE Psi.tbSolicitudesXPlanes
 (
 
 	spl_ID	INT IDENTITY(1,1),
