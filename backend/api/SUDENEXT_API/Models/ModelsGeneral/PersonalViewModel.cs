@@ -14,7 +14,7 @@ namespace SUDENEXT.API.Models.ModelsGeneral
 
         public string per_Sexo { get; set; }
 
-        public DateOnly per_FechaNac { get; set; }
+        public DateTime per_FechaNac { get; set; }
 
         public string per_Telefono { get; set; }
 
@@ -37,15 +37,5 @@ namespace SUDENEXT.API.Models.ModelsGeneral
         public DateTime? per_FechaEliminacion { get; set; }
 
         public bool? per_Estado { get; set; }
-
-        public virtual tbAreas are { get; set; }
-
-        public virtual ICollection<tbUsuarios> tbUsuarios { get; set; } = new List<tbUsuarios>();
-
-        public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
-
-        public virtual tbUsuarios usu_UsuarioEliminacionNavigation { get; set; }
-
-        public virtual tbUsuarios usu_UsuarioModificacionNavigation { get; set; }
     }
 }

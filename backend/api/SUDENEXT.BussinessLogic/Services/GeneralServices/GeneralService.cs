@@ -1,4 +1,5 @@
 ﻿using SUDENEXT.DataAccess.Repositories.Gral;
+using SUDENEXT.Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,50 @@ namespace SUDENEXT.BussinessLogic.Services.GeneralServices
                 return resultado.Error(ex.Message);
             }
 
+        }
+
+        public ServiceResult CrearPersonal(tbPersonal item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _personalRepository.Insert(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EditarPersonal(tbPersonal item)
+        {
+
+            var result = new ServiceResult();
+            try
+            {
+                var list = _personalRepository.Update(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult EliminarPersonal(tbPersonal item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _personalRepository.Delete(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
         }
         #endregion
 

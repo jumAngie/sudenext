@@ -1,6 +1,54 @@
 [
   {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
+    "Method": "Update",
+    "RelativePath": "api/Personal/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "personalViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsGeneral.PersonalViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
+    "Method": "Delete",
+    "RelativePath": "api/Personal/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "personalViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsGeneral.PersonalViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
+    "Method": "Insert",
+    "RelativePath": "api/Personal/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "personalViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsGeneral.PersonalViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
     "Method": "Index",
     "RelativePath": "api/Personal/Listar",
     "HttpMethod": "GET",
