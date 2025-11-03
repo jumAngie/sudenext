@@ -22,6 +22,7 @@ namespace SUDENEXT.DataAccess
         #endregion
 
         #region Gral
+        public static string ListarPersonal = "Gral.Personal_Listar";
         #endregion
 
         #region Med

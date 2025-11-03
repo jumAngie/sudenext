@@ -1,5 +1,15 @@
 [
   {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
+    "Method": "Index",
+    "RelativePath": "api/Personal/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SUDENEXT_API.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

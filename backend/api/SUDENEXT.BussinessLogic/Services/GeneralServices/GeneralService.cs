@@ -29,6 +29,22 @@ namespace SUDENEXT.BussinessLogic.Services.GeneralServices
         #endregion
 
         #region Personal
+        public ServiceResult ListadoPersonalCompleto()
+        {
+
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _personalRepository.ListadoCompleto();
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+
+        }
         #endregion
 
     }

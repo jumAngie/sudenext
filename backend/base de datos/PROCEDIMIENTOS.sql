@@ -1,6 +1,6 @@
----------------------------------------------------  ACCE  -----------------------------------------------------
+---------------------------------------------------  GRAL  -----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
----- LISTAR TODAS LAS CATEGORIAS
+---- LISTAR TODO EL PERSONAL
 CREATE OR ALTER PROCEDURE Gral.Personal_Listar
 AS
 	BEGIN
@@ -30,17 +30,25 @@ AS
 				are.are_ID,
 				are.are_Nombre, 
 				usuC.usu_UsuarioCreacion,
-				usuC.usu_Usuario,
-				usuC.per_ID AS 'ID Creador',
-				(SELECT personal.per_Nombres + ' ' + personal.per_Apellidos AS 'NombreCompleto'
+				usuC.usu_Usuario AS 'Usuario_C',
+				usuC.per_ID AS 'ID_Creador',
+				(SELECT personal.per_Nombres + ' ' + personal.per_Apellidos AS 'NombreCompleto_C'
 				 FROM Acce.tbUsuarios usuario 
-				 INNER JOIN Gral.tbPersonal personal ON usuario.per_ID = personal.per_ID) AS 'Usuario Creador',
+				 INNER JOIN Gral.tbPersonal personal ON usuario.usu_ID = personal.usu_UsuarioCreacion) AS 'NombreCompleto_C',
 				per_FechaCreacion, 
 				usuM.usu_UsuarioModificacion, 
-				usuM.usu_Usuario,
+				usuM.per_ID AS 'ID_Modificador',
+				usuM.usu_Usuario AS 'Usuario_M',
+				(SELECT personal.per_Nombres + ' ' + personal.per_Apellidos AS 'NombreCompleto_M'
+				 FROM Acce.tbUsuarios usuario 
+				 LEFT JOIN Gral.tbPersonal personal ON usuario.usu_ID = personal.usu_UsuarioModificacion) AS 'NombreCompleto_M',
 				per_FechaModificacion, 
 				usuE.usu_UsuarioEliminacion,
-				usuE.usu_Usuario,
+				usuE.usu_Usuario AS 'Usuario_E',
+				usuE.usu_ID AS 'ID_Eliminador',
+				(SELECT personal.per_Nombres + ' ' + personal.per_Apellidos AS 'NombreCompleto_E'
+				 FROM Acce.tbUsuarios usuario 
+				 LEFT JOIN Gral.tbPersonal personal ON usuario.usu_ID = personal.usu_UsuarioEliminacion) AS 'NombreCompleto_E',
 				per_FechaEliminacion, 
 				per_Estado
 		FROM	Gral.tbPersonal per 
@@ -51,3 +59,5 @@ AS
 		WHERE	per_Estado = 1
 	END
 GO
+
+EXECUTE Gral.Personal_Listar

@@ -1,0 +1,16 @@
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\bin\Debug\net8.0\SUDENEXT.DataAccess.deps.json
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\bin\Debug\net8.0\SUDENEXT.DataAccess.dll
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\bin\Debug\net8.0\SUDENEXT.DataAccess.pdb
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\bin\Debug\net8.0\SUDENEXT.Entities.dll
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\bin\Debug\net8.0\SUDENEXT.Entities.pdb
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\SUDENEXT.DataAccess.csproj.AssemblyReference.cache
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\SUDENEXT.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\SUDENEXT.DataAccess.AssemblyInfoInputs.cache
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\SUDENEXT.DataAccess.AssemblyInfo.cs
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\SUDENEXT.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\SUDENEXT.DataAccess.sourcelink.json
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\SUDENEXT.AF168960.Up2Date
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\SUDENEXT.DataAccess.dll
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\refint\SUDENEXT.DataAccess.dll
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\SUDENEXT.DataAccess.pdb
+C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.DataAccess\obj\Debug\net8.0\ref\SUDENEXT.DataAccess.dll
