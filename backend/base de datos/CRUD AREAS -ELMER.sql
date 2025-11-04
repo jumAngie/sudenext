@@ -4,20 +4,53 @@
 ---LISTAR
 CREATE OR ALTER PROCEDURE Gral.sp_ListarAreas
 AS
-	BEGIN
-	SELECT  are_ID, 
-			are_Nombre, 
-			usu_UsuarioCreacion, 
-			are_FechaCreacion, 
-			usu_UsuarioModificacion, 
-			are_FechaModificacion, 
-			usu_UsuarioEliminacion, 
-			are_FechaEliminacion, 
-			are_Estado
-	FROM [Gral].[tbAreas]  are 
-	WHERE   are_Estado = 1
-	END
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT 
+		-- Datos principales del área
+		are.are_ID,
+		are.are_Nombre,
+		are.are_Estado,
+
+		-- ======== DATOS DEL USUARIO CREADOR ========
+		usuC.usu_ID AS usu_UsuarioCreacion,
+		usuC.usu_Usuario AS Usuario_C,
+		perC.per_ID AS ID_Creador,
+		(perC.per_Nombres + ' ' + perC.per_Apellidos) AS NombreCompleto_C,
+		are.are_FechaCreacion,
+
+		-- ======== DATOS DEL USUARIO MODIFICADOR ========
+		usuM.usu_ID AS usu_UsuarioModificacion,
+		usuM.usu_Usuario AS Usuario_M,
+		perM.per_ID AS ID_Modificador,
+		(perM.per_Nombres + ' ' + perM.per_Apellidos) AS NombreCompleto_M,
+		are.are_FechaModificacion,
+
+		-- ======== DATOS DEL USUARIO ELIMINADOR ========
+		usuE.usu_ID AS usu_UsuarioEliminacion,
+		usuE.usu_Usuario AS Usuario_E,
+		perE.per_ID AS ID_Eliminador,
+		(perE.per_Nombres + ' ' + perE.per_Apellidos) AS NombreCompleto_E,
+		are.are_FechaEliminacion
+
+	FROM Gral.tbAreas are
+		-- JOIN con Usuario Creador
+		INNER JOIN Acce.tbUsuarios usuC ON are.usu_UsuarioCreacion = usuC.usu_ID
+		INNER JOIN Gral.tbPersonal perC ON usuC.per_ID = perC.per_ID
+
+		-- JOIN con Usuario Modificador
+		LEFT JOIN Acce.tbUsuarios usuM ON are.usu_UsuarioModificacion = usuM.usu_ID
+		LEFT JOIN Gral.tbPersonal perM ON usuM.per_ID = perM.per_ID
+
+		-- JOIN con Usuario Eliminador
+		LEFT JOIN Acce.tbUsuarios usuE ON are.usu_UsuarioEliminacion = usuE.usu_ID
+		LEFT JOIN Gral.tbPersonal perE ON usuE.per_ID = perE.per_ID
+
+	WHERE are.are_Estado = 1;
+END;
 GO
+
 
 ---CREAR
 CREATE OR ALTER PROCEDURE Gral.sp_CrearArea
