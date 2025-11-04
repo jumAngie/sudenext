@@ -24,6 +24,66 @@ namespace SUDENEXT.BussinessLogic.Services.GeneralServices
         }
 
         #region Areas
+        public ServiceResult ListadoAreasCompleto()
+        {
+
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _areasRepository.ListadoCompleto();
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult CrearAreas(tbAreas item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _areasRepository.Insert(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EditarAreas(tbAreas item)
+        {
+
+            var result = new ServiceResult();
+            try
+            {
+                var list = _areasRepository.Update(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult EliminarAreas(tbAreas item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _areasRepository.Delete(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Estudiantes

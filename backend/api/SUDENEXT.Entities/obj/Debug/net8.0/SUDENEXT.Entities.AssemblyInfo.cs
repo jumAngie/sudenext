@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SUDENEXT.Entities")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4eb4d94784c019d79765fb5ae07d77bf8088d573")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+409eee6c573fbb47368e69f4cf39b64aeae2426f")]
 [assembly: System.Reflection.AssemblyProductAttribute("SUDENEXT.Entities")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SUDENEXT.Entities")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

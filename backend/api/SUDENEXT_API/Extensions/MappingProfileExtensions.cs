@@ -13,12 +13,14 @@ namespace SUDENEXT.API.Extensions
             #endregion
 
             #region Acceso
-            //CreateMap<UsuariosViewModel, tbUsuarios>().ReverseMap();
             #endregion
 
             #region General
             CreateMap<PersonalViewModel, tbPersonal>().ReverseMap();
             CreateMap<ListadoPersonalViewModel, ListadoPersonalDTO>().ReverseMap();
+
+            CreateMap<AreasViewModel, tbAreas>().ReverseMap();
+            CreateMap<ListadoAreasViewModel, ListadoAreasDTO>().ReverseMap();
             #endregion
 
             #region General

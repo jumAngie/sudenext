@@ -1,5 +1,63 @@
 [
   {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.AreasController",
+    "Method": "Update",
+    "RelativePath": "api/Areas/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "areasViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsGeneral.AreasViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.AreasController",
+    "Method": "Delete",
+    "RelativePath": "api/Areas/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "areasViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsGeneral.AreasViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.AreasController",
+    "Method": "Insert",
+    "RelativePath": "api/Areas/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "areasViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsGeneral.AreasViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.AreasController",
+    "Method": "Index",
+    "RelativePath": "api/Areas/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
     "Method": "Update",
     "RelativePath": "api/Personal/Editar",
