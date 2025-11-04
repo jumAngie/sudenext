@@ -114,26 +114,26 @@ BEGIN
 END;
 GO
 ---ELIMINAR
-CREATE OR ALTER PROCEDURE Gral.sp_EliminarArea
-	@are_ID INT,
+CREATE OR ALTER PROCEDURE Acad.sp_EliminarTipoConsulta
+	@tic_ID INT,
 	@usu_UsuarioEliminacion INT,
-	@are_FechaEliminacion DATETIME
+	@tic_FechaEliminacion DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		-- Validar existencia activa
-		IF NOT EXISTS (SELECT 1 FROM Gral.tbAreas WHERE are_ID = @are_ID AND are_Estado = 1)
+		IF NOT EXISTS (SELECT 1 FROM Acad.tbTipoConsulta WHERE tic_ID = @tic_ID AND tic_Estado = 1)
 		BEGIN
 			SELECT 'El registro no existe o ya fue eliminado.' AS MessageStatus;
 			RETURN;
 		END
 
-		UPDATE Gral.tbAreas
-		SET are_Estado = 0,
+		UPDATE Acad.tbTipoConsulta
+		SET tic_Estado = 0,
 			usu_UsuarioEliminacion = @usu_UsuarioEliminacion,
-			are_FechaEliminacion = @are_FechaEliminacion
-		WHERE are_ID = @are_ID;
+			tic_FechaEliminacion = @tic_FechaEliminacion
+		WHERE tic_ID = @tic_ID;
 
 		SELECT 'Registro eliminado exitosamente.' AS MessageStatus;
 	END TRY
