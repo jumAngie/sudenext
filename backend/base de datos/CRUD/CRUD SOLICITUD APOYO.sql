@@ -1,86 +1,80 @@
----------------------------------------------------  CONSULTAS ACADEMICAS  -----------------------------------------------------
+---------------------------------------------------  SOLICITUD DE APOYO  -----------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------
 ---LISTAR
-CREATE OR ALTER PROCEDURE Acad.sp_ListarConsultaAcademicas
+CREATE OR ALTER PROCEDURE Psi.sp_ListarSolicitudApoyo
 AS
 BEGIN
 	SET NOCOUNT ON;
 	SELECT 
 		-- Datos principales del tipo de consulta
-		coa.coa_ID,
-		coa.est_ID,
+		sol.sol_ID,
+		sol.est_ID,
 		est.est_NombreCompleto,
-		coa.tic_ID,
-		tic.tic_Descripcion,
-		coa.coa_Descripcion,
-		coa.coa_Recomendacion,
-		coa.coa_Seguimiento,
-		CASE
-			WHEN coa.coa_Seguimiento = 0 THEN 'No necesita seguimiento.'
-			WHEN coa.coa_Seguimiento = 1 THEN 'Necesita seguimiento.'
-			ELSE 'N/A' 
-		END AS Seguimiento,
-		coa.coa_Estado,
+		sol.sol_ResumenSesion,
+		sol.sol_MotivoConsulta,
+		sol.sol_MalestarEmocional,
+		sol.sol_Asistencia,
+		sol.sol_HorarioPref,
+		sol.sol_Estado,
 
 		-- ======== DATOS DEL USUARIO CREADOR ========
 		usuC.usu_ID AS usu_UsuarioCreacion,
 		usuC.usu_Usuario AS Usuario_C,
 		perC.per_ID AS ID_Creador,
 		(perC.per_Nombres + ' ' + perC.per_Apellidos) AS NombreCompleto_C,
-		coa.coa_FechaCreacion,
+		sol.sol_FechaCreacion,
 
 		-- ======== DATOS DEL USUARIO MODIFICADOR ========
 		usuM.usu_ID AS usu_UsuarioModificacion,
 		usuM.usu_Usuario AS Usuario_M,
 		perM.per_ID AS ID_Modificador,
 		(perM.per_Nombres + ' ' + perM.per_Apellidos) AS NombreCompleto_M,
-		coa.coa_FechaModificacion,
+		sol.sol_FechaModificacion,
 
 		-- ======== DATOS DEL USUARIO ELIMINADOR ========
 		usuE.usu_ID AS usu_UsuarioEliminacion,
 		usuE.usu_Usuario AS Usuario_E,
 		perE.per_ID AS ID_Eliminador,
 		(perE.per_Nombres + ' ' + perE.per_Apellidos) AS NombreCompleto_E,
-		coa.coa_FechaEliminacion
+		sol.sol_FechaEliminacion
 
-	FROM Acad.tbConsultasAcademicas coa
-		INNER JOIN Gral.tbEstudiantes est ON coa.est_ID = est.est_ID
-		INNER JOIN Acad.tbTipoConsulta tic ON coa.tic_ID = tic.tic_ID
+	FROM Psi.tbSolicitudApoyo sol
+		INNER JOIN Gral.tbEstudiantes est ON sol.est_ID = est.est_ID
 		-- JOIN con Usuario Creador
-		INNER JOIN Acce.tbUsuarios usuC ON coa.usu_UsuarioCreacion = usuC.usu_ID
+		INNER JOIN Acce.tbUsuarios usuC ON sol.usu_UsuarioCreacion = usuC.usu_ID
 		INNER JOIN Gral.tbPersonal perC ON usuC.per_ID = perC.per_ID
 
 		-- JOIN con Usuario Modificador
-		LEFT JOIN Acce.tbUsuarios usuM ON coa.usu_UsuarioModificacion = usuM.usu_ID
+		LEFT JOIN Acce.tbUsuarios usuM ON sol.usu_UsuarioModificacion = usuM.usu_ID
 		LEFT JOIN Gral.tbPersonal perM ON usuM.per_ID = perM.per_ID
 
 		-- JOIN con Usuario Eliminador
-		LEFT JOIN Acce.tbUsuarios usuE ON coa.usu_UsuarioEliminacion = usuE.usu_ID
+		LEFT JOIN Acce.tbUsuarios usuE ON sol.usu_UsuarioEliminacion = usuE.usu_ID
 		LEFT JOIN Gral.tbPersonal perE ON usuE.per_ID = perE.per_ID
 
-	WHERE coa.coa_Estado = 1;
+	WHERE sol.sol_Estado = 1;
 END;
 GO
 
-
 ---CREAR
-CREATE OR ALTER PROCEDURE Acad.sp_CrearConsultaAcademicas
-	@est_ID		INT,
-	@tic_ID		INT,
-	@coa_Descripcion NVARCHAR(MAX),
-	@coa_Recomendacion NVARCHAR(MAX),
-	@coa_Seguimiento BIT,
+CREATE OR ALTER PROCEDURE Psi.sp_CrearSolicitudApoyo
+	@est_ID	INT,
+	@sol_ResumenSesion NVARCHAR(200),
+	@sol_MotivoConsulta NVARCHAR(200),
+	@sol_MalestarEmocional INT,
+	@sol_Asistencia	BIT,
+	@sol_HorarioPref	TIME,
 	@usu_UsuarioCreacion INT,
-	@coa_FechaCreacion DATETIME
+	@sol_FechaCreacion DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		
-		INSERT INTO Acad.tbConsultasAcademicas
-		(est_ID, tic_ID, coa_Descripcion, coa_Recomendacion, coa_Seguimiento, usu_UsuarioCreacion,coa_FechaCreacion)
+		INSERT INTO Psi.tbSolicitudApoyo
+		(est_ID, sol_ResumenSesion, sol_MotivoConsulta, sol_MalestarEmocional, sol_Asistencia, sol_HorarioPref, usu_UsuarioCreacion,sol_FechaCreacion)
 		VALUES
-		(@est_ID, @tic_ID, @coa_Descripcion, @coa_Recomendacion, @coa_Seguimiento, @usu_UsuarioCreacion,@coa_FechaCreacion);
+		(@est_ID, @sol_ResumenSesion, @sol_MotivoConsulta, @sol_MalestarEmocional, @sol_Asistencia, @sol_HorarioPref, @usu_UsuarioCreacion,@sol_FechaCreacion);
 
 		SELECT 'Registro creado correctamente.' AS MessageStatus;
 	END TRY
@@ -92,29 +86,31 @@ BEGIN
 END;
 GO
 ----EDITAR
-CREATE OR ALTER PROCEDURE Acad.sp_EditarConsultaAcademicas
-	@coa_ID INT,
-	@est_ID		INT,
-	@tic_ID		INT,
-	@coa_Descripcion NVARCHAR(MAX),
-	@coa_Recomendacion NVARCHAR(MAX),
-	@coa_Seguimiento BIT,
+CREATE OR ALTER PROCEDURE Psi.sp_EditarSolicitudApoyo
+	@sol_ID INT,
+	@est_ID	INT,
+	@sol_ResumenSesion NVARCHAR(200),
+	@sol_MotivoConsulta NVARCHAR(200),
+	@sol_MalestarEmocional INT,
+	@sol_Asistencia	BIT,
+	@sol_HorarioPref	TIME,
 	@usu_UsuarioModificacion INT,
-	@coa_FechaModificacion DATETIME
+	@sol_FechaModificacion DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
-		
-		UPDATE Acad.tbConsultasAcademicas
+
+		UPDATE Psi.tbSolicitudApoyo
 		SET est_ID = @est_ID,
-			tic_ID = @tic_ID,
-			coa_Descripcion = @coa_Descripcion,
-			coa_Recomendacion = @coa_Recomendacion,
-			coa_Seguimiento = @coa_Seguimiento,
+			sol_ResumenSesion = @sol_ResumenSesion,
+			sol_MotivoConsulta = @sol_MotivoConsulta, 
+			sol_MalestarEmocional = @sol_MalestarEmocional, 
+			sol_Asistencia = @sol_Asistencia, 
+			sol_HorarioPref = @sol_HorarioPref,
 			usu_UsuarioModificacion = @usu_UsuarioModificacion,
-			coa_FechaModificacion = @coa_FechaModificacion
-		WHERE coa_ID = @coa_ID;
+			sol_FechaModificacion = @sol_FechaModificacion
+		WHERE sol_ID = @sol_ID;
 
 		SELECT 'Registro actualizado correctamente.' AS MessageStatus;
 	END TRY
@@ -126,26 +122,26 @@ BEGIN
 END;
 GO
 ---ELIMINAR
-CREATE OR ALTER PROCEDURE Acad.sp_EliminarConsultaAcademicas
-	@coa_ID INT,
+CREATE OR ALTER PROCEDURE Psi.sp_EliminarSolicitudApoyo
+	@sol_ID INT,
 	@usu_UsuarioEliminacion INT,
-	@coa_FechaEliminacion DATETIME
+	@sol_FechaEliminacion DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		-- Validar existencia activa
-		IF NOT EXISTS (SELECT 1 FROM Acad.tbConsultasAcademicas WHERE coa_ID = @coa_ID AND coa_Estado = 1)
+		IF NOT EXISTS (SELECT 1 FROM Psi.tbSolicitudApoyo WHERE sol_ID = @sol_ID AND sol_Estado = 1)
 		BEGIN
 			SELECT 'El registro no existe o ya fue eliminado.' AS MessageStatus;
 			RETURN;
 		END
 
-		UPDATE Acad.tbConsultasAcademicas
-		SET coa_Estado = 0,
+		UPDATE Psi.tbSolicitudApoyo
+		SET sol_Estado = 0,
 			usu_UsuarioEliminacion = @usu_UsuarioEliminacion,
-			coa_FechaEliminacion = @coa_FechaEliminacion
-		WHERE coa_ID = @coa_ID;
+			sol_FechaEliminacion = @sol_FechaEliminacion
+		WHERE sol_ID = @sol_ID;
 
 		SELECT 'Registro eliminado exitosamente.' AS MessageStatus;
 	END TRY
