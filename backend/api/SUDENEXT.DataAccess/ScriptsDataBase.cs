@@ -9,13 +9,15 @@ namespace SUDENEXT.DataAccess
     public class ScriptsDataBase
     {
         #region Acad
+        public static string ListarConsultaAcademicas =     "Acad.sp_ListarConsultaAcademicas";
+        public static string CrearConsultaAcademicas =      "Acad.sp_CrearConsultaAcademicas";
+        public static string EditarConsultaAcademicas =     "Acad.sp_EditarConsultaAcademicas";
+        public static string EliminarConsultaAcademicas =   "Acad.sp_EliminarConsultaAcademicas";
 
-        // Usuarios
-
-
-        // LogIn
-        public static string VerificarUsuario = "";
-
+        public static string ListarTipoConsulta = "Acad.sp_ListarTipoConsulta";
+        public static string CrearTipoConsulta = "Acad.sp_CrearTipoConsulta";
+        public static string EditarTipoConsulta = "Acad.sp_EditarTipoConsulta";
+        public static string EliminarTipoConsulta = "Acad.sp_EliminarTipoConsulta";
         #endregion
 
         #region Acce
@@ -35,11 +37,25 @@ namespace SUDENEXT.DataAccess
 
         #region Med
         #endregion
+        
 
         #region Odon
+        public static string ListarTipoTratamiento =    "Odon.sp_ListarTipoTratamiento";
+        public static string CrearTipoTratamiento =     "Odon.sp_CrearTipoTratamiento";
+        public static string EditarTipoTratamiento =    "Odon.sp_EditarTipoTratamiento";
+        public static string EliminarTipoTratamiento =  "Odon.sp_EliminarTipoTratamiento";
         #endregion
 
         #region Psi
+        public static string ListarPlanAccion = "Psi.sp_ListarPlanAccion";
+        public static string CrearPlanAccion = "Psi.sp_CrearPlanAccion";
+        public static string EditarPlanAccion = "Psi.sp_EditarPlanAccion";
+        public static string EliminarPlanAccion = "Psi.sp_EliminarPlanAccion";
+
+        public static string ListarSolicitudApoyo = "Psi.sp_ListarSolicitudApoyo";
+        public static string CrearSolicitudApoyo = "Psi.sp_CrearSolicitudApoyo";
+        public static string EditarSolicitudApoyo = "Psi.sp_EditarSolicitudApoyo";
+        public static string EliminarSolicitudApoyo = "Psi.sp_EliminarSolicitudApoyo";
         #endregion
     }
 }

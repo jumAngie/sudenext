@@ -15,7 +15,7 @@ public partial class tbPlanAccion
 
     public string pla_ActividadSug { get; set; }
 
-    public DateOnly? pla_FechaSeguimiento { get; set; }
+    public DateTime? pla_FechaSeguimiento { get; set; }
 
     public string pla_Observacion { get; set; }
 

@@ -1,4 +1,6 @@
-﻿using SUDENEXT.DataAccess.Repositories.Odon;
+﻿using SUDENEXT.DataAccess.Repositories.Acad;
+using SUDENEXT.DataAccess.Repositories.Odon;
+using SUDENEXT.Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,65 @@ namespace SUDENEXT.BussinessLogic.Services.OdontologiaServices
         #endregion
 
         #region Tratamientos
+        public ServiceResult ListadoTipoTratamientoCompleto()
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _tratamientosRepository.ListadoCompleto();
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult CrearTipoTratamiento(tbTratamientos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _tratamientosRepository.Insert(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EditarTipoTratamiento(tbTratamientos item)
+        {
+
+            var result = new ServiceResult();
+            try
+            {
+                var list = _tratamientosRepository.Update(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult EliminarTipoTratamiento(tbTratamientos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _tratamientosRepository.Delete(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
     }
 }

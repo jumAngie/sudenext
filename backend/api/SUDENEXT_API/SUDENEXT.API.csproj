@@ -29,15 +29,9 @@
 
   <ItemGroup>
     <Folder Include="Controllers\ControllersAcceso\" />
-    <Folder Include="Controllers\ControllersAcademico\" />
     <Folder Include="Controllers\ControllersMedicina\" />
-    <Folder Include="Controllers\ControllersOdontologia\" />
-    <Folder Include="Controllers\ControllersPsicologia\" />
     <Folder Include="Models\ModelsAcceso\" />
-    <Folder Include="Models\ModelsAcademico\" />
     <Folder Include="Models\ModelsMedicina\" />
-    <Folder Include="Models\ModelsPsicologia\" />
-    <Folder Include="Models\ModelsOdontologia\" />
   </ItemGroup>
 
 </Project>

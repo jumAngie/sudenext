@@ -58,6 +58,64 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcademico.ConsultaAcademicasController",
+    "Method": "Update",
+    "RelativePath": "api/ConsultaAcademicas/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "consultaAcademicasViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsAcademico.ConsultaAcademicasViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcademico.ConsultaAcademicasController",
+    "Method": "Delete",
+    "RelativePath": "api/ConsultaAcademicas/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "consultaAcademicasViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsAcademico.ConsultaAcademicasViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcademico.ConsultaAcademicasController",
+    "Method": "Insert",
+    "RelativePath": "api/ConsultaAcademicas/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "consultaAcademicasViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsAcademico.ConsultaAcademicasViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcademico.ConsultaAcademicasController",
+    "Method": "Index",
+    "RelativePath": "api/ConsultaAcademicas/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
     "Method": "Update",
     "RelativePath": "api/Personal/Editar",
@@ -109,6 +167,238 @@
     "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
     "Method": "Index",
     "RelativePath": "api/Personal/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.PlanAccionController",
+    "Method": "Update",
+    "RelativePath": "api/PlanAccion/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "planAccionViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsPsicologia.PlanAccionViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.PlanAccionController",
+    "Method": "Delete",
+    "RelativePath": "api/PlanAccion/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "planAccionViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsPsicologia.PlanAccionViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.PlanAccionController",
+    "Method": "Insert",
+    "RelativePath": "api/PlanAccion/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "planAccionViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsPsicologia.PlanAccionViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.PlanAccionController",
+    "Method": "Index",
+    "RelativePath": "api/PlanAccion/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.SolicitudApoyoController",
+    "Method": "Update",
+    "RelativePath": "api/SolicitudApoyo/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitudApoyoViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsPsicologia.SolicitudApoyoViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.SolicitudApoyoController",
+    "Method": "Delete",
+    "RelativePath": "api/SolicitudApoyo/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitudApoyoViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsPsicologia.SolicitudApoyoViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.SolicitudApoyoController",
+    "Method": "Insert",
+    "RelativePath": "api/SolicitudApoyo/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitudApoyoViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsPsicologia.SolicitudApoyoViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.SolicitudApoyoController",
+    "Method": "Index",
+    "RelativePath": "api/SolicitudApoyo/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcademico.TipoConsultaController",
+    "Method": "Update",
+    "RelativePath": "api/TipoConsulta/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tipoConsultaViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsAcademico.TipoConsultaViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcademico.TipoConsultaController",
+    "Method": "Delete",
+    "RelativePath": "api/TipoConsulta/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tipoConsultaViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsAcademico.TipoConsultaViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcademico.TipoConsultaController",
+    "Method": "Insert",
+    "RelativePath": "api/TipoConsulta/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tipoConsultaViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsAcademico.TipoConsultaViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcademico.TipoConsultaController",
+    "Method": "Index",
+    "RelativePath": "api/TipoConsulta/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.TipoTratamientoController",
+    "Method": "Update",
+    "RelativePath": "api/TipoTratamiento/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tipoTratamientoViewMoel",
+        "Type": "SUDENEXT.API.Models.ModelsOdontologia.TipoTratamientoViewMoel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.TipoTratamientoController",
+    "Method": "Delete",
+    "RelativePath": "api/TipoTratamiento/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tipoTratamientoViewMoel",
+        "Type": "SUDENEXT.API.Models.ModelsOdontologia.TipoTratamientoViewMoel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.TipoTratamientoController",
+    "Method": "Insert",
+    "RelativePath": "api/TipoTratamiento/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tipoTratamientoViewMoel",
+        "Type": "SUDENEXT.API.Models.ModelsOdontologia.TipoTratamientoViewMoel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.TipoTratamientoController",
+    "Method": "Index",
+    "RelativePath": "api/TipoTratamiento/Listar",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

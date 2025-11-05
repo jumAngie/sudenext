@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using SUDENEXT.API.Models.ModelsAcademico;
 using SUDENEXT.API.Models.ModelsGeneral;
+using SUDENEXT.API.Models.ModelsOdontologia;
+using SUDENEXT.API.Models.ModelsPsicologia;
 using SUDENEXT.Entities.DTO;
 using SUDENEXT.Entities.Entities;
 
@@ -10,6 +13,11 @@ namespace SUDENEXT.API.Extensions
         public MappingProfileExtensions()
         {
             #region Academico
+            CreateMap<ConsultaAcademicasViewModel, tbConsultasAcademicas>().ReverseMap();
+            CreateMap<ListadoConsultaAcademicasViewModel, ListadoConsultasAcademicasDTO>().ReverseMap();
+
+            CreateMap<TipoConsultaViewModel, tbTipoConsulta>().ReverseMap();
+            CreateMap<ListadoTipoConsultaViewModel, ListadoTipoConsultaDTO>().ReverseMap();
             #endregion
 
             #region Acceso
@@ -23,7 +31,17 @@ namespace SUDENEXT.API.Extensions
             CreateMap<ListadoAreasViewModel, ListadoAreasDTO>().ReverseMap();
             #endregion
 
-            #region General
+            #region Odontología
+            CreateMap<TipoTratamientoViewMoel, tbTratamientos>().ReverseMap();
+            CreateMap<ListadoTipoTratamientoViewModel, ListadoTipoTratamientoDTO>().ReverseMap();
+            #endregion
+
+            #region Psicología
+            CreateMap<PlanAccionViewModel, tbPlanAccion>().ReverseMap();
+            CreateMap<ListadoPlanAccionViewModel, ListadoPlanAccionDTO>().ReverseMap();
+
+            CreateMap<SolicitudApoyoViewModel, tbSolicitudApoyo>().ReverseMap();
+            CreateMap<ListadoSolicitudApoyoViewModel, ListadoSolicitudSesionApoyoDTO>().ReverseMap();
             #endregion
 
         }

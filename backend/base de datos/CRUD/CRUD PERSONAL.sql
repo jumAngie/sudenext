@@ -31,16 +31,19 @@ AS
 		are.are_ID,
 		are.are_Nombre, 
 		-- Datos del usuario creador
+		per.usu_UsuarioCreacion,
 		usuC.usu_ID AS ID_Creador,
 		usuC.usu_Usuario AS Usuario_C,
 		perC.per_Nombres + ' ' + perC.per_Apellidos AS NombreCompleto_C,
 		per.per_FechaCreacion,
 		-- Datos del usuario modificador
+		per.usu_UsuarioModificacion,
 		usuM.usu_ID AS ID_Modificador,
 		usuM.usu_Usuario AS Usuario_M,
 		perM.per_Nombres + ' ' + perM.per_Apellidos AS NombreCompleto_M,
 		per.per_FechaModificacion,
 		-- Datos del usuario eliminador
+		per.usu_UsuarioEliminacion,
 		usuE.usu_ID AS ID_Eliminador,
 		usuE.usu_Usuario AS Usuario_E,
 		perE.per_Nombres + ' ' + perE.per_Apellidos AS NombreCompleto_E,

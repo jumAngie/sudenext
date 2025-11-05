@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\SUDENEXT.API.props" />
-</Project>
