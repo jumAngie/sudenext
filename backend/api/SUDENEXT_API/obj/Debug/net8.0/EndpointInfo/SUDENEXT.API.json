@@ -1,0 +1,1344 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "SUDENEXT API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/Areas/Listar": {
+      "get": {
+        "tags": [
+          "Areas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Areas/Insertar": {
+      "post": {
+        "tags": [
+          "Areas"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AreasViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AreasViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AreasViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Areas/Editar": {
+      "post": {
+        "tags": [
+          "Areas"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AreasViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AreasViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AreasViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Areas/Eliminar": {
+      "post": {
+        "tags": [
+          "Areas"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AreasViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AreasViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AreasViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/ConsultaAcademicas/Listar": {
+      "get": {
+        "tags": [
+          "ConsultaAcademicas"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/ConsultaAcademicas/Insertar": {
+      "post": {
+        "tags": [
+          "ConsultaAcademicas"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultaAcademicasViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultaAcademicasViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultaAcademicasViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/ConsultaAcademicas/Editar": {
+      "post": {
+        "tags": [
+          "ConsultaAcademicas"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultaAcademicasViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultaAcademicasViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultaAcademicasViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/ConsultaAcademicas/Eliminar": {
+      "post": {
+        "tags": [
+          "ConsultaAcademicas"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultaAcademicasViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultaAcademicasViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultaAcademicasViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Personal/Listar": {
+      "get": {
+        "tags": [
+          "Personal"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Personal/Insertar": {
+      "post": {
+        "tags": [
+          "Personal"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Personal/Editar": {
+      "post": {
+        "tags": [
+          "Personal"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Personal/Eliminar": {
+      "post": {
+        "tags": [
+          "Personal"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/PlanAccion/Listar": {
+      "get": {
+        "tags": [
+          "PlanAccion"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/PlanAccion/Insertar": {
+      "post": {
+        "tags": [
+          "PlanAccion"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanAccionViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanAccionViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanAccionViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/PlanAccion/Editar": {
+      "post": {
+        "tags": [
+          "PlanAccion"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanAccionViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanAccionViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanAccionViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/PlanAccion/Eliminar": {
+      "post": {
+        "tags": [
+          "PlanAccion"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanAccionViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanAccionViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanAccionViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/SolicitudApoyo/Listar": {
+      "get": {
+        "tags": [
+          "SolicitudApoyo"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/SolicitudApoyo/Insertar": {
+      "post": {
+        "tags": [
+          "SolicitudApoyo"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudApoyoViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudApoyoViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudApoyoViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/SolicitudApoyo/Editar": {
+      "post": {
+        "tags": [
+          "SolicitudApoyo"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudApoyoViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudApoyoViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudApoyoViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/SolicitudApoyo/Eliminar": {
+      "post": {
+        "tags": [
+          "SolicitudApoyo"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudApoyoViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudApoyoViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudApoyoViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/TipoConsulta/Listar": {
+      "get": {
+        "tags": [
+          "TipoConsulta"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/TipoConsulta/Insertar": {
+      "post": {
+        "tags": [
+          "TipoConsulta"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoConsultaViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoConsultaViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoConsultaViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/TipoConsulta/Editar": {
+      "post": {
+        "tags": [
+          "TipoConsulta"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoConsultaViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoConsultaViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoConsultaViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/TipoConsulta/Eliminar": {
+      "post": {
+        "tags": [
+          "TipoConsulta"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoConsultaViewModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoConsultaViewModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoConsultaViewModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/TipoTratamiento/Listar": {
+      "get": {
+        "tags": [
+          "TipoTratamiento"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/TipoTratamiento/Insertar": {
+      "post": {
+        "tags": [
+          "TipoTratamiento"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoTratamientoViewMoel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoTratamientoViewMoel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoTratamientoViewMoel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/TipoTratamiento/Editar": {
+      "post": {
+        "tags": [
+          "TipoTratamiento"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoTratamientoViewMoel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoTratamientoViewMoel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoTratamientoViewMoel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/TipoTratamiento/Eliminar": {
+      "post": {
+        "tags": [
+          "TipoTratamiento"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoTratamientoViewMoel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoTratamientoViewMoel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TipoTratamientoViewMoel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/WeatherForecast": {
+      "get": {
+        "tags": [
+          "WeatherForecast"
+        ],
+        "operationId": "GetWeatherForecast",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WeatherForecast"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AreasViewModel": {
+        "type": "object",
+        "properties": {
+          "are_ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "are_Nombre": {
+            "type": "string",
+            "nullable": true
+          },
+          "usu_UsuarioCreacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "are_FechaCreacion": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usu_UsuarioModificacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "are_FechaModificacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "usu_UsuarioEliminacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "are_FechaEliminacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "are_Estado": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ConsultaAcademicasViewModel": {
+        "type": "object",
+        "properties": {
+          "coa_ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "est_ID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "tic_ID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "coa_Descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "coa_Recomendacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "coa_Seguimiento": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "usu_UsuarioCreacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "coa_FechaCreacion": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usu_UsuarioModificacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "coa_FechaModificacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "usu_UsuarioEliminacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "coa_FechaEliminacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "coa_Estado": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DateOnly": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "month": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "day": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dayOfWeek": {
+            "$ref": "#/components/schemas/DayOfWeek"
+          },
+          "dayOfYear": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "dayNumber": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DayOfWeek": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "PersonalViewModel": {
+        "type": "object",
+        "properties": {
+          "per_ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "per_Nombres": {
+            "type": "string",
+            "nullable": true
+          },
+          "per_Apellidos": {
+            "type": "string",
+            "nullable": true
+          },
+          "per_EstadoCivil": {
+            "type": "string",
+            "nullable": true
+          },
+          "per_Sexo": {
+            "type": "string",
+            "nullable": true
+          },
+          "per_FechaNac": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "per_Telefono": {
+            "type": "string",
+            "nullable": true
+          },
+          "per_Direccion": {
+            "type": "string",
+            "nullable": true
+          },
+          "per_Correo": {
+            "type": "string",
+            "nullable": true
+          },
+          "are_ID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "usu_UsuarioCreacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "per_FechaCreacion": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usu_UsuarioModificacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "per_FechaModificacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "usu_UsuarioEliminacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "per_FechaEliminacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "per_Estado": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PlanAccionViewModel": {
+        "type": "object",
+        "properties": {
+          "pla_ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pla_ResumenSesion": {
+            "type": "string",
+            "nullable": true
+          },
+          "pla_Objetivo": {
+            "type": "string",
+            "nullable": true
+          },
+          "pla_ActividadSug": {
+            "type": "string",
+            "nullable": true
+          },
+          "pla_FechaSeguimiento": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "pla_Observacion": {
+            "type": "string",
+            "nullable": true
+          },
+          "usu_UsuarioCreacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pla_FechaCreacion": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usu_UsuarioModificacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "pla_FechaModificacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "usu_UsuarioEliminacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "pla_FechaEliminacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "pla_Estado": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SolicitudApoyoViewModel": {
+        "type": "object",
+        "properties": {
+          "sol_ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "est_ID": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sol_ResumenSesion": {
+            "type": "string",
+            "nullable": true
+          },
+          "sol_MotivoConsulta": {
+            "type": "string",
+            "nullable": true
+          },
+          "sol_MalestarEmocional": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sol_Asistencia": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "sol_HorarioPref": {
+            "$ref": "#/components/schemas/TimeSpan"
+          },
+          "usu_UsuarioCreacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sol_FechaCreacion": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usu_UsuarioModificacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sol_FechaModificacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "usu_UsuarioEliminacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "sol_FechaEliminacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "sol_Estado": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TimeSpan": {
+        "type": "object",
+        "properties": {
+          "ticks": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "days": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "hours": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "milliseconds": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "microseconds": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "nanoseconds": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "minutes": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "seconds": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "totalDays": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalHours": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalMilliseconds": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalMicroseconds": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalNanoseconds": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalMinutes": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "totalSeconds": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TipoConsultaViewModel": {
+        "type": "object",
+        "properties": {
+          "tic_ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tic_Descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "usu_UsuarioCreacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tic_FechaCreacion": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usu_UsuarioModificacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "tic_FechaModificacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "usu_UsuarioEliminacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "tic_FechaEliminacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tic_Estado": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TipoTratamientoViewMoel": {
+        "type": "object",
+        "properties": {
+          "tra_ID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tra_Descripcion": {
+            "type": "string",
+            "nullable": true
+          },
+          "usu_UsuarioCreacion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tra_FechaCreacion": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "usu_UsuarioModificacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "tra_FechaModificacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "usu_UsuarioEliminacion": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "tra_FechaEliminacion": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "tra_Estado": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WeatherForecast": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "$ref": "#/components/schemas/DateOnly"
+          },
+          "temperatureC": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "temperatureF": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

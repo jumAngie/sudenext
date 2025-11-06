@@ -1,7 +1,12 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\Elmer Carbajal\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B3222012-D49A-4127-AC07-877FDA63F06B}|SUDENEXT.API.csproj|c:\\users\\elmer carbajal\\documents\\github\\sudenext\\backend\\api\\sudenext_api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B3222012-D49A-4127-AC07-877FDA63F06B}|SUDENEXT.API.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +14,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Elmer Carbajal\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Elmer Carbajal\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-06T15:53:14.04Z",
+              "EditorCaption": ""
             }
           ]
         }
