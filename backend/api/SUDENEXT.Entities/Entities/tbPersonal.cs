@@ -43,9 +43,9 @@ public partial class tbPersonal
 
     public virtual tbAreas are { get; set; }
 
-    public virtual ICollection<tbSolicitudApoyo> tbSolicitudApoyo { get; set; } = new List<tbSolicitudApoyo>();
+    public virtual ICollection<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignada { get; set; } = new List<tbSolicitudApoyoAsignada>();
 
-    public virtual ICollection<tbSolicitudCitaOdon> tbSolicitudCitaOdon { get; set; } = new List<tbSolicitudCitaOdon>();
+    public virtual ICollection<tbSolicitudOdonAsignada> tbSolicitudOdonAsignada { get; set; } = new List<tbSolicitudOdonAsignada>();
 
     public virtual ICollection<tbUsuarios> tbUsuarios { get; set; } = new List<tbUsuarios>();
 

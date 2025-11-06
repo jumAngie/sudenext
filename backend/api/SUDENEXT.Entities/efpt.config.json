@@ -64,6 +64,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Odon].[tbSolicitudOdonAsignada]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Odon].[tbTratamientos]",
          "ObjectType": 0
       },
@@ -73,6 +77,10 @@
       },
       {
          "Name": "[Psi].[tbSolicitudApoyo]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Psi].[tbSolicitudApoyoAsignada]",
          "ObjectType": 0
       },
       {

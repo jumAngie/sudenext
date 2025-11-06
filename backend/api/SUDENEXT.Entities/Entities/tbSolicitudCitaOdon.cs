@@ -19,8 +19,6 @@ public partial class tbSolicitudCitaOdon
 
     public string sco_Prioridad { get; set; }
 
-    public int? per_ID { get; set; }
-
     public int usu_UsuarioCreacion { get; set; }
 
     public DateTime sco_FechaCreacion { get; set; }
@@ -37,7 +35,7 @@ public partial class tbSolicitudCitaOdon
 
     public virtual tbEstudiantes est { get; set; }
 
-    public virtual tbPersonal per { get; set; }
+    public virtual ICollection<tbSolicitudOdonAsignada> tbSolicitudOdonAsignada { get; set; } = new List<tbSolicitudOdonAsignada>();
 
     public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
 

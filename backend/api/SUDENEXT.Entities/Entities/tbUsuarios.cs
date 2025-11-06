@@ -105,6 +105,12 @@ public partial class tbUsuarios
 
     public virtual ICollection<tbRoles> tbRolesusu_UsuarioModificacionNavigation { get; set; } = new List<tbRoles>();
 
+    public virtual ICollection<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignadausu_UsuarioCreacionNavigation { get; set; } = new List<tbSolicitudApoyoAsignada>();
+
+    public virtual ICollection<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignadausu_UsuarioEliminacionNavigation { get; set; } = new List<tbSolicitudApoyoAsignada>();
+
+    public virtual ICollection<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignadausu_UsuarioModificacionNavigation { get; set; } = new List<tbSolicitudApoyoAsignada>();
+
     public virtual ICollection<tbSolicitudApoyo> tbSolicitudApoyousu_UsuarioCreacionNavigation { get; set; } = new List<tbSolicitudApoyo>();
 
     public virtual ICollection<tbSolicitudApoyo> tbSolicitudApoyousu_UsuarioEliminacionNavigation { get; set; } = new List<tbSolicitudApoyo>();
@@ -116,6 +122,12 @@ public partial class tbUsuarios
     public virtual ICollection<tbSolicitudCitaOdon> tbSolicitudCitaOdonusu_UsuarioEliminacionNavigation { get; set; } = new List<tbSolicitudCitaOdon>();
 
     public virtual ICollection<tbSolicitudCitaOdon> tbSolicitudCitaOdonusu_UsuarioModificacionNavigation { get; set; } = new List<tbSolicitudCitaOdon>();
+
+    public virtual ICollection<tbSolicitudOdonAsignada> tbSolicitudOdonAsignadausu_UsuarioCreacionNavigation { get; set; } = new List<tbSolicitudOdonAsignada>();
+
+    public virtual ICollection<tbSolicitudOdonAsignada> tbSolicitudOdonAsignadausu_UsuarioEliminacionNavigation { get; set; } = new List<tbSolicitudOdonAsignada>();
+
+    public virtual ICollection<tbSolicitudOdonAsignada> tbSolicitudOdonAsignadausu_UsuarioModificacionNavigation { get; set; } = new List<tbSolicitudOdonAsignada>();
 
     public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanesusu_UsuarioCreacionNavigation { get; set; } = new List<tbSolicitudesXPlanes>();
 

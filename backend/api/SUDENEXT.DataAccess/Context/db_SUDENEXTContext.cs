@@ -12,7 +12,6 @@ public partial class db_SUDENEXTContext : DbContext
     public db_SUDENEXTContext()
     {
     }
-
     public db_SUDENEXTContext(DbContextOptions<db_SUDENEXTContext> options)
         : base(options)
     {
@@ -40,7 +39,11 @@ public partial class db_SUDENEXTContext : DbContext
 
     public virtual DbSet<tbSolicitudApoyo> tbSolicitudApoyo { get; set; }
 
+    public virtual DbSet<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignada { get; set; }
+
     public virtual DbSet<tbSolicitudCitaOdon> tbSolicitudCitaOdon { get; set; }
+
+    public virtual DbSet<tbSolicitudOdonAsignada> tbSolicitudOdonAsignada { get; set; }
 
     public virtual DbSet<tbSolicitudesXPlanes> tbSolicitudesXPlanes { get; set; }
 
@@ -522,6 +525,40 @@ public partial class db_SUDENEXTContext : DbContext
                 .HasConstraintName("FK_Psi_tbSolicitudApoyo_UsuarioModificacion_Acce_tbUsuarios_usu_ID");
         });
 
+        modelBuilder.Entity<tbSolicitudApoyoAsignada>(entity =>
+        {
+            entity.HasKey(e => e.spa_ID).HasName("PK_Psi_tbSolicitudApoyoAsignada_spa_ID");
+
+            entity.ToTable("tbSolicitudApoyoAsignada", "Psi");
+
+            entity.Property(e => e.spa_Cancel).HasDefaultValue(false);
+            entity.Property(e => e.spa_Estado).HasDefaultValue(true);
+            entity.Property(e => e.spa_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.spa_FechaEliminacion).HasColumnType("datetime");
+            entity.Property(e => e.spa_FechaModificacion).HasColumnType("datetime");
+
+            entity.HasOne(d => d.per).WithMany(p => p.tbSolicitudApoyoAsignada)
+                .HasForeignKey(d => d.per_ID)
+                .HasConstraintName("FK_Psi_tbSolicitudApoyoAsignada_per_ID_Gral_tbPersonal_per_ID");
+
+            entity.HasOne(d => d.sol).WithMany(p => p.tbSolicitudApoyoAsignada)
+                .HasForeignKey(d => d.sol_ID)
+                .HasConstraintName("FK_Psi_tbSolicitudApoyoAsignada_sco_ID_Psi_tbSolicitudApoyo_sol_ID");
+
+            entity.HasOne(d => d.usu_UsuarioCreacionNavigation).WithMany(p => p.tbSolicitudApoyoAsignadausu_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usu_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Psi_tbSolicitudApoyoAsignada_UsuarioCreacion_Acce_tbUsuarios_usu_ID");
+
+            entity.HasOne(d => d.usu_UsuarioEliminacionNavigation).WithMany(p => p.tbSolicitudApoyoAsignadausu_UsuarioEliminacionNavigation)
+                .HasForeignKey(d => d.usu_UsuarioEliminacion)
+                .HasConstraintName("FK_Psi_tbSolicitudApoyoAsignada_UsuarioEliminacion_Acce_tbUsuarios_usu_ID");
+
+            entity.HasOne(d => d.usu_UsuarioModificacionNavigation).WithMany(p => p.tbSolicitudApoyoAsignadausu_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usu_UsuarioModificacion)
+                .HasConstraintName("FK_Psi_tbSolicitudApoyoAsignada_UsuarioModificacion_Acce_tbUsuarios_usu_ID");
+        });
+
         modelBuilder.Entity<tbSolicitudCitaOdon>(entity =>
         {
             entity.HasKey(e => e.sco_ID).HasName("PK_Odon_tbSolicitudCitaOdon_sco_ID");
@@ -558,6 +595,40 @@ public partial class db_SUDENEXTContext : DbContext
             entity.HasOne(d => d.usu_UsuarioModificacionNavigation).WithMany(p => p.tbSolicitudCitaOdonusu_UsuarioModificacionNavigation)
                 .HasForeignKey(d => d.usu_UsuarioModificacion)
                 .HasConstraintName("FK_Odon_tbSolicitudCitaOdon_UsuarioModificacion_Acce_tbUsuarios_usu_ID");
+        });
+
+        modelBuilder.Entity<tbSolicitudOdonAsignada>(entity =>
+        {
+            entity.HasKey(e => e.sca_ID).HasName("PK_Odon_tbSolicitudOdonAsignada_sca_ID");
+
+            entity.ToTable("tbSolicitudOdonAsignada", "Odon");
+
+            entity.Property(e => e.sca_Cancel).HasDefaultValue(false);
+            entity.Property(e => e.sca_Estado).HasDefaultValue(true);
+            entity.Property(e => e.sca_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.sca_FechaEliminacion).HasColumnType("datetime");
+            entity.Property(e => e.sca_FechaModificacion).HasColumnType("datetime");
+
+            entity.HasOne(d => d.per).WithMany(p => p.tbSolicitudOdonAsignada)
+                .HasForeignKey(d => d.per_ID)
+                .HasConstraintName("FK_Odon_tbSolicitudOdonAsignada_per_ID_Gral_tbPersonal_per_ID");
+
+            entity.HasOne(d => d.sco).WithMany(p => p.tbSolicitudOdonAsignada)
+                .HasForeignKey(d => d.sco_ID)
+                .HasConstraintName("FK_Odon_tbSolicitudOdonAsignada_sco_ID_Odon_tbSolicitudCitaOdon_sco_ID");
+
+            entity.HasOne(d => d.usu_UsuarioCreacionNavigation).WithMany(p => p.tbSolicitudOdonAsignadausu_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usu_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Odon_tbSolicitudOdonAsignada_UsuarioCreacion_Acce_tbUsuarios_usu_ID");
+
+            entity.HasOne(d => d.usu_UsuarioEliminacionNavigation).WithMany(p => p.tbSolicitudOdonAsignadausu_UsuarioEliminacionNavigation)
+                .HasForeignKey(d => d.usu_UsuarioEliminacion)
+                .HasConstraintName("FK_Odon_tbSolicitudOdonAsignada_UsuarioEliminacion_Acce_tbUsuarios_usu_ID");
+
+            entity.HasOne(d => d.usu_UsuarioModificacionNavigation).WithMany(p => p.tbSolicitudOdonAsignadausu_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usu_UsuarioModificacion)
+                .HasConstraintName("FK_Odon_tbSolicitudOdonAsignada_UsuarioModificacion_Acce_tbUsuarios_usu_ID");
         });
 
         modelBuilder.Entity<tbSolicitudesXPlanes>(entity =>

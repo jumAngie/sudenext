@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "wM5PuegDhBE=",
-  "success": false,
+  "dgSpecHash": "wdH4EbrZ+jc=",
+  "success": true,
   "projectFilePath": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.BussinessLogic\\SUDENEXT.BussinessLogic.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PC\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
@@ -119,15 +119,5 @@
     "C:\\Users\\PC\\.nuget\\packages\\system.xml.readerwriter\\4.0.11\\system.xml.readerwriter.4.0.11.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\system.xml.xdocument\\4.0.11\\system.xml.xdocument.4.0.11.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1605",
-      "level": "Error",
-      "message": "Advertencia como error: Degradación del paquete detectada: Microsoft.EntityFrameworkCore.SqlServer de 8.0.20 a 8.0.18. Haga referencia al paquete directamente desde el proyecto para seleccionar una versión diferente. \r\n SUDENEXT.BussinessLogic -> SUDENEXT.DataAccess -> SUDENEXT.Entities -> Microsoft.EntityFrameworkCore.SqlServer (>= 8.0.20) \r\n SUDENEXT.BussinessLogic -> SUDENEXT.DataAccess -> Microsoft.EntityFrameworkCore.SqlServer (>= 8.0.18)",
-      "libraryId": "Microsoft.EntityFrameworkCore.SqlServer",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  "logs": []
 }

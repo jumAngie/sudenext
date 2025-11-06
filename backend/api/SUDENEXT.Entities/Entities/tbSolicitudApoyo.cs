@@ -21,8 +21,6 @@ public partial class tbSolicitudApoyo
 
     public TimeSpan? sol_HorarioPref { get; set; }
 
-    public int? per_ID { get; set; }
-
     public int usu_UsuarioCreacion { get; set; }
 
     public DateTime sol_FechaCreacion { get; set; }
@@ -39,7 +37,7 @@ public partial class tbSolicitudApoyo
 
     public virtual tbEstudiantes est { get; set; }
 
-    public virtual tbPersonal per { get; set; }
+    public virtual ICollection<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignada { get; set; } = new List<tbSolicitudApoyoAsignada>();
 
     public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanes { get; set; } = new List<tbSolicitudesXPlanes>();
 
