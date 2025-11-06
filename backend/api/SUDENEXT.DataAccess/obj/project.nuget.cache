@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "bBl5Oh5Sb9s=",
-  "success": true,
+  "dgSpecHash": "i2qaf7ErgnQ=",
+  "success": false,
   "projectFilePath": "C:\\Users\\Elmer Carbajal\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.DataAccess\\SUDENEXT.DataAccess.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Elmer Carbajal\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
@@ -119,5 +119,17 @@
     "C:\\Users\\Elmer Carbajal\\.nuget\\packages\\system.xml.readerwriter\\4.0.11\\system.xml.readerwriter.4.0.11.nupkg.sha512",
     "C:\\Users\\Elmer Carbajal\\.nuget\\packages\\system.xml.xdocument\\4.0.11\\system.xml.xdocument.4.0.11.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1605",
+      "level": "Error",
+      "message": "Advertencia como error: Degradación del paquete detectada: Microsoft.EntityFrameworkCore.SqlServer de 8.0.20 a 8.0.18. Haga referencia al paquete directamente desde el proyecto para seleccionar una versión diferente. \r\n SUDENEXT.DataAccess -> SUDENEXT.Entities -> Microsoft.EntityFrameworkCore.SqlServer (>= 8.0.20) \r\n SUDENEXT.DataAccess -> Microsoft.EntityFrameworkCore.SqlServer (>= 8.0.18)",
+      "projectPath": "C:\\Users\\Elmer Carbajal\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.DataAccess\\SUDENEXT.DataAccess.csproj",
+      "filePath": "C:\\Users\\Elmer Carbajal\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.DataAccess\\SUDENEXT.DataAccess.csproj",
+      "libraryId": "Microsoft.EntityFrameworkCore.SqlServer",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

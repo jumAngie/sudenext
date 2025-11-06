@@ -11,13 +11,15 @@ public partial class tbSolicitudCitaOdon
 
     public int? est_ID { get; set; }
 
-    public DateOnly sco_FechaP { get; set; }
+    public DateTime sco_FechaP { get; set; }
 
-    public TimeOnly sco_Hora { get; set; }
+    public TimeSpan sco_Hora { get; set; }
 
     public string sco_Motivo { get; set; }
 
     public string sco_Prioridad { get; set; }
+
+    public int? per_ID { get; set; }
 
     public int usu_UsuarioCreacion { get; set; }
 
@@ -34,6 +36,8 @@ public partial class tbSolicitudCitaOdon
     public bool? sco_Estado { get; set; }
 
     public virtual tbEstudiantes est { get; set; }
+
+    public virtual tbPersonal per { get; set; }
 
     public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
 
