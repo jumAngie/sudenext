@@ -293,6 +293,7 @@ CREATE TABLE Odon.tbSolicitudCitaOdon
 	sco_Hora		TIME				NOT NULL,
 	sco_Motivo		NVARCHAR(255)		NOT NULL,
 	sco_Prioridad	CHAR(1) DEFAULT 'B' NOT NULL,
+	per_ID			INT,
     
 	usu_UsuarioCreacion      INT     NOT NULL,
     sco_FechaCreacion        DATETIME NOT NULL,
@@ -305,6 +306,7 @@ CREATE TABLE Odon.tbSolicitudCitaOdon
 	CONSTRAINT PK_Odon_tbSolicitudCitaOdon_sco_ID	PRIMARY KEY(sco_ID),
 	CONSTRAINT FK_Odon_tbSolicitudCitaOdon_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY(est_ID) REFERENCES Gral.tbEstudiantes(est_ID),
 	CONSTRAINT CK_Odon_tbSolicitudCitaOdon_sco_Prioridad CHECK(sco_Prioridad IN('B','M','A')),
+	CONSTRAINT FK_Odon_tbSolicitudCitaOdon_per_ID_Gral_tbPersonal_per_ID FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID),
 	CONSTRAINT FK_Odon_tbSolicitudCitaOdon_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
     CONSTRAINT FK_Odon_tbSolicitudCitaOdon_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
     CONSTRAINT FK_Odon_tbSolicitudCitaOdon_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
@@ -393,6 +395,7 @@ CREATE TABLE Psi.tbSolicitudApoyo
     sol_MalestarEmocional INT CHECK (sol_MalestarEmocional BETWEEN 1 AND 5), --Este que seria--
     sol_Asistencia BIT DEFAULT 0,
     sol_HorarioPref TIME,
+	per_ID			INT,
 	
 	usu_UsuarioCreacion				INT NOT NULL,
 	sol_FechaCreacion			    DATETIME NOT NULL,
@@ -404,6 +407,7 @@ CREATE TABLE Psi.tbSolicitudApoyo
 
     CONSTRAINT PK_Psi_tbSolicitudApoyo_sol_ID PRIMARY KEY(sol_ID),
     CONSTRAINT FK_Psi_tbSolicitudApoyo_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID),
+	CONSTRAINT FK_Psi_tbSolicitudApoyo_per_ID_Gral_tbPersonal_per_ID FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID),
 	CONSTRAINT FK_Psi_tbSolicitudApoyo_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
     CONSTRAINT FK_Psi_tbSolicitudApoyo_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
     CONSTRAINT FK_Psi_tbSolicitudApoyo_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
