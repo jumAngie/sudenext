@@ -293,7 +293,6 @@ CREATE TABLE Odon.tbSolicitudCitaOdon
 	sco_Hora		TIME				NOT NULL,
 	sco_Motivo		NVARCHAR(255)		NOT NULL,
 	sco_Prioridad	CHAR(1) DEFAULT 'B' NOT NULL,
-	per_ID			INT,
     
 	usu_UsuarioCreacion      INT     NOT NULL,
     sco_FechaCreacion        DATETIME NOT NULL,
@@ -306,10 +305,33 @@ CREATE TABLE Odon.tbSolicitudCitaOdon
 	CONSTRAINT PK_Odon_tbSolicitudCitaOdon_sco_ID	PRIMARY KEY(sco_ID),
 	CONSTRAINT FK_Odon_tbSolicitudCitaOdon_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY(est_ID) REFERENCES Gral.tbEstudiantes(est_ID),
 	CONSTRAINT CK_Odon_tbSolicitudCitaOdon_sco_Prioridad CHECK(sco_Prioridad IN('B','M','A')),
-	CONSTRAINT FK_Odon_tbSolicitudCitaOdon_per_ID_Gral_tbPersonal_per_ID FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID),
 	CONSTRAINT FK_Odon_tbSolicitudCitaOdon_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
     CONSTRAINT FK_Odon_tbSolicitudCitaOdon_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
     CONSTRAINT FK_Odon_tbSolicitudCitaOdon_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
+);
+
+--- Tabla de Asignación de Citas Odontologicas
+CREATE TABLE Odon.tbSolicitudOdonAsignada
+(
+		sca_ID		INT IDENTITY (1,1),
+		sco_ID		INT,
+		per_ID		INT,
+		sca_Cancel	BIT DEFAULT 0,
+
+		usu_UsuarioCreacion      INT     NOT NULL,
+		sca_FechaCreacion        DATETIME NOT NULL,
+		usu_UsuarioModificacion  INT     NULL,
+		sca_FechaModificacion    DATETIME NULL,
+		usu_UsuarioEliminacion   INT     NULL,
+		sca_FechaEliminacion     DATETIME NULL,
+		sca_Estado               BIT DEFAULT 1,
+	
+	CONSTRAINT PK_Odon_tbSolicitudOdonAsignada_sca_ID PRIMARY KEY (sca_ID),
+	CONSTRAINT FK_Odon_tbSolicitudOdonAsignada_sco_ID_Odon_tbSolicitudCitaOdon_sco_ID		FOREIGN KEY(sco_ID) REFERENCES Odon.tbSolicitudCitaOdon(sco_ID),
+	CONSTRAINT FK_Odon_tbSolicitudOdonAsignada_per_ID_Gral_tbPersonal_per_ID				FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID),
+	CONSTRAINT FK_Odon_tbSolicitudOdonAsignada_UsuarioCreacion_Acce_tbUsuarios_usu_ID		FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
+    CONSTRAINT FK_Odon_tbSolicitudOdonAsignada_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
+    CONSTRAINT FK_Odon_tbSolicitudOdonAsignada_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
 );
 
 --- Tabla de Tratamientos disponibles
@@ -392,10 +414,9 @@ CREATE TABLE Psi.tbSolicitudApoyo
     est_ID INT,
     sol_ResumenSesion NVARCHAR (200) NOT NULL,
     sol_MotivoConsulta NVARCHAR (200) NOT NULL,
-    sol_MalestarEmocional INT CHECK (sol_MalestarEmocional BETWEEN 1 AND 5), --Este que seria--
+    sol_MalestarEmocional INT CHECK (sol_MalestarEmocional BETWEEN 1 AND 5),
     sol_Asistencia BIT DEFAULT 0,
     sol_HorarioPref TIME,
-	per_ID			INT,
 	
 	usu_UsuarioCreacion				INT NOT NULL,
 	sol_FechaCreacion			    DATETIME NOT NULL,
@@ -407,10 +428,33 @@ CREATE TABLE Psi.tbSolicitudApoyo
 
     CONSTRAINT PK_Psi_tbSolicitudApoyo_sol_ID PRIMARY KEY(sol_ID),
     CONSTRAINT FK_Psi_tbSolicitudApoyo_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID),
-	CONSTRAINT FK_Psi_tbSolicitudApoyo_per_ID_Gral_tbPersonal_per_ID FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID),
 	CONSTRAINT FK_Psi_tbSolicitudApoyo_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
     CONSTRAINT FK_Psi_tbSolicitudApoyo_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
     CONSTRAINT FK_Psi_tbSolicitudApoyo_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
+);
+
+--- Tabla de Asignación de Sesiones de Apoyo 
+CREATE TABLE Psi.tbSolicitudApoyoAsignada
+(
+		spa_ID			INT IDENTITY (1,1),
+		sol_ID			INT,
+		per_ID			INT,
+		spa_Cancel		BIT DEFAULT 0,
+
+		usu_UsuarioCreacion      INT     NOT NULL,
+		spa_FechaCreacion        DATETIME NOT NULL,
+		usu_UsuarioModificacion  INT     NULL,
+		spa_FechaModificacion    DATETIME NULL,
+		usu_UsuarioEliminacion   INT     NULL,
+		spa_FechaEliminacion     DATETIME NULL,
+		spa_Estado               BIT DEFAULT 1,
+	
+	CONSTRAINT PK_Psi_tbSolicitudApoyoAsignada_spa_ID PRIMARY KEY (spa_ID),
+	CONSTRAINT FK_Psi_tbSolicitudApoyoAsignada_sco_ID_Psi_tbSolicitudApoyo_sol_ID			FOREIGN KEY(sol_ID) REFERENCES Psi.tbSolicitudApoyo(sol_ID),
+	CONSTRAINT FK_Psi_tbSolicitudApoyoAsignada_per_ID_Gral_tbPersonal_per_ID				FOREIGN KEY(per_ID) REFERENCES Gral.tbPersonal(per_ID),
+	CONSTRAINT FK_Psi_tbSolicitudApoyoAsignada_UsuarioCreacion_Acce_tbUsuarios_usu_ID		FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
+    CONSTRAINT FK_Psi_tbSolicitudApoyoAsignada_UsuarioModificacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
+    CONSTRAINT FK_Psi_tbSolicitudApoyoAsignada_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
 );
 
 CREATE TABLE Psi.tbPlanAccion

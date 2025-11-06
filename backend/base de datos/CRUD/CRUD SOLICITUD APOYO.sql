@@ -16,8 +16,6 @@ BEGIN
 		sol.sol_Asistencia,
 		sol.sol_HorarioPref,
 		sol.sol_Estado,
-		sol.per_ID,
-		perP.per_Nombres + perP.per_Apellidos AS 'PersonalAsignado',
 
 		-- ======== DATOS DEL USUARIO CREADOR ========
 		usuC.usu_ID AS usu_UsuarioCreacion,
@@ -42,7 +40,6 @@ BEGIN
 
 	FROM Psi.tbSolicitudApoyo sol
 		INNER JOIN Gral.tbEstudiantes est ON sol.est_ID = est.est_ID
-		LEFT JOIN Gral.tbPersonal perP	  ON sol.per_ID = perP.per_ID
 		-- JOIN con Usuario Creador
 		INNER JOIN Acce.tbUsuarios usuC ON sol.usu_UsuarioCreacion = usuC.usu_ID
 		INNER JOIN Gral.tbPersonal perC ON usuC.per_ID = perC.per_ID
