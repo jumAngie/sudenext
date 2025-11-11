@@ -23,3 +23,4 @@ C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\ne
 C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\refint\SUDENEXT.Entities.dll
 C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\SUDENEXT.Entities.pdb
 C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\ref\SUDENEXT.Entities.dll
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.Entities\obj\Debug\net8.0\SUDENEXT.Entities.csproj.AssemblyReference.cache

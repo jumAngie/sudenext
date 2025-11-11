@@ -4,55 +4,66 @@
 CREATE OR ALTER PROCEDURE Psi.sp_ListarSolicitudApoyo
 AS
 BEGIN
-	SET NOCOUNT ON;
-	SELECT 
-		-- Datos principales del tipo de consulta
-		sol.sol_ID,
-		sol.est_ID,
-		est.est_NombreCompleto,
-		sol.sol_ResumenSesion,
-		sol.sol_MotivoConsulta,
-		sol.sol_MalestarEmocional,
-		sol.sol_Asistencia,
-		sol.sol_HorarioPref,
-		sol.sol_Estado,
+    SET NOCOUNT ON;
 
-		-- ======== DATOS DEL USUARIO CREADOR ========
-		usuC.usu_ID AS usu_UsuarioCreacion,
-		usuC.usu_Usuario AS Usuario_C,
-		perC.per_ID AS ID_Creador,
-		(perC.per_Nombres + ' ' + perC.per_Apellidos) AS NombreCompleto_C,
-		sol.sol_FechaCreacion,
+    SELECT 
+        -- ======== DATOS PRINCIPALES DE LA SOLICITUD ========
+        sol.sol_ID,
+        sol.est_ID,
+        est.est_NombreCompleto,
+        sol.sol_ResumenSesion,
+        sol.sol_MotivoConsulta,
+        sol.sol_MalestarEmocional,
+        sol.sol_Asistencia,
+        sol.sol_HorarioPref,
+        sol.sol_Estado,
 
-		-- ======== DATOS DEL USUARIO MODIFICADOR ========
-		usuM.usu_ID AS usu_UsuarioModificacion,
-		usuM.usu_Usuario AS Usuario_M,
-		perM.per_ID AS ID_Modificador,
-		(perM.per_Nombres + ' ' + perM.per_Apellidos) AS NombreCompleto_M,
-		sol.sol_FechaModificacion,
+        -- ======== DATOS DEL USUARIO CREADOR ========
+        usuC.usu_ID AS usu_UsuarioCreacion,
+        usuC.usu_Usuario AS Usuario_C,
+        estC.est_ID AS ID_Creador,
+        estC.est_NombreCompleto AS NombreCompleto_C,
+        sol.sol_FechaCreacion,
 
-		-- ======== DATOS DEL USUARIO ELIMINADOR ========
-		usuE.usu_ID AS usu_UsuarioEliminacion,
-		usuE.usu_Usuario AS Usuario_E,
-		perE.per_ID AS ID_Eliminador,
-		(perE.per_Nombres + ' ' + perE.per_Apellidos) AS NombreCompleto_E,
-		sol.sol_FechaEliminacion
+        -- ======== DATOS DEL USUARIO MODIFICADOR ========
+        usuM.usu_ID AS usu_UsuarioModificacion,
+        usuM.usu_Usuario AS Usuario_M,
+        estM.est_ID AS ID_Modificador,
+        estM.est_NombreCompleto AS NombreCompleto_M,
+        sol.sol_FechaModificacion,
 
-	FROM Psi.tbSolicitudApoyo sol
-		INNER JOIN Gral.tbEstudiantes est ON sol.est_ID = est.est_ID
-		-- JOIN con Usuario Creador
-		INNER JOIN Acce.tbUsuarios usuC ON sol.usu_UsuarioCreacion = usuC.usu_ID
-		INNER JOIN Gral.tbPersonal perC ON usuC.per_ID = perC.per_ID
+        -- ======== DATOS DEL USUARIO ELIMINADOR ========
+        usuE.usu_ID AS usu_UsuarioEliminacion,
+        usuE.usu_Usuario AS Usuario_E,
+        estE.est_ID AS ID_Eliminador,
+        estE.est_NombreCompleto AS NombreCompleto_E,
+        sol.sol_FechaEliminacion
 
-		-- JOIN con Usuario Modificador
-		LEFT JOIN Acce.tbUsuarios usuM ON sol.usu_UsuarioModificacion = usuM.usu_ID
-		LEFT JOIN Gral.tbPersonal perM ON usuM.per_ID = perM.per_ID
+    FROM Psi.tbSolicitudApoyo sol
+        INNER JOIN Gral.tbEstudiantes est 
+            ON sol.est_ID = est.est_ID
+        
+        -- ======== USUARIO CREADOR (Debe ser estudiante) ========
+        INNER JOIN Acce.tbUsuarios usuC 
+            ON sol.usu_UsuarioCreacion = usuC.usu_ID
+           AND usuC.est_ID IS NOT NULL    -- Solo estudiantes
+        INNER JOIN Gral.tbEstudiantes estC 
+            ON usuC.est_ID = estC.est_ID
 
-		-- JOIN con Usuario Eliminador
-		LEFT JOIN Acce.tbUsuarios usuE ON sol.usu_UsuarioEliminacion = usuE.usu_ID
-		LEFT JOIN Gral.tbPersonal perE ON usuE.per_ID = perE.per_ID
+        -- ======== USUARIO MODIFICADOR ========
+        LEFT JOIN Acce.tbUsuarios usuM 
+            ON sol.usu_UsuarioModificacion = usuM.usu_ID
+        LEFT JOIN Gral.tbEstudiantes estM 
+            ON usuM.est_ID = estM.est_ID
 
-	WHERE sol.sol_Estado = 1;
+        -- ======== USUARIO ELIMINADOR ========
+        LEFT JOIN Acce.tbUsuarios usuE 
+            ON sol.usu_UsuarioEliminacion = usuE.usu_ID
+        LEFT JOIN Gral.tbEstudiantes estE 
+            ON usuE.est_ID = estE.est_ID
+
+    WHERE 
+        sol.sol_Estado = 1;
 END;
 GO
 

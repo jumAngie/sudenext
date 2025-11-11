@@ -49,6 +49,14 @@ INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,	est_ID,		per_ID,		
 VALUES						('Felps',			@Pass,				NULL,		1, 		1,			1,						GETDATE(),			1);
 GO
 
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = '12345';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+
+INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,	est_ID,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
+VALUES						('AngieC',			@Pass,				1,		NULL, 		2,			1,						GETDATE(),			1);
+GO
+
 CREATE TABLE Acce.tbPantallas
 (
 	pan_ID				INT IDENTITY(1,1),
@@ -93,6 +101,8 @@ CREATE TABLE Acce.tbRoles
 GO
 INSERT INTO Acce.tbRoles (rol_Descripcion, usu_UsuarioCreacion, rol_FechaCreacion)
 VALUES					 ('Administrador',		1,				GETDATE());
+INSERT INTO Acce.tbRoles (rol_Descripcion, usu_UsuarioCreacion, rol_FechaCreacion)
+VALUES					 ('Estudiante',		1,				GETDATE());
 
 GO
  ALTER TABLE Acce.tbUsuarios
