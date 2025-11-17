@@ -23,7 +23,6 @@ CREATE TABLE Acce.tbUsuarios
 	usu_ID				INT IDENTITY(1,1),
 	usu_Usuario			NVARCHAR(80)		NOT NULL,
 	usu_Contrasena		NVARCHAR(255)		NOT NULL,
-	est_ID				INT,
 	per_ID				INT,
 	rol_ID				INT,
 
@@ -45,16 +44,8 @@ DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
 SET @Clave = '0987654321';
 SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
 
-INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,	est_ID,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
-VALUES						('Felps',			@Pass,				NULL,		1, 		1,			1,						GETDATE(),			1);
-GO
-
-DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
-SET @Clave = '12345';
-SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
-
-INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,	est_ID,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
-VALUES						('AngieC',			@Pass,				1,		NULL, 		2,			1,						GETDATE(),			1);
+INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
+VALUES						('Felps',			@Pass,		1, 		1,			1,						GETDATE(),			1);
 GO
 
 CREATE TABLE Acce.tbPantallas
@@ -101,8 +92,6 @@ CREATE TABLE Acce.tbRoles
 GO
 INSERT INTO Acce.tbRoles (rol_Descripcion, usu_UsuarioCreacion, rol_FechaCreacion)
 VALUES					 ('Administrador',		1,				GETDATE());
-INSERT INTO Acce.tbRoles (rol_Descripcion, usu_UsuarioCreacion, rol_FechaCreacion)
-VALUES					 ('Estudiante',		1,				GETDATE());
 
 GO
  ALTER TABLE Acce.tbUsuarios
@@ -177,6 +166,7 @@ CREATE TABLE Gral.tbEstudiantes
 	est_ID				INT IDENTITY(1,1),
 	est_NumeroCuenta	VARCHAR(11)		NOT NULL,
 	est_NombreCompleto	NVARCHAR(200)	NOT NULL,
+	est_Contra			VARCHAR(255)	NOT NULL,
 	est_Correo			NVARCHAR(50)	NOT NULL,
 	est_Celular			VARCHAR(20)		NOT NULL,
 	est_Carrera			NVARCHAR(50)	NOT NULL,
@@ -197,11 +187,11 @@ CREATE TABLE Gral.tbEstudiantes
 	CONSTRAINT FK_Gral_tbEstudiantes_usu_UsuarioEliminacion_Acce_tbUsuarios_usu_ID	FOREIGN KEY(usu_UsuarioEliminacion)		REFERENCES Acce.tbUsuarios(usu_ID)
 );
 GO
-INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,			est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
-VALUES						  ('20222000215',	'Angie Yahaira Campos Arias', 'angie.campos@unah.hn', '95887062', 'Informática Administrativa',	 1,				1,					GETDATE());
-GO
- ALTER TABLE Acce.tbUsuarios
- ADD CONSTRAINT FK_Acce_tbUsuarios_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID)
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = '0124';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('20222000215',	'Angie Yahaira Campos Arias', @Pass, 'angie.campos@unah.hn', '95887062', 'Informática Administrativa',	 1,				1,					GETDATE());
 GO
 
 -- Tabla de Personal
@@ -303,21 +293,18 @@ CREATE TABLE Odon.tbSolicitudCitaOdon
 	sco_Hora		TIME				NOT NULL,
 	sco_Motivo		NVARCHAR(255)		NOT NULL,
 	sco_Prioridad	CHAR(1) DEFAULT 'B' NOT NULL,
+	sco_Cancelar	BIT DEFAULT 0		NULL,
+	sco_FechaCancelacion     DATETIME   NULL,
     
-	usu_UsuarioCreacion      INT     NOT NULL,
+	
     sco_FechaCreacion        DATETIME NOT NULL,
-    usu_UsuarioModificacion  INT     NULL,
     sco_FechaModificacion    DATETIME NULL,
-    usu_UsuarioEliminacion   INT     NULL,
     sco_FechaEliminacion     DATETIME NULL,
     sco_Estado               BIT DEFAULT 1,
 
 	CONSTRAINT PK_Odon_tbSolicitudCitaOdon_sco_ID	PRIMARY KEY(sco_ID),
 	CONSTRAINT FK_Odon_tbSolicitudCitaOdon_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY(est_ID) REFERENCES Gral.tbEstudiantes(est_ID),
-	CONSTRAINT CK_Odon_tbSolicitudCitaOdon_sco_Prioridad CHECK(sco_Prioridad IN('B','M','A')),
-	CONSTRAINT FK_Odon_tbSolicitudCitaOdon_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
-    CONSTRAINT FK_Odon_tbSolicitudCitaOdon_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
-    CONSTRAINT FK_Odon_tbSolicitudCitaOdon_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
+	CONSTRAINT CK_Odon_tbSolicitudCitaOdon_sco_Prioridad CHECK(sco_Prioridad IN('B','M','A'))
 );
 
 --- Tabla de Asignación de Citas Odontologicas
@@ -427,20 +414,16 @@ CREATE TABLE Psi.tbSolicitudApoyo
     sol_MalestarEmocional INT CHECK (sol_MalestarEmocional BETWEEN 1 AND 5),
     sol_Asistencia BIT DEFAULT 0,
     sol_HorarioPref TIME,
+	sol_Cancelacion BIT DEFAULT 0,
+	sol_FechaCancelacion DATETIME NULL,
 	
-	usu_UsuarioCreacion				INT NOT NULL,
 	sol_FechaCreacion			    DATETIME NOT NULL,
-	usu_UsuarioModificacion 		INT DEFAULT NULL,
 	sol_FechaModificacion		    DATETIME DEFAULT NULL,
-	usu_UsuarioEliminacion			INT	DEFAULT NULL,
 	sol_FechaEliminacion			DATETIME DEFAULT NULL,
 	sol_Estado 				        BIT DEFAULT 1
 
     CONSTRAINT PK_Psi_tbSolicitudApoyo_sol_ID PRIMARY KEY(sol_ID),
-    CONSTRAINT FK_Psi_tbSolicitudApoyo_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID),
-	CONSTRAINT FK_Psi_tbSolicitudApoyo_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
-    CONSTRAINT FK_Psi_tbSolicitudApoyo_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
-    CONSTRAINT FK_Psi_tbSolicitudApoyo_UsuarioEliminacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioEliminacion) REFERENCES Acce.tbUsuarios(usu_ID)
+    CONSTRAINT FK_Psi_tbSolicitudApoyo_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID)
 );
 
 --- Tabla de Asignación de Sesiones de Apoyo 
