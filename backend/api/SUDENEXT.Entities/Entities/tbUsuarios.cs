@@ -13,8 +13,6 @@ public partial class tbUsuarios
 
     public string usu_Contrasena { get; set; }
 
-    public int? est_ID { get; set; }
-
     public int? per_ID { get; set; }
 
     public int? rol_ID { get; set; }
@@ -38,8 +36,6 @@ public partial class tbUsuarios
     public virtual ICollection<tbUsuarios> Inverseusu_UsuarioEliminacionNavigation { get; set; } = new List<tbUsuarios>();
 
     public virtual ICollection<tbUsuarios> Inverseusu_UsuarioModificacionNavigation { get; set; } = new List<tbUsuarios>();
-
-    public virtual tbEstudiantes est { get; set; }
 
     public virtual tbPersonal per { get; set; }
 
@@ -110,18 +106,6 @@ public partial class tbUsuarios
     public virtual ICollection<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignadausu_UsuarioEliminacionNavigation { get; set; } = new List<tbSolicitudApoyoAsignada>();
 
     public virtual ICollection<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignadausu_UsuarioModificacionNavigation { get; set; } = new List<tbSolicitudApoyoAsignada>();
-
-    public virtual ICollection<tbSolicitudApoyo> tbSolicitudApoyousu_UsuarioCreacionNavigation { get; set; } = new List<tbSolicitudApoyo>();
-
-    public virtual ICollection<tbSolicitudApoyo> tbSolicitudApoyousu_UsuarioEliminacionNavigation { get; set; } = new List<tbSolicitudApoyo>();
-
-    public virtual ICollection<tbSolicitudApoyo> tbSolicitudApoyousu_UsuarioModificacionNavigation { get; set; } = new List<tbSolicitudApoyo>();
-
-    public virtual ICollection<tbSolicitudCitaOdon> tbSolicitudCitaOdonusu_UsuarioCreacionNavigation { get; set; } = new List<tbSolicitudCitaOdon>();
-
-    public virtual ICollection<tbSolicitudCitaOdon> tbSolicitudCitaOdonusu_UsuarioEliminacionNavigation { get; set; } = new List<tbSolicitudCitaOdon>();
-
-    public virtual ICollection<tbSolicitudCitaOdon> tbSolicitudCitaOdonusu_UsuarioModificacionNavigation { get; set; } = new List<tbSolicitudCitaOdon>();
 
     public virtual ICollection<tbSolicitudOdonAsignada> tbSolicitudOdonAsignadausu_UsuarioCreacionNavigation { get; set; } = new List<tbSolicitudOdonAsignada>();
 

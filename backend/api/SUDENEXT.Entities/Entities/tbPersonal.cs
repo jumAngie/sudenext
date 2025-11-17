@@ -17,7 +17,7 @@ public partial class tbPersonal
 
     public string per_Sexo { get; set; }
 
-    public DateTime per_FechaNac { get; set; }
+    public DateOnly per_FechaNac { get; set; }
 
     public string per_Telefono { get; set; }
 

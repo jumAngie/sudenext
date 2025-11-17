@@ -1,21 +1,3 @@
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.BussinessLogic.deps.json
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.BussinessLogic.dll
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.BussinessLogic.pdb
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.DataAccess.dll
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.Entities.dll
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.DataAccess.pdb
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.Entities.pdb
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.csproj.AssemblyReference.cache
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.AssemblyInfoInputs.cache
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.AssemblyInfo.cs
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.csproj.CoreCompileInputs.cache
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.sourcelink.json
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.807F91EB.Up2Date
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.dll
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\refint\SUDENEXT.BussinessLogic.dll
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.pdb
-C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\ref\SUDENEXT.BussinessLogic.dll
 C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.BussinessLogic.deps.json
 C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.BussinessLogic.dll
 C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.BussinessLogic.pdb
@@ -34,3 +16,21 @@ C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\De
 C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\refint\SUDENEXT.BussinessLogic.dll
 C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.pdb
 C:\Users\PC\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\ref\SUDENEXT.BussinessLogic.dll
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.BussinessLogic.deps.json
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.BussinessLogic.dll
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.BussinessLogic.pdb
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.DataAccess.dll
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.Entities.dll
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.DataAccess.pdb
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\bin\Debug\net8.0\SUDENEXT.Entities.pdb
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.csproj.AssemblyReference.cache
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.AssemblyInfoInputs.cache
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.AssemblyInfo.cs
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.csproj.CoreCompileInputs.cache
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.sourcelink.json
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.807F91EB.Up2Date
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.dll
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\refint\SUDENEXT.BussinessLogic.dll
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\SUDENEXT.BussinessLogic.pdb
+C:\Users\Elmer Carbajal\Documents\GitHub\sudenext\backend\api\SUDENEXT.BussinessLogic\obj\Debug\net8.0\ref\SUDENEXT.BussinessLogic.dll

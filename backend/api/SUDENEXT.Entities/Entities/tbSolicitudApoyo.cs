@@ -21,15 +21,13 @@ public partial class tbSolicitudApoyo
 
     public TimeSpan? sol_HorarioPref { get; set; }
 
-    public int usu_UsuarioCreacion { get; set; }
+    public bool? sol_Cancelacion { get; set; }
+
+    public DateTime? sol_FechaCancelacion { get; set; }
 
     public DateTime sol_FechaCreacion { get; set; }
 
-    public int? usu_UsuarioModificacion { get; set; }
-
     public DateTime? sol_FechaModificacion { get; set; }
-
-    public int? usu_UsuarioEliminacion { get; set; }
 
     public DateTime? sol_FechaEliminacion { get; set; }
 
@@ -40,10 +38,4 @@ public partial class tbSolicitudApoyo
     public virtual ICollection<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignada { get; set; } = new List<tbSolicitudApoyoAsignada>();
 
     public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanes { get; set; } = new List<tbSolicitudesXPlanes>();
-
-    public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
-
-    public virtual tbUsuarios usu_UsuarioEliminacionNavigation { get; set; }
-
-    public virtual tbUsuarios usu_UsuarioModificacionNavigation { get; set; }
 }

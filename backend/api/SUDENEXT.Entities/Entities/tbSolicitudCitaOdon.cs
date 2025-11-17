@@ -19,15 +19,13 @@ public partial class tbSolicitudCitaOdon
 
     public string sco_Prioridad { get; set; }
 
-    public int usu_UsuarioCreacion { get; set; }
+    public bool? sco_Cancelar { get; set; }
+
+    public DateTime? sco_FechaCancelacion { get; set; }
 
     public DateTime sco_FechaCreacion { get; set; }
 
-    public int? usu_UsuarioModificacion { get; set; }
-
     public DateTime? sco_FechaModificacion { get; set; }
-
-    public int? usu_UsuarioEliminacion { get; set; }
 
     public DateTime? sco_FechaEliminacion { get; set; }
 
@@ -36,10 +34,4 @@ public partial class tbSolicitudCitaOdon
     public virtual tbEstudiantes est { get; set; }
 
     public virtual ICollection<tbSolicitudOdonAsignada> tbSolicitudOdonAsignada { get; set; } = new List<tbSolicitudOdonAsignada>();
-
-    public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
-
-    public virtual tbUsuarios usu_UsuarioEliminacionNavigation { get; set; }
-
-    public virtual tbUsuarios usu_UsuarioModificacionNavigation { get; set; }
 }

@@ -19,7 +19,6 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@sol_ID", item.sol_ID, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@usu_UsuarioEliminacion", item.usu_UsuarioEliminacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@sol_FechaEliminacion", item.sol_FechaEliminacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarSolicitudApoyo, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
@@ -42,7 +41,6 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
             parametros.Add("@sol_MalestarEmocional", item.sol_MalestarEmocional, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@sol_Asistencia", item.sol_Asistencia, DbType.Boolean, ParameterDirection.Input);
             parametros.Add("@sol_HorarioPref", item.sol_HorarioPref, DbType.Time, ParameterDirection.Input);
-            parametros.Add("@usu_UsuarioCreacion", item.usu_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@sol_FechaCreacion", item.sol_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.CrearSolicitudApoyo, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
@@ -73,7 +71,6 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
             parametros.Add("@sol_MalestarEmocional", item.sol_MalestarEmocional, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@sol_Asistencia", item.sol_Asistencia, DbType.Boolean, ParameterDirection.Input);
             parametros.Add("@sol_HorarioPref", item.sol_HorarioPref, DbType.Time, ParameterDirection.Input);
-            parametros.Add("@usu_UsuarioModificacion", item.usu_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@sol_FechaModificacion", item.sol_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarSolicitudApoyo, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;

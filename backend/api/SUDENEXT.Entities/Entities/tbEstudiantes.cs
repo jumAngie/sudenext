@@ -13,6 +13,8 @@ public partial class tbEstudiantes
 
     public string est_NombreCompleto { get; set; }
 
+    public string est_Contra { get; set; }
+
     public string est_Correo { get; set; }
 
     public string est_Celular { get; set; }
@@ -44,8 +46,6 @@ public partial class tbEstudiantes
     public virtual ICollection<tbSolicitudApoyo> tbSolicitudApoyo { get; set; } = new List<tbSolicitudApoyo>();
 
     public virtual ICollection<tbSolicitudCitaOdon> tbSolicitudCitaOdon { get; set; } = new List<tbSolicitudCitaOdon>();
-
-    public virtual ICollection<tbUsuarios> tbUsuarios { get; set; } = new List<tbUsuarios>();
 
     public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
 
