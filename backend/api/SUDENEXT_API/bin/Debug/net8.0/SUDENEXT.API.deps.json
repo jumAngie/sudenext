@@ -2289,7 +2289,7 @@
         },
         "runtime": {
           "SUDENEXT.BussinessLogic.dll": {
-            "assemblyVersion": "1.0.0.0",
+            "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -2305,7 +2305,7 @@
         },
         "runtime": {
           "SUDENEXT.DataAccess.dll": {
-            "assemblyVersion": "1.0.0.0",
+            "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -2316,7 +2316,7 @@
         },
         "runtime": {
           "SUDENEXT.Entities.dll": {
-            "assemblyVersion": "1.0.0.0",
+            "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
         }

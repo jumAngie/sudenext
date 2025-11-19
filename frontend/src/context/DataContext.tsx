@@ -4,6 +4,7 @@ import {
   MedicalCheckIn, AcademicConsultation, DentalTreatment,
   Area, Personnel, Role, SystemUser, ConsultationType, TreatmentType
 } from '../types';
+import { fetchAreas } from "/src/services/areaService.ts";
 
 interface DataContextType {
   // Support Sessions
@@ -394,43 +395,7 @@ const initialDentalTreatments: DentalTreatment[] = [
   }
 ];
 
-const initialAreas: Area[] = [
-  {
-    id: 'area-1',
-    name: 'Odontología',
-    description: 'Servicios de salud dental y atención odontológica',
-    isActive: true,
-    createdAt: '2024-01-01T08:00:00Z'
-  },
-  {
-    id: 'area-2',
-    name: 'Medicina General',
-    description: 'Atención médica general y primeros auxilios',
-    isActive: true,
-    createdAt: '2024-01-01T08:00:00Z'
-  },
-  {
-    id: 'area-3',
-    name: 'Psicología',
-    description: 'Apoyo psicológico y consejería estudiantil',
-    isActive: true,
-    createdAt: '2024-01-01T08:00:00Z'
-  },
-  {
-    id: 'area-4',
-    name: 'Asesoría Académica',
-    description: 'Orientación y consultas académicas',
-    isActive: true,
-    createdAt: '2024-01-01T08:00:00Z'
-  },
-  {
-    id: 'area-5',
-    name: 'Administración',
-    description: 'Gestión administrativa del SUDECAD',
-    isActive: true,
-    createdAt: '2024-01-01T08:00:00Z'
-  }
-];
+const initialAreas: Area[] = [];
 
 const initialPersonnel: Personnel[] = [
   {
@@ -682,6 +647,27 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [systemUsers, setSystemUsers] = useState<SystemUser[]>(initialSystemUsers);
   const [consultationTypes, setConsultationTypes] = useState<ConsultationType[]>(initialConsultationTypes);
   const [treatmentTypes, setTreatmentTypes] = useState<TreatmentType[]>(initialTreatmentTypes);
+
+  useEffect(() => {
+  const loadAreas = async () => {
+    try {
+      const data = await fetchAreas();
+      const formatted = data.map((a: any) => ({
+        id: a.are_ID,
+        name: a.are_Nombre,
+        description: "", // tu API no manda descripción, aquí decides
+        isActive: a.are_Estado,
+        createdAt: a.are_FechaCreacion
+      }));
+
+      setAreas(formatted);
+    } catch (err) {
+      console.error("Error cargando áreas", err);
+    }
+  };
+
+  loadAreas();
+}, []);
 
   // Generate unique ID
   const generateId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
