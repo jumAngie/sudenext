@@ -2,6 +2,8 @@ using Microsoft.OpenApi.Models;
 using AutoMapper;
 using SUDENEXT.API.Extensions;
 using SUDENEXT.BussinessLogic;
+using System.ComponentModel;
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,12 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new DateTimeConverter());
+});
+
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

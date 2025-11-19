@@ -32,6 +32,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "../ui/alert-dialog"
 import { toast } from 'sonner@2.0.3';
 
 export function AreasPage() {
@@ -41,57 +52,91 @@ export function AreasPage() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [areaToDelete, setAreaToDelete] = useState<Area | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
   const [selectedArea, setSelectedArea] = useState<Area | null>(null);
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    isActive: true,
+    are_Nombre: '',
   });
 
+
   const filteredAreas = areas.filter((area) => {
-    const matchesSearch = area.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      area.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || 
-      (statusFilter === 'active' && area.isActive) || 
-      (statusFilter === 'inactive' && !area.isActive);
+    const matchesSearch = area.are_Nombre.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === 'all' ||
+      (statusFilter === 'active' && area.are_Estado) ||
+      (statusFilter === 'inactive' && !area.are_Estado);
     return matchesSearch && matchesStatus;
   });
 
-  const handleCreateArea = () => {
-    addArea(formData);
+  const totalRecords = filteredAreas.length;
+  const totalPages = Math.ceil(totalRecords / recordsPerPage);
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+
+  const currentRecords = filteredAreas.slice(indexOfFirstRecord, indexOfLastRecord);
+
+  const handleCreateArea = async () => {
+    await addArea({
+      are_Nombre: formData.are_Nombre,
+      usu_UsuarioCreacion: 1,
+      are_FechaCreacion: new Date().toISOString().slice(0, 19),
+
+    });
     setIsCreateDialogOpen(false);
-    setFormData({ name: '', description: '', isActive: true });
+    setFormData({ are_Nombre: '' });
     toast.success('Área creada exitosamente');
   };
 
-  const handleEditArea = () => {
+
+  const handleEditArea = async () => {
     if (selectedArea) {
-      updateArea(selectedArea.id, formData);
+      await updateArea(selectedArea.are_ID, {
+        are_Nombre: formData.are_Nombre,
+        usu_UsuarioModificacion: 1,
+        are_FechaModificacion: new Date().toISOString().slice(0, 19),
+      });
+
       setIsEditDialogOpen(false);
       setSelectedArea(null);
-      setFormData({ name: '', description: '', isActive: true });
+      setFormData({ are_Nombre: '' });
       toast.success('Área actualizada exitosamente');
     }
   };
 
-  const handleDeleteArea = (area: Area) => {
-    if (window.confirm(`¿Está seguro que desea eliminar el área "${area.name}"?`)) {
-      deleteArea(area.id);
-      toast.success('Área eliminada exitosamente');
+
+  const handleDeleteArea = async (area: Area) => {
+    try {
+      await deleteArea(area.are_ID, {
+        are_ID: area.are_ID,
+        are_Nombre: area.are_Nombre,
+        usu_UsuarioCreacion: area.usu_UsuarioCreacion ?? 0,
+        are_FechaCreacion: area.are_FechaCreacion ?? new Date().toISOString().slice(0, 19),
+        usu_UsuarioModificacion: area.usu_UsuarioModificacion ?? 0,
+        are_FechaModificacion: area.are_FechaModificacion ?? new Date().toISOString().slice(0, 19),
+        usu_UsuarioEliminacion: 1,
+        are_FechaEliminacion: new Date().toISOString().slice(0, 19),
+        are_Estado: false,
+      });
+
+      toast.success("Área eliminada exitosamente");
+    } catch (error) {
+      console.error("Error al eliminar área:", error);
+      toast.error("No se pudo eliminar el área");
     }
   };
 
   const openCreateDialog = () => {
-    setFormData({ name: '', description: '', isActive: true });
+    setFormData({ are_Nombre: '' });
     setIsCreateDialogOpen(true);
   };
 
   const openEditDialog = (area: Area) => {
     setSelectedArea(area);
     setFormData({
-      name: area.name,
-      description: area.description,
-      isActive: area.isActive,
+      are_Nombre: area.are_Nombre,
     });
     setIsEditDialogOpen(true);
   };
@@ -192,25 +237,39 @@ export function AreasPage() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>ID</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead>Descripción</TableHead>
-                  <TableHead>Estado</TableHead>
+                  <TableHead>Usuario Creador</TableHead>
                   <TableHead>Fecha de Creación</TableHead>
+                  <TableHead>Estado</TableHead>
                   <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredAreas.map((area) => (
-                  <TableRow key={area.id} className="hover:bg-gray-50">
-                    <TableCell className="font-medium">{area.name}</TableCell>
-                    <TableCell className="max-w-md truncate">{area.description}</TableCell>
-                    <TableCell>
-                      <Badge variant={area.isActive ? 'default' : 'secondary'} className={area.isActive ? 'bg-green-600' : ''}>
-                        {area.isActive ? 'Activo' : 'Inactivo'}
-                      </Badge>
+                {currentRecords.map((area) => (
+                  <TableRow key={area.are_ID} className="hover:bg-gray-50">
+                    <TableCell className="font-medium">
+                      {area.are_ID}
                     </TableCell>
+
+                    <TableCell className="font-medium">
+                      {area.are_Nombre}
+                    </TableCell>
+
                     <TableCell>
-                      {new Date(area.createdAt).toLocaleDateString('es-HN')}
+                      {area.nombreCompleto_C ?? "—"}
+                    </TableCell>
+
+                    <TableCell>
+                      {area.are_FechaCreacion
+                        ? new Date(area.are_FechaCreacion).toLocaleDateString("es-HN")
+                        : "—"}
+                    </TableCell>
+
+                    <TableCell>
+                      <Badge variant={area.are_Estado ? "default" : "secondary"} className={area.are_Estado ? "bg-green-600" : ""}>
+                        {area.are_Estado ? "Activo" : "Inactivo"}
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex gap-2 justify-end">
@@ -235,7 +294,10 @@ export function AreasPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDeleteArea(area)}
+                          onClick={() => {
+                            setAreaToDelete(area);
+                            setIsDeleteDialogOpen(true);
+                          }}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
                           <Trash2 className="w-3 h-3 mr-1" />
@@ -247,6 +309,39 @@ export function AreasPage() {
                 ))}
               </TableBody>
             </Table>
+          )}
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-between items-center mt-4">
+
+              {/* Info */}
+              <p className="text-sm text-gray-600">
+                Mostrando{" "}
+                <span className="font-semibold">
+                  {indexOfFirstRecord + 1} – {Math.min(indexOfLastRecord, totalRecords)}
+                </span>{" "}
+                de <span className="font-semibold">{totalRecords}</span> registros
+              </p>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                >
+                  Anterior
+                </Button>
+
+                <Button
+                  variant="outline"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Siguiente
+                </Button>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>
@@ -265,27 +360,10 @@ export function AreasPage() {
               <Label htmlFor="name">Nombre</Label>
               <Input
                 id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.are_Nombre}
+                onChange={(e) => setFormData({ ...formData, are_Nombre: e.target.value })}
                 placeholder="Ej: Odontología"
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Descripción</Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Describe el área"
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="isActive"
-                checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-              />
-              <Label htmlFor="isActive">Área activa</Label>
             </div>
           </div>
           <DialogFooter>
@@ -313,25 +391,9 @@ export function AreasPage() {
               <Label htmlFor="edit-name">Nombre</Label>
               <Input
                 id="edit-name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.are_Nombre}
+                onChange={(e) => setFormData({ ...formData, are_Nombre: e.target.value })}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-description">Descripción</Label>
-              <Textarea
-                id="edit-description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="edit-isActive"
-                checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-              />
-              <Label htmlFor="edit-isActive">Área activa</Label>
             </div>
           </div>
           <DialogFooter>
@@ -347,45 +409,115 @@ export function AreasPage() {
 
       {/* View Dialog */}
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-7xl">
           <DialogHeader>
             <DialogTitle>Detalles del Área</DialogTitle>
           </DialogHeader>
           {selectedArea && (
-            <div className="space-y-4 py-4">
-              <div>
-                <Label className="text-gray-600">Nombre</Label>
-                <p className="mt-1">{selectedArea.name}</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Descripción</Label>
-                <p className="mt-1">{selectedArea.description}</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Estado</Label>
-                <div className="mt-1">
-                  <Badge variant={selectedArea.isActive ? 'default' : 'secondary'} className={selectedArea.isActive ? 'bg-green-600' : ''}>
-                    {selectedArea.isActive ? 'Activo' : 'Inactivo'}
-                  </Badge>
+            <div className="space-y-8 py-4">
+              {/* GRID DE 2 COLUMNAS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+
+                <div>
+                  <Label className="text-gray-600">Nombre</Label>
+                  <p className="mt-1">{selectedArea.are_Nombre}</p>
                 </div>
+
+                <div>
+                  <Label className="text-gray-600">Estado</Label>
+                  <div className="mt-1">
+                    <Badge
+                      variant={selectedArea.are_Estado ? "default" : "secondary"}
+                      className={selectedArea.are_Estado ? "bg-green-600" : ""}
+                    >
+                      {selectedArea.are_Estado ? "Activo" : "Inactivo"}
+                    </Badge>
+                  </div>
+                </div>
+
               </div>
-              <div>
-                <Label className="text-gray-600">Fecha de Creación</Label>
-                <p className="mt-1">
-                  {new Date(selectedArea.createdAt).toLocaleDateString('es-HN', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </p>
-              </div>
+
+              {/* Auditoría */}
+              <h3 className="text-lg font-semibold mt-4">Auditoría</h3>
+
+              <table className="w-full border text-sm">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border p-2">Acción</th>
+                    <th className="border p-2">Usuario</th>
+                    <th className="border p-2">Fecha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border p-2">Creación</td>
+                    <td className="border p-2">{selectedArea.nombreCompleto_C ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedArea.are_FechaCreacion
+                        ? new Date(selectedArea.are_FechaCreacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="border p-2">Modificación</td>
+                    <td className="border p-2">{selectedArea.nombreCompleto_M ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedArea.are_FechaModificacion
+                        ? new Date(selectedArea.are_FechaModificacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="border p-2">Eliminación</td>
+                    <td className="border p-2">{selectedArea.nombreCompleto_E ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedArea.are_FechaEliminacion
+                        ? new Date(selectedArea.are_FechaEliminacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           )}
+
           <DialogFooter>
             <Button onClick={() => setIsViewDialogOpen(false)}>Cerrar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar Eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Seguro que querés eliminar el área{" "}
+              <span className="font-semibold text-red-600">
+                {areaToDelete?.are_Nombre}
+              </span>
+              ? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+
+            <AlertDialogAction
+              className="bg-[#004aad] hover:bg-[#003687]"
+              onClick={async () => {
+                if (areaToDelete) {
+                  await handleDeleteArea(areaToDelete);
+                  setIsDeleteDialogOpen(false);
+                }
+              }}
+            >
+              Sí, Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

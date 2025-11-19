@@ -128,13 +128,22 @@ export interface DentalTreatment {
 
 // Administrative entities
 export interface Area {
-  id: string;
-  name: string;
-  description: string;
-  isActive: boolean;
-  createdAt: string;
-}
+  are_ID: number;
+  are_Nombre: string;
+  are_Estado: boolean;
 
+  are_FechaCreacion: string | null;
+  usu_UsuarioCreacion: number | null;
+  nombreCompleto_C: string | null;
+
+  are_FechaModificacion: string | null;
+  usu_UsuarioModificacion: number | null;
+  nombreCompleto_M: string | null;
+
+  are_FechaEliminacion: string | null;
+  usu_UsuarioEliminacion: number | null;
+  nombreCompleto_E: string | null;
+}
 export interface Personnel {
   id: string;
   name: string;

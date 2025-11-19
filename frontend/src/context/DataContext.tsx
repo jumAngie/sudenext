@@ -1,71 +1,94 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { 
-  SupportSession, ActionPlan, DentalAppointment, 
+import {
+  SupportSession, ActionPlan, DentalAppointment,
   MedicalCheckIn, AcademicConsultation, DentalTreatment,
   Area, Personnel, Role, SystemUser, ConsultationType, TreatmentType
 } from '../types';
-import { fetchAreas } from "/src/services/areaService.ts";
+import { fetchAreas, createAreaAPI, updateAreaAPI, deleteAreaAPI } from "/src/services/areaService.ts";
 
 interface DataContextType {
   // Support Sessions
   supportSessions: SupportSession[];
   addSupportSession: (session: Omit<SupportSession, 'id' | 'createdAt'>) => void;
   updateSupportSession: (id: string, updates: Partial<SupportSession>) => void;
-  
+
   // Action Plans
   actionPlans: ActionPlan[];
   addActionPlan: (plan: Omit<ActionPlan, 'id' | 'createdAt'>) => void;
-  
+
   // Dental Appointments
   dentalAppointments: DentalAppointment[];
   addDentalAppointment: (appointment: Omit<DentalAppointment, 'id' | 'createdAt'>) => void;
   updateDentalAppointment: (id: string, updates: Partial<DentalAppointment>) => void;
-  
+
   // Dental Treatments
   dentalTreatments: DentalTreatment[];
   addDentalTreatment: (treatment: Omit<DentalTreatment, 'id' | 'createdAt'>) => void;
   updateDentalTreatment: (id: string, updates: Partial<DentalTreatment>) => void;
-  
+
   // Medical Check-ins
   medicalCheckIns: MedicalCheckIn[];
   addMedicalCheckIn: (checkIn: Omit<MedicalCheckIn, 'id' | 'createdAt'>) => void;
   updateMedicalCheckIn: (id: string, updates: Partial<MedicalCheckIn>) => void;
-  
+
   // Academic Consultations
   academicConsultations: AcademicConsultation[];
   addAcademicConsultation: (consultation: Omit<AcademicConsultation, 'id' | 'createdAt'>) => void;
   updateAcademicConsultation: (id: string, updates: Partial<AcademicConsultation>) => void;
-  
+
   // Areas
   areas: Area[];
-  addArea: (area: Omit<Area, 'id' | 'createdAt'>) => void;
-  updateArea: (id: string, updates: Partial<Area>) => void;
-  deleteArea: (id: string) => void;
-  
+  addArea: (payload: {
+    are_Nombre: string;
+    usu_UsuarioCreacion: number;
+    are_FechaCreacion: string;
+  }) => Promise<void>;
+
+  updateArea: (id: number, payload: {
+    are_Nombre: string;
+    usu_UsuarioModificacion: number;
+    are_FechaModificacion: string;
+  }) => Promise<void>;
+
+  deleteArea: (
+    id: number,
+    payload: {
+      are_ID: number;
+      are_Nombre: string;
+      usu_UsuarioCreacion: number | null;
+      are_FechaCreacion: string | null;
+      usu_UsuarioModificacion: number | null;
+      are_FechaModificacion: string | null;
+      usu_UsuarioEliminacion: number;
+      are_FechaEliminacion: string;
+      are_Estado: boolean;
+    }
+  ) => Promise<void>;
+
   // Personnel
   personnel: Personnel[];
   addPersonnel: (person: Omit<Personnel, 'id' | 'createdAt'>) => void;
   updatePersonnel: (id: string, updates: Partial<Personnel>) => void;
   deletePersonnel: (id: string) => void;
-  
+
   // Roles
   roles: Role[];
   addRole: (role: Omit<Role, 'id' | 'createdAt'>) => void;
   updateRole: (id: string, updates: Partial<Role>) => void;
   deleteRole: (id: string) => void;
-  
+
   // System Users
   systemUsers: SystemUser[];
   addSystemUser: (user: Omit<SystemUser, 'id' | 'createdAt'>) => void;
   updateSystemUser: (id: string, updates: Partial<SystemUser>) => void;
   deleteSystemUser: (id: string) => void;
-  
+
   // Consultation Types
   consultationTypes: ConsultationType[];
   addConsultationType: (type: Omit<ConsultationType, 'id' | 'createdAt'>) => void;
   updateConsultationType: (id: string, updates: Partial<ConsultationType>) => void;
   deleteConsultationType: (id: string) => void;
-  
+
   // Treatment Types
   treatmentTypes: TreatmentType[];
   addTreatmentType: (type: Omit<TreatmentType, 'id' | 'createdAt'>) => void;
@@ -80,7 +103,7 @@ const getCurrentMonthDates = () => {
   const today = new Date();
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
-  
+
   return {
     // Tomorrow
     tomorrow: new Date(currentYear, currentMonth, today.getDate() + 1).toISOString(),
@@ -641,7 +664,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [dentalTreatments, setDentalTreatments] = useState<DentalTreatment[]>(initialDentalTreatments);
   const [medicalCheckIns, setMedicalCheckIns] = useState<MedicalCheckIn[]>(initialMedicalCheckIns);
   const [academicConsultations, setAcademicConsultations] = useState<AcademicConsultation[]>(initialAcademicConsultations);
-  const [areas, setAreas] = useState<Area[]>(initialAreas);
+  const [areas, setAreas] = useState<Area[]>([]);
   const [personnel, setPersonnel] = useState<Personnel[]>(initialPersonnel);
   const [roles, setRoles] = useState<Role[]>(initialRoles);
   const [systemUsers, setSystemUsers] = useState<SystemUser[]>(initialSystemUsers);
@@ -649,25 +672,35 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [treatmentTypes, setTreatmentTypes] = useState<TreatmentType[]>(initialTreatmentTypes);
 
   useEffect(() => {
-  const loadAreas = async () => {
-    try {
-      const data = await fetchAreas();
-      const formatted = data.map((a: any) => ({
-        id: a.are_ID,
-        name: a.are_Nombre,
-        description: "", // tu API no manda descripción, aquí decides
-        isActive: a.are_Estado,
-        createdAt: a.are_FechaCreacion
-      }));
+    const loadAreas = async () => {
+      try {
+        const data = await fetchAreas();
+        const formatted = data.map((a: any) => ({
+          are_ID: a.are_ID,
+          are_Nombre: a.are_Nombre,
+          are_Estado: a.are_Estado,
 
-      setAreas(formatted);
-    } catch (err) {
-      console.error("Error cargando áreas", err);
-    }
-  };
+          are_FechaCreacion: a.are_FechaCreacion,
+          usu_UsuarioCreacion: a.usu_UsuarioCreacion,
+          nombreCompleto_C: a.nombreCompleto_C,
 
-  loadAreas();
-}, []);
+          are_FechaModificacion: a.are_FechaModificacion,
+          usu_UsuarioModificacion: a.usu_UsuarioModificacion,
+          nombreCompleto_M: a.nombreCompleto_M,
+
+          are_FechaEliminacion: a.are_FechaEliminacion,
+          usu_UsuarioEliminacion: a.usu_UsuarioEliminacion,
+          nombreCompleto_E: a.nombreCompleto_E,
+        }));
+
+        setAreas(formatted);
+      } catch (err) {
+        console.error("Error cargando áreas", err);
+      }
+    };
+
+    loadAreas();
+  }, []);
 
   // Generate unique ID
   const generateId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -683,8 +716,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateSupportSession = (id: string, updates: Partial<SupportSession>) => {
-    setSupportSessions(prev => 
-      prev.map(session => 
+    setSupportSessions(prev =>
+      prev.map(session =>
         session.id === id ? { ...session, ...updates } : session
       )
     );
@@ -711,8 +744,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateDentalAppointment = (id: string, updates: Partial<DentalAppointment>) => {
-    setDentalAppointments(prev => 
-      prev.map(appointment => 
+    setDentalAppointments(prev =>
+      prev.map(appointment =>
         appointment.id === id ? { ...appointment, ...updates } : appointment
       )
     );
@@ -729,8 +762,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateMedicalCheckIn = (id: string, updates: Partial<MedicalCheckIn>) => {
-    setMedicalCheckIns(prev => 
-      prev.map(checkIn => 
+    setMedicalCheckIns(prev =>
+      prev.map(checkIn =>
         checkIn.id === id ? { ...checkIn, ...updates } : checkIn
       )
     );
@@ -747,8 +780,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateAcademicConsultation = (id: string, updates: Partial<AcademicConsultation>) => {
-    setAcademicConsultations(prev => 
-      prev.map(consultation => 
+    setAcademicConsultations(prev =>
+      prev.map(consultation =>
         consultation.id === id ? { ...consultation, ...updates } : consultation
       )
     );
@@ -765,34 +798,54 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateDentalTreatment = (id: string, updates: Partial<DentalTreatment>) => {
-    setDentalTreatments(prev => 
-      prev.map(treatment => 
+    setDentalTreatments(prev =>
+      prev.map(treatment =>
         treatment.id === id ? { ...treatment, ...updates } : treatment
       )
     );
   };
 
   // Areas
-  const addArea = (area: Omit<Area, 'id' | 'createdAt'>) => {
-    const newArea: Area = {
-      ...area,
-      id: generateId('area'),
-      createdAt: new Date().toISOString()
-    };
-    setAreas(prev => [...prev, newArea]);
+  const addArea = async (payload: {
+    are_Nombre: string;
+    usu_UsuarioCreacion: number;
+    are_FechaCreacion: string;
+  }) => {
+    await createAreaAPI(payload);
+    const data = await fetchAreas();
+    setAreas(data);
   };
 
-  const updateArea = (id: string, updates: Partial<Area>) => {
-    setAreas(prev => 
-      prev.map(area => 
-        area.id === id ? { ...area, ...updates } : area
-      )
-    );
+  const updateArea = async (id: number, payload: {
+    are_Nombre: string;
+    usu_UsuarioModificacion: number;
+    are_FechaModificacion: string;
+  }) => {
+    await updateAreaAPI({ are_ID: id, ...payload });
+    const data = await fetchAreas();
+    setAreas(data);
   };
 
-  const deleteArea = (id: string) => {
-    setAreas(prev => prev.filter(area => area.id !== id));
+  const deleteArea = async (
+    id: number,
+    payload: {
+      are_ID: number;
+      are_Nombre: string;
+      usu_UsuarioCreacion: number | null;
+      are_FechaCreacion: string | null;
+      usu_UsuarioModificacion: number | null;
+      are_FechaModificacion: string | null;
+      usu_UsuarioEliminacion: number;
+      are_FechaEliminacion: string;
+      are_Estado: boolean;
+    }
+  ) => {
+    await deleteAreaAPI(payload);
+    const data = await fetchAreas();
+    setAreas(data);
   };
+
+
 
   // Personnel
   const addPersonnel = (person: Omit<Personnel, 'id' | 'createdAt'>) => {
@@ -805,8 +858,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updatePersonnel = (id: string, updates: Partial<Personnel>) => {
-    setPersonnel(prev => 
-      prev.map(person => 
+    setPersonnel(prev =>
+      prev.map(person =>
         person.id === id ? { ...person, ...updates } : person
       )
     );
@@ -827,8 +880,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateRole = (id: string, updates: Partial<Role>) => {
-    setRoles(prev => 
-      prev.map(role => 
+    setRoles(prev =>
+      prev.map(role =>
         role.id === id ? { ...role, ...updates } : role
       )
     );
@@ -849,8 +902,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateSystemUser = (id: string, updates: Partial<SystemUser>) => {
-    setSystemUsers(prev => 
-      prev.map(user => 
+    setSystemUsers(prev =>
+      prev.map(user =>
         user.id === id ? { ...user, ...updates } : user
       )
     );
@@ -871,8 +924,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateConsultationType = (id: string, updates: Partial<ConsultationType>) => {
-    setConsultationTypes(prev => 
-      prev.map(type => 
+    setConsultationTypes(prev =>
+      prev.map(type =>
         type.id === id ? { ...type, ...updates } : type
       )
     );
@@ -893,8 +946,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateTreatmentType = (id: string, updates: Partial<TreatmentType>) => {
-    setTreatmentTypes(prev => 
-      prev.map(type => 
+    setTreatmentTypes(prev =>
+      prev.map(type =>
         type.id === id ? { ...type, ...updates } : type
       )
     );
