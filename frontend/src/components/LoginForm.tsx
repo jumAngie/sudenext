@@ -56,7 +56,7 @@ export function LoginForm({ onBackToLanding, onLoginSuccess }: LoginFormProps) {
       toast.error(result.message);
       return;
     }
-    toast.success("Bienvenido 👋");
+    toast.info("Bienvenido(a) 👋");
 
     // Obtener usuario del localStorage (AuthContext ya lo guardó)
     const user = JSON.parse(localStorage.getItem("sudenext-user") || "null");

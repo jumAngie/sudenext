@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
+import { useAuth } from "../../context/AuthContext";
 import { ConsultationType } from '../../types';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -32,68 +33,142 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { toast } from 'sonner@2.0.3';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "../ui/alert-dialog"
+import { toast } from "sonner";
+import { getLocalDateTime } from '../../utils/dateHelpers';
 
 export function ConsultationTypesPage() {
+  const { user } = useAuth();
+
   const { consultationTypes, addConsultationType, updateConsultationType, deleteConsultationType } = useData();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [consultationTypeToDelete, setconsultationTypeToDelete] = useState<ConsultationType | null>(null);
+
+  // Páginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
   const [selectedType, setSelectedType] = useState<ConsultationType | null>(null);
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    estimatedDuration: 30,
-    isActive: true,
+    tic_ID: 0,
+    tic_Descripcion: ''
   });
 
+  // Validaciones
+  const [formError, setFormError] = useState("");
+  const [editFormError, setEditFormError] = useState("");
+
   const filteredTypes = consultationTypes.filter((type) => {
-    const matchesSearch = type.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      type.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || 
-      (statusFilter === 'active' && type.isActive) || 
-      (statusFilter === 'inactive' && !type.isActive);
+    const matchesSearch = type.tic_Descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === 'all' ||
+      (statusFilter === 'active' && type.tic_Estado) ||
+      (statusFilter === 'inactive' && !type.tic_Estado);
     return matchesSearch && matchesStatus;
   });
 
-  const handleCreateType = () => {
-    addConsultationType(formData);
+  // Paginación
+  const totalRecords = filteredTypes.length;
+  const totalPages = Math.ceil(totalRecords / recordsPerPage);
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredTypes.slice(indexOfFirstRecord, indexOfLastRecord);
+
+  //CREAR
+  const handleCreateType = async () => {
+    // Validación en blanco
+    if (!formData.tic_Descripcion.trim()) {
+      setFormError("El nombre es obligatorio.");
+      toast.error("El nombre del área no puede estar vacío.");
+      return;
+    }
+    const message = await addConsultationType({
+      tic_Descripcion: formData.tic_Descripcion,
+      usu_UsuarioCreacion: Number(user?.data?.id),
+      tic_FechaCreacion: getLocalDateTime(),
+    });
+    // Si el backend dice error
+    if (!message.toLowerCase().includes("correctamente")) {
+      setFormError(message);
+      toast.error(message);
+      return;
+    }
+    // Si fue exitoso
+    toast.success(message);
     setIsCreateDialogOpen(false);
-    setFormData({ name: '', description: '', estimatedDuration: 30, isActive: true });
-    toast.success('Tipo de consulta creado exitosamente');
+    setFormData({ tic_ID: 0, tic_Descripcion: "" });
+    setFormError("");
   };
 
-  const handleEditType = () => {
+  // EDITAR
+  const handleEditType = async () => {
+    if (!formData.tic_Descripcion.trim()) {
+      setEditFormError("El nombre no puede estar vacío.");
+      toast.error("El nombre no puede estar vacío.");
+      return;
+    }
     if (selectedType) {
-      updateConsultationType(selectedType.id, formData);
+      const message = await updateConsultationType(selectedType.tic_ID, {
+        tic_ID: selectedType.tic_ID,
+        tic_Descripcion: formData.tic_Descripcion,
+        usu_UsuarioModificacion: Number(user?.data?.id),
+        tic_FechaModificacion: getLocalDateTime()
+      });
+      // Si el SP devolvió error
+      if (!message.toLowerCase().includes("correctamente")) {
+        setEditFormError(message);
+        toast.error(message);
+        return;
+      }
+      // Si el SP devolvió éxito
+      toast.success(message);
       setIsEditDialogOpen(false);
+      setEditFormError("");
       setSelectedType(null);
-      setFormData({ name: '', description: '', estimatedDuration: 30, isActive: true });
-      toast.success('Tipo de consulta actualizado exitosamente');
+      setFormData({ tic_ID: 0, tic_Descripcion: "" });
     }
   };
 
-  const handleDeleteType = (type: ConsultationType) => {
-    if (window.confirm(`¿Está seguro que desea eliminar el tipo de consulta "${type.name}"?`)) {
-      deleteConsultationType(type.id);
-      toast.success('Tipo de consulta eliminado exitosamente');
+  // ELIMINAR
+  const handleDeleteType = async () => {
+    if (!consultationTypeToDelete) return;
+    const message = await deleteConsultationType(consultationTypeToDelete.tra_ID, {
+      tic_ID: consultationTypeToDelete.tic_ID,
+      usu_UsuarioEliminacion: Number(user?.data?.id),
+      tic_FechaEliminacion: getLocalDateTime(),
+      tic_Descripcion: "string"
+    });
+    if (!message.toLowerCase().includes("exitosamente")) {
+      toast.error(message);
+      return;
     }
+    toast.success(message);
+    setIsDeleteDialogOpen(false);
+    setconsultationTypeToDelete(null);
   };
 
   const openCreateDialog = () => {
-    setFormData({ name: '', description: '', estimatedDuration: 30, isActive: true });
+    setFormData({ tic_ID: 0, tic_Descripcion: '' });
     setIsCreateDialogOpen(true);
   };
 
   const openEditDialog = (type: ConsultationType) => {
     setSelectedType(type);
     setFormData({
-      name: type.name,
-      description: type.description,
-      estimatedDuration: type.estimatedDuration,
-      isActive: type.isActive,
+      tic_ID: type.tic_ID,
+      tic_Descripcion: type.tic_Descripcion
     });
     setIsEditDialogOpen(true);
   };
@@ -194,22 +269,32 @@ export function ConsultationTypesPage() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>ID</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead>Descripción</TableHead>
-                  <TableHead>Duración Estimada</TableHead>
+                  <TableHead>Usuario Creador</TableHead>
+                  <TableHead>Fecha Creación</TableHead>
                   <TableHead>Estado</TableHead>
                   <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredTypes.map((type) => (
-                  <TableRow key={type.id} className="hover:bg-gray-50">
-                    <TableCell className="font-medium">{type.name}</TableCell>
-                    <TableCell className="max-w-md truncate">{type.description}</TableCell>
-                    <TableCell>{type.estimatedDuration} minutos</TableCell>
+                {currentRecords.map((type) => (
+                  <TableRow key={type.tic_ID} className="hover:bg-gray-50">
+                    <TableCell className="font-medium">
+                      {type.tic_ID}
+                    </TableCell>
+                    <TableCell className="font-medium">{type.tic_Descripcion}</TableCell>
                     <TableCell>
-                      <Badge variant={type.isActive ? 'default' : 'secondary'} className={type.isActive ? 'bg-green-600' : ''}>
-                        {type.isActive ? 'Activo' : 'Inactivo'}
+                      {type.nombreCompleto_C ?? "—"}
+                    </TableCell>
+                    <TableCell>
+                      {type.tic_FechaCreacion
+                        ? new Date(type.tic_FechaCreacion).toLocaleDateString("es-HN")
+                        : "—"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={type.tic_Estado ? 'default' : 'secondary'} className={type.tic_Estado ? 'bg-green-600' : ''}>
+                        {type.tic_Estado ? 'Activo' : 'Inactivo'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
@@ -235,7 +320,10 @@ export function ConsultationTypesPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDeleteType(type)}
+                          onClick={() => {
+                            setconsultationTypeToDelete(type);
+                            setIsDeleteDialogOpen(true);
+                          }}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
                           <Trash2 className="w-3 h-3 mr-1" />
@@ -248,11 +336,50 @@ export function ConsultationTypesPage() {
               </TableBody>
             </Table>
           )}
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-between items-center mt-4">
+              {/* Info */}
+              <p className="text-sm text-gray-600">
+                Mostrando{" "}
+                <span className="font-semibold">
+                  {indexOfFirstRecord + 1} – {Math.min(indexOfLastRecord, totalRecords)}
+                </span>{" "}
+                de <span className="font-semibold">{totalRecords}</span> registros
+              </p>
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                >
+                  Anterior
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Siguiente
+                </Button>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
       {/* Create Dialog */}
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+      <Dialog
+        open={isCreateDialogOpen}
+        onOpenChange={(open: any) => {
+          setIsCreateDialogOpen(open);
+          if (!open) {
+            setFormError("");
+            setFormData({ tic_ID: 0, tic_Descripcion: "" });
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Crear Nuevo Tipo de Consulta</DialogTitle>
@@ -264,43 +391,26 @@ export function ConsultationTypesPage() {
             <div className="space-y-2">
               <Label htmlFor="name">Nombre</Label>
               <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.tic_Descripcion}
+                onChange={(e) => {
+                  setFormData({ ...formData, tic_Descripcion: e.target.value });
+                  setFormError("");  // quitar error cuando el usuario escribe
+                }}
                 placeholder="Ej: Orientación Académica"
+                className={`${formError ? "border-red-500" : ""}`}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Descripción</Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Describe el tipo de consulta"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="duration">Duración Estimada (minutos)</Label>
-              <Input
-                id="duration"
-                type="number"
-                value={formData.estimatedDuration}
-                onChange={(e) => setFormData({ ...formData, estimatedDuration: parseInt(e.target.value) || 30 })}
-                min="15"
-                step="15"
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="isActive"
-                checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-              />
-              <Label htmlFor="isActive">Tipo activo</Label>
+              {formError && (
+                <p className="text-red-600 text-sm mt-1">{formError}</p>
+              )}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+            <Button variant="outline" onClick={() => {
+              setIsCreateDialogOpen(false);
+              setFormError("");          // limpiar error
+              setFormData({ tic_ID: 0, tic_Descripcion: "" }); // limpiar textbox
+            }}
+            >
               Cancelar
             </Button>
             <Button onClick={handleCreateType} className="bg-[#004aad] hover:bg-[#003687]">
@@ -311,7 +421,16 @@ export function ConsultationTypesPage() {
       </Dialog>
 
       {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+      <Dialog
+        open={isEditDialogOpen}
+        onOpenChange={(open: any) => {
+          setIsEditDialogOpen(open);
+          if (!open) {
+            setEditFormError("");
+            setFormData({ tic_ID: 0, tic_Descripcion: "" });
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Editar Tipo de Consulta</DialogTitle>
@@ -324,40 +443,25 @@ export function ConsultationTypesPage() {
               <Label htmlFor="edit-name">Nombre</Label>
               <Input
                 id="edit-name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.tic_Descripcion}
+                onChange={(e) => {
+                  setFormData({ ...formData, tic_Descripcion: e.target.value });
+                  setEditFormError("");
+                }}
+                className={editFormError ? "border-red-500" : ""}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-description">Descripción</Label>
-              <Textarea
-                id="edit-description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-duration">Duración Estimada (minutos)</Label>
-              <Input
-                id="edit-duration"
-                type="number"
-                value={formData.estimatedDuration}
-                onChange={(e) => setFormData({ ...formData, estimatedDuration: parseInt(e.target.value) || 30 })}
-                min="15"
-                step="15"
-              />
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="edit-isActive"
-                checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-              />
-              <Label htmlFor="edit-isActive">Tipo activo</Label>
+              {editFormError && (
+                <p className="text-red-600 text-sm mt-1">{editFormError}</p>
+              )}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button variant="outline" onClick={() => {
+              setIsEditDialogOpen(false);
+              setEditFormError("");      // limpiar error
+              setFormData({ tic_ID: 0, tic_Descripcion: "" });
+            }}
+            >
               Cancelar
             </Button>
             <Button onClick={handleEditType} className="bg-[#004aad] hover:bg-[#003687]">
@@ -374,37 +478,65 @@ export function ConsultationTypesPage() {
             <DialogTitle>Detalles del Tipo de Consulta</DialogTitle>
           </DialogHeader>
           {selectedType && (
-            <div className="space-y-4 py-4">
-              <div>
-                <Label className="text-gray-600">Nombre</Label>
-                <p className="mt-1">{selectedType.name}</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Descripción</Label>
-                <p className="mt-1">{selectedType.description}</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Duración Estimada</Label>
-                <p className="mt-1">{selectedType.estimatedDuration} minutos</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Estado</Label>
-                <div className="mt-1">
-                  <Badge variant={selectedType.isActive ? 'default' : 'secondary'} className={selectedType.isActive ? 'bg-green-600' : ''}>
-                    {selectedType.isActive ? 'Activo' : 'Inactivo'}
-                  </Badge>
+            <div className="space-y-8 py-4">
+              {/* GRID DE 2 COLUMNAS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div>
+                  <Label className="text-gray-600">Nombre</Label>
+                  <p className="mt-1">{selectedType.tic_Descripcion}</p>
+                </div>
+                <div>
+                  <Label className="text-gray-600">Estado</Label>
+                  <div className="mt-1">
+                    <Badge
+                      variant={selectedType.tic_Estado ? "default" : "secondary"}
+                      className={selectedType.tic_Estado ? "bg-green-600" : ""}
+                    >
+                      {selectedType.tic_Estado ? "Activo" : "Inactivo"}
+                    </Badge>
+                  </div>
                 </div>
               </div>
-              <div>
-                <Label className="text-gray-600">Fecha de Creación</Label>
-                <p className="mt-1">
-                  {new Date(selectedType.createdAt).toLocaleDateString('es-HN', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </p>
-              </div>
+              {/* Auditoría */}
+              <h3 className="text-lg font-semibold mt-4">Auditoría</h3>
+              <table className="w-full border text-sm">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border p-2">Acción</th>
+                    <th className="border p-2">Usuario</th>
+                    <th className="border p-2">Fecha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border p-2">Creación</td>
+                    <td className="border p-2">{selectedType.nombreCompleto_C ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedType.tic_FechaCreacion
+                        ? new Date(selectedType.tic_FechaCreacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2">Modificación</td>
+                    <td className="border p-2">{selectedType.nombreCompleto_M ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedType.tic_FechaModificacion
+                        ? new Date(selectedType.tic_FechaModificacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2">Eliminación</td>
+                    <td className="border p-2">{selectedType.nombreCompleto_E ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedType.tic_FechaEliminacion
+                        ? new Date(selectedType.tic_FechaEliminacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           )}
           <DialogFooter>
@@ -412,6 +544,34 @@ export function ConsultationTypesPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar Eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Seguro que querés eliminar el registro{" "}
+              <span className="font-semibold text-red-600">
+                {consultationTypeToDelete?.tic_Descripcion}
+              </span>
+              ? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-[#004aad] hover:bg-[#003687]"
+              onClick={async () => {
+                if (consultationTypeToDelete) {
+                  await handleDeleteType();
+                  setIsDeleteDialogOpen(false);
+                }
+              }}
+            >
+              Sí, Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

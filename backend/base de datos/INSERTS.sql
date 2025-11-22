@@ -179,3 +179,11 @@ SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
 INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
 VALUES						('carlos.martinez@unah.hn',			@Pass,		3, 		5,			1,						GETDATE(),			1);
 GO
+
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = 'NO5';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+
+INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
+VALUES						('lucia.garcia@unah.hn',			@Pass,		6, 		1,			1,						GETDATE(),			1);
+GO

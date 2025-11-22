@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
+import { useAuth } from "../../context/AuthContext";
 import { Area } from '../../types';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -44,6 +45,8 @@ import { toast } from "sonner";
 import { getLocalDateTime } from '../../utils/dateHelpers';
 
 export function AreasPage() {
+  const { user } = useAuth();
+
   const { areas, addArea, updateArea, deleteArea } = useData();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -52,6 +55,8 @@ export function AreasPage() {
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [areaToDelete, setAreaToDelete] = useState<Area | null>(null);
+  
+  // Páginación
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
   const [selectedArea, setSelectedArea] = useState<Area | null>(null);
@@ -64,8 +69,6 @@ export function AreasPage() {
   const [formError, setFormError] = useState("");
   const [editFormError, setEditFormError] = useState("");
 
-
-
   const filteredAreas = areas.filter((area) => {
     const matchesSearch = area.are_Nombre.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === 'all' ||
@@ -76,10 +79,8 @@ export function AreasPage() {
 
   const totalRecords = filteredAreas.length;
   const totalPages = Math.ceil(totalRecords / recordsPerPage);
-
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-
   const currentRecords = filteredAreas.slice(indexOfFirstRecord, indexOfLastRecord);
 
   // CREAR 
@@ -92,7 +93,7 @@ export function AreasPage() {
     }
     const message = await addArea({
       are_Nombre: formData.are_Nombre,
-      usu_UsuarioCreacion: 1,
+      usu_UsuarioCreacion: Number(user?.data?.id),
       are_FechaCreacion: getLocalDateTime(),
     });
     // Si el backend dice error
@@ -120,7 +121,7 @@ export function AreasPage() {
       const message = await updateArea(selectedArea.are_ID, {
         are_ID: selectedArea.are_ID,
         are_Nombre: formData.are_Nombre,
-        usu_UsuarioModificacion: 1,
+        usu_UsuarioModificacion: Number(user?.data?.id),
         are_FechaModificacion: getLocalDateTime()
       });
       // Si el SP devolvió error
@@ -145,7 +146,7 @@ export function AreasPage() {
 
     const message = await deleteArea(areaToDelete.are_ID, {
       are_ID: areaToDelete.are_ID,
-      usu_UsuarioEliminacion: 1,
+      usu_UsuarioEliminacion: Number(user?.data?.id),
       are_FechaEliminacion:  getLocalDateTime(),
       are_Nombre: "string"
     });
@@ -284,21 +285,17 @@ export function AreasPage() {
                     <TableCell className="font-medium">
                       {area.are_ID}
                     </TableCell>
-
                     <TableCell className="font-medium">
                       {area.are_Nombre}
                     </TableCell>
-
                     <TableCell>
                       {area.nombreCompleto_C ?? "—"}
                     </TableCell>
-
                     <TableCell>
                       {area.are_FechaCreacion
                         ? new Date(area.are_FechaCreacion).toLocaleDateString("es-HN")
                         : "—"}
                     </TableCell>
-
                     <TableCell>
                       <Badge variant={area.are_Estado ? "default" : "secondary"} className={area.are_Estado ? "bg-green-600" : ""}>
                         {area.are_Estado ? "Activo" : "Inactivo"}
@@ -346,7 +343,6 @@ export function AreasPage() {
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex justify-between items-center mt-4">
-
               {/* Info */}
               <p className="text-sm text-gray-600">
                 Mostrando{" "}
@@ -355,7 +351,6 @@ export function AreasPage() {
                 </span>{" "}
                 de <span className="font-semibold">{totalRecords}</span> registros
               </p>
-
               {/* Buttons */}
               <div className="flex gap-3">
                 <Button
@@ -365,7 +360,6 @@ export function AreasPage() {
                 >
                   Anterior
                 </Button>
-
                 <Button
                   variant="outline"
                   disabled={currentPage === totalPages}
@@ -425,7 +419,6 @@ export function AreasPage() {
             >
               Cancelar
             </Button>
-
             <Button onClick={handleCreateArea} className="bg-[#004aad] hover:bg-[#000000]">
               Crear Área
             </Button>
@@ -496,12 +489,10 @@ export function AreasPage() {
             <div className="space-y-8 py-4">
               {/* GRID DE 2 COLUMNAS */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-
                 <div>
                   <Label className="text-gray-600">Nombre</Label>
                   <p className="mt-1">{selectedArea.are_Nombre}</p>
                 </div>
-
                 <div>
                   <Label className="text-gray-600">Estado</Label>
                   <div className="mt-1">
@@ -513,12 +504,9 @@ export function AreasPage() {
                     </Badge>
                   </div>
                 </div>
-
               </div>
-
               {/* Auditoría */}
               <h3 className="text-lg font-semibold mt-4">Auditoría</h3>
-
               <table className="w-full border text-sm">
                 <thead className="bg-gray-100">
                   <tr>
@@ -537,7 +525,6 @@ export function AreasPage() {
                         : "—"}
                     </td>
                   </tr>
-
                   <tr>
                     <td className="border p-2">Modificación</td>
                     <td className="border p-2">{selectedArea.nombreCompleto_M ?? "—"}</td>
@@ -547,7 +534,6 @@ export function AreasPage() {
                         : "—"}
                     </td>
                   </tr>
-
                   <tr>
                     <td className="border p-2">Eliminación</td>
                     <td className="border p-2">{selectedArea.nombreCompleto_E ?? "—"}</td>
@@ -561,7 +547,6 @@ export function AreasPage() {
               </table>
             </div>
           )}
-
           <DialogFooter>
             <Button onClick={() => setIsViewDialogOpen(false)}>Cerrar</Button>
           </DialogFooter>

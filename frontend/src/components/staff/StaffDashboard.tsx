@@ -833,7 +833,7 @@ export function StaffDashboard() {
       <Card className="border-l-4 border-l-[#004aad]">
         <CardHeader>
           <CardTitle className="text-[#004aad]">
-            Bienvenido, {staff.name}
+            Bienvenido(a), {staff.name}
           </CardTitle>
           <CardDescription>
             {staff.department} - {staff.role === 'administrador' ? 'Administrador' : 

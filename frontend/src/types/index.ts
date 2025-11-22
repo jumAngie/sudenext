@@ -131,19 +131,50 @@ export interface Area {
   are_ID: number;
   are_Nombre: string;
   are_Estado: boolean;
-
+  
   are_FechaCreacion: string | null;
   usu_UsuarioCreacion: number | null;
   nombreCompleto_C: string | null;
-
   are_FechaModificacion: string | null;
   usu_UsuarioModificacion: number | null;
   nombreCompleto_M: string | null;
-
   are_FechaEliminacion: string | null;
   usu_UsuarioEliminacion: number | null;
   nombreCompleto_E: string | null;
 }
+
+export interface TreatmentType {
+  tra_ID: number;
+  tra_Descripcion: string;
+  tra_Estado: boolean;
+
+  tra_FechaCreacion: string | null;
+  usu_UsuarioCreacion: number | null;
+  nombreCompleto_C: string | null;
+  tra_FechaModificacion: string | null;
+  usu_UsuarioModificacion: number | null;
+  nombreCompleto_M: string | null;
+  tra_FechaEliminacion: string | null;
+  usu_UsuarioEliminacion: number | null;
+  nombreCompleto_E: string | null;
+}
+
+export interface ConsultationType {
+  tic_ID: number;
+  tic_Descripcion: string;
+  tic_Estado: boolean;
+
+  tic_FechaCreacion: string | null;
+  usu_UsuarioCreacion: number | null;
+  nombreCompleto_C: string | null;
+  tic_FechaModificacion: string | null;
+  usu_UsuarioModificacion: number | null;
+  nombreCompleto_M: string | null;
+  tic_FechaEliminacion: string | null;
+  usu_UsuarioEliminacion: number | null;
+  nombreCompleto_E: string | null;
+}
+
 export interface Personnel {
   id: string;
   name: string;
@@ -173,24 +204,5 @@ export interface SystemUser {
   roleName: string;
   isActive: boolean;
   lastLogin?: string;
-  createdAt: string;
-}
-
-export interface ConsultationType {
-  id: string;
-  name: string;
-  description: string;
-  estimatedDuration: number; // in minutes
-  isActive: boolean;
-  createdAt: string;
-}
-
-export interface TreatmentType {
-  id: string;
-  name: string;
-  description: string;
-  estimatedDuration: number; // in minutes
-  estimatedCost: number;
-  isActive: boolean;
   createdAt: string;
 }

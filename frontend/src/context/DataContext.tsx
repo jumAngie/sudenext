@@ -20,6 +20,20 @@ import {
   deleteAreaAPI,
 } from "/src/services/areaService.ts";
 
+import {
+  fetchTipoTratamientos,
+  createTipoTratamientoAPI,
+  updateTipoTratamientoAPI,
+  deleteTipoTratamientoAPI
+} from "/src/services/tipoTratamientoService.ts";
+
+import {
+  fetchTipoConsultas,
+  createTipoConsultaAPI,
+  updateTipoConsultaAPI,
+  deleteTipoConsultaAPI
+} from "/src/services/tipoConsultaService.ts";
+
 interface DataContextType {
   // Support Sessions
   supportSessions: SupportSession[];
@@ -97,6 +111,62 @@ interface DataContextType {
     }
   ) => Promise<void>;
 
+  // Tipo Tratamiento
+  treatmentTypes: TreatmentType[];
+  addTreatmentType: (payload: {
+    tra_Descripcion: string;
+    usu_UsuarioCreacion: number;
+    tra_FechaCreacion: string;
+  }) => Promise<void>;
+
+  updateTreatmentType: (
+    id: number,
+    payload: {
+      tra_ID: number;
+      tra_Descripcion: string;
+      usu_UsuarioModificacion: number;
+      tra_FechaModificacion: string;
+    }
+  ) => Promise<void>;
+
+  deleteTreatmentType: (
+    id: number,
+    payload: {
+      tra_ID: number;
+      tra_Descripcion: string,
+      usu_UsuarioEliminacion: number;
+      tra_FechaEliminacion: string;
+    }
+  ) => Promise<void>;
+
+  // Consultation Types
+  consultationTypes: ConsultationType[];
+  addConsultationType: (payload: {
+    tic_Descripcion: string;
+    usu_UsuarioCreacion: number;
+    tic_FechaCreacion: string;
+  }) => Promise<void>;
+
+  updateConsultationType: (
+    id: number,
+    payload: {
+      tic_ID: number;
+      tic_Descripcion: string;
+      usu_UsuarioModificacion: number;
+      tic_FechaModificacion: string;
+    }
+  ) => Promise<void>;
+
+  deleteConsultationType: (
+    id: number,
+    payload: {
+      tic_ID: number;
+      tic_Descripcion: string,
+      usu_UsuarioEliminacion: number;
+      tic_FechaEliminacion: string;
+    }
+  ) => Promise<void>;
+
   // Personnel
   personnel: Personnel[];
   addPersonnel: (person: Omit<Personnel, "id" | "createdAt">) => void;
@@ -114,23 +184,6 @@ interface DataContextType {
   addSystemUser: (user: Omit<SystemUser, "id" | "createdAt">) => void;
   updateSystemUser: (id: string, updates: Partial<SystemUser>) => void;
   deleteSystemUser: (id: string) => void;
-
-  // Consultation Types
-  consultationTypes: ConsultationType[];
-  addConsultationType: (
-    type: Omit<ConsultationType, "id" | "createdAt">
-  ) => void;
-  updateConsultationType: (
-    id: string,
-    updates: Partial<ConsultationType>
-  ) => void;
-  deleteConsultationType: (id: string) => void;
-
-  // Treatment Types
-  treatmentTypes: TreatmentType[];
-  addTreatmentType: (type: Omit<TreatmentType, "id" | "createdAt">) => void;
-  updateTreatmentType: (id: string, updates: Partial<TreatmentType>) => void;
-  deleteTreatmentType: (id: string) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -495,7 +548,8 @@ const initialDentalTreatments: DentalTreatment[] = [
   },
 ];
 
-const initialAreas: Area[] = [];
+//const initialAreas: Area[] = [];
+//const initialTreatmentTypes: TreatmentType[] = [];
 
 const initialPersonnel: Personnel[] = [
   {
@@ -657,91 +711,14 @@ const initialSystemUsers: SystemUser[] = [
   },
 ];
 
-const initialConsultationTypes: ConsultationType[] = [
-  {
-    id: "consult-type-1",
-    name: "Orientación Académica",
-    description: "Asesoría sobre cursos, carreras y planificación académica",
-    estimatedDuration: 30,
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "consult-type-2",
-    name: "Dificultades Académicas",
-    description: "Apoyo para estudiantes con bajo rendimiento académico",
-    estimatedDuration: 45,
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "consult-type-3",
-    name: "Cambio de Carrera",
-    description:
-      "Información sobre procedimientos y requisitos para cambio de carrera",
-    estimatedDuration: 40,
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "consult-type-4",
-    name: "Tutoría Académica",
-    description: "Apoyo personalizado en áreas académicas específicas",
-    estimatedDuration: 60,
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-];
-
-const initialTreatmentTypes: TreatmentType[] = [
-  {
-    id: "treatment-type-1",
-    name: "Limpieza Dental",
-    description: "Profilaxis y limpieza dental de rutina",
-    estimatedDuration: 45,
-    estimatedCost: 150,
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "treatment-type-2",
-    name: "Extracción Dental",
-    description: "Extracción de piezas dentales",
-    estimatedDuration: 60,
-    estimatedCost: 300,
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "treatment-type-3",
-    name: "Resina Dental",
-    description: "Restauración con resina compuesta",
-    estimatedDuration: 50,
-    estimatedCost: 200,
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "treatment-type-4",
-    name: "Endodoncia",
-    description: "Tratamiento de conducto radicular",
-    estimatedDuration: 90,
-    estimatedCost: 500,
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "treatment-type-5",
-    name: "Ortodoncia",
-    description: "Revisión y ajuste de aparatos ortodónticos",
-    estimatedDuration: 30,
-    estimatedCost: 250,
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-];
-
 export function DataProvider({ children }: { children: React.ReactNode }) {
+  // FUNCIONALES
+  const [areas, setAreas] = useState<Area[]>([]);
+  const [treatmentTypes, setTreatmentTypes] = useState<TreatmentType[]>([]);
+  const [consultationTypes, setConsultationTypes] = useState<ConsultationType[]>([]);
+
+
+  // NO FUNCIONALES
   const [supportSessions, setSupportSessions] = useState<SupportSession[]>(
     initialSupportSessions
   );
@@ -758,44 +735,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [academicConsultations, setAcademicConsultations] = useState<
     AcademicConsultation[]
   >(initialAcademicConsultations);
-  const [areas, setAreas] = useState<Area[]>([]);
+
   const [personnel, setPersonnel] = useState<Personnel[]>(initialPersonnel);
   const [roles, setRoles] = useState<Role[]>(initialRoles);
   const [systemUsers, setSystemUsers] =
     useState<SystemUser[]>(initialSystemUsers);
-  const [consultationTypes, setConsultationTypes] = useState<
-    ConsultationType[]
-  >(initialConsultationTypes);
-  const [treatmentTypes, setTreatmentTypes] = useState<TreatmentType[]>(
-    initialTreatmentTypes
-  );
-
-  useEffect(() => {
-    const loadAreas = async () => {
-      try {
-        const data = await fetchAreas();
-        const formatted = data.map((a: any) => ({
-          are_ID: a.are_ID,
-          are_Nombre: a.are_Nombre,
-          are_Estado: a.are_Estado,
-          are_FechaCreacion: a.are_FechaCreacion,
-          usu_UsuarioCreacion: a.usu_UsuarioCreacion,
-          nombreCompleto_C: a.nombreCompleto_C,
-          are_FechaModificacion: a.are_FechaModificacion,
-          usu_UsuarioModificacion: a.usu_UsuarioModificacion,
-          nombreCompleto_M: a.nombreCompleto_M,
-          are_FechaEliminacion: a.are_FechaEliminacion,
-          usu_UsuarioEliminacion: a.usu_UsuarioEliminacion,
-          nombreCompleto_E: a.nombreCompleto_E,
-        }));
-        setAreas(formatted);
-      } catch (err) {
-        console.error("Error cargando áreas", err);
-      }
-    };
-
-    loadAreas();
-  }, []);
 
   // Generate unique ID
   const generateId = (prefix: string) =>
@@ -928,6 +872,33 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   //  ------------------------------------------------------- Areas -------------------------------------------------------
   //  ---------------------------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    const loadAreas = async () => {
+      try {
+        const data = await fetchAreas();
+        const formatted = data.map((a: any) => ({
+          are_ID: a.are_ID,
+          are_Nombre: a.are_Nombre,
+          are_Estado: a.are_Estado,
+          are_FechaCreacion: a.are_FechaCreacion,
+          usu_UsuarioCreacion: a.usu_UsuarioCreacion,
+          nombreCompleto_C: a.nombreCompleto_C,
+          are_FechaModificacion: a.are_FechaModificacion,
+          usu_UsuarioModificacion: a.usu_UsuarioModificacion,
+          nombreCompleto_M: a.nombreCompleto_M,
+          are_FechaEliminacion: a.are_FechaEliminacion,
+          usu_UsuarioEliminacion: a.usu_UsuarioEliminacion,
+          nombreCompleto_E: a.nombreCompleto_E,
+        }));
+        setAreas(formatted);
+      } catch (err) {
+        console.error("Error cargando áreas", err);
+      }
+    };
+
+    loadAreas();
+  }, []);
+
   const addArea = async (payload: any) => {
     const message = await createAreaAPI(payload);
     if (message.toLowerCase().includes("correctamente")) {
@@ -954,7 +925,116 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     }
     return message;
   };
+  //  ------------------------------------------------------- Tipo Tratamiento -------------------------------------------------------
+  //  --------------------------------------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    const loadTreatmentTypes = async () => {
+      try {
+        const data = await fetchTipoTratamientos();
+        const formatted = data.map((a: any) => ({
+          tra_ID: a.tra_ID,
+          tra_Descripcion: a.tra_Descripcion,
+          tra_Estado: a.tra_Estado,
+          tra_FechaCreacion: a.tra_FechaCreacion,
+          usu_UsuarioCreacion: a.usu_UsuarioCreacion,
+          nombreCompleto_C: a.nombreCompleto_C,
+          tra_FechaModificacion: a.tra_FechaModificacion,
+          usu_UsuarioModificacion: a.usu_UsuarioModificacion,
+          nombreCompleto_M: a.nombreCompleto_M,
+          tra_FechaEliminacion: a.tra_FechaEliminacion,
+          usu_UsuarioEliminacion: a.usu_UsuarioEliminacion,
+          nombreCompleto_E: a.nombreCompleto_E,
+        }));
+        setTreatmentTypes(formatted);
+      } catch (err) {
+        console.error("Error cargando los tipos de tratamiento", err);
+      }
+    };
 
+    loadTreatmentTypes();
+  }, []);
+
+  const addTreatmentType = async (payload: any) => {
+    const message = await createTipoTratamientoAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchTipoTratamientos();
+      setTreatmentTypes(data);
+    }
+    return message;
+  };
+
+  const updateTreatmentType = async (id: number, payload: any) => {
+    const message = await updateTipoTratamientoAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchTipoTratamientos();
+      setTreatmentTypes(data);
+    }
+    return message;
+  };
+
+  const deleteTreatmentType = async (id: number, payload: any) => {
+    const message = await deleteTipoTratamientoAPI(payload);
+    if (message.toLowerCase().includes("exitosamente")) {
+      const data = await fetchTipoTratamientos();
+      setTreatmentTypes(data);
+    }
+    return message;
+  };
+  //  ------------------------------------------------------- Tipos de Consulta -------------------------------------------------------
+  //  -------------------------------------------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    const loadConsultationType = async () => {
+      try {
+        const data = await fetchTipoConsultas();
+        const formatted = data.map((a: any) => ({
+          tic_ID: a.tic_ID,
+          tic_Descripcion: a.tic_Descripcion,
+          tic_Estado: a.tic_Estado,
+          tic_FechaCreacion: a.tic_FechaCreacion,
+          usu_UsuarioCreacion: a.usu_UsuarioCreacion,
+          nombreCompleto_C: a.nombreCompleto_C,
+          tic_FechaModificacion: a.tic_FechaModificacion,
+          usu_UsuarioModificacion: a.usu_UsuarioModificacion,
+          nombreCompleto_M: a.nombreCompleto_M,
+          tic_FechaEliminacion: a.tic_FechaEliminacion,
+          usu_UsuarioEliminacion: a.usu_UsuarioEliminacion,
+          nombreCompleto_E: a.nombreCompleto_E,
+        }));
+        setConsultationTypes(formatted);
+      } catch (err) {
+        console.error("Error cargando los tipos de consultas", err);
+      }
+    };
+    loadConsultationType();
+  }, []);
+
+
+  const addConsultationType = async (payload: any) => {
+    const message = await createTipoConsultaAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchTipoConsultas();
+      setConsultationTypes(data);
+    }
+    return message;
+  };
+
+  const updateConsultationType = async (id: number, payload: any) => {
+    const message = await updateTipoConsultaAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchTipoConsultas();
+      setConsultationTypes(data);
+    }
+    return message;
+  };
+
+  const deleteConsultationType = async (id: number, payload: any) => {
+    const message = await deleteTipoConsultaAPI(payload);
+    if (message.toLowerCase().includes("exitosamente")) {
+      const data = await fetchTipoConsultas();
+      setConsultationTypes(data);
+    }
+    return message;
+  };
   //  ------------------------------------------------------- Personal -------------------------------------------------------
   //  ---------------------------------------------------------------------------------------------------------------------
   const addPersonnel = (person: Omit<Personnel, "id" | "createdAt">) => {
@@ -1016,51 +1096,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   const deleteSystemUser = (id: string) => {
     setSystemUsers((prev) => prev.filter((user) => user.id !== id));
-  };
-
-  // Consultation Types
-  const addConsultationType = (
-    type: Omit<ConsultationType, "id" | "createdAt">
-  ) => {
-    const newType: ConsultationType = {
-      ...type,
-      id: generateId("consult-type"),
-      createdAt: new Date().toISOString(),
-    };
-    setConsultationTypes((prev) => [...prev, newType]);
-  };
-
-  const updateConsultationType = (
-    id: string,
-    updates: Partial<ConsultationType>
-  ) => {
-    setConsultationTypes((prev) =>
-      prev.map((type) => (type.id === id ? { ...type, ...updates } : type))
-    );
-  };
-
-  const deleteConsultationType = (id: string) => {
-    setConsultationTypes((prev) => prev.filter((type) => type.id !== id));
-  };
-
-  // Treatment Types
-  const addTreatmentType = (type: Omit<TreatmentType, "id" | "createdAt">) => {
-    const newType: TreatmentType = {
-      ...type,
-      id: generateId("treatment-type"),
-      createdAt: new Date().toISOString(),
-    };
-    setTreatmentTypes((prev) => [...prev, newType]);
-  };
-
-  const updateTreatmentType = (id: string, updates: Partial<TreatmentType>) => {
-    setTreatmentTypes((prev) =>
-      prev.map((type) => (type.id === id ? { ...type, ...updates } : type))
-    );
-  };
-
-  const deleteTreatmentType = (id: string) => {
-    setTreatmentTypes((prev) => prev.filter((type) => type.id !== id));
   };
 
   return (

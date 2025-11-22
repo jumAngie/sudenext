@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
+import { useAuth } from "../../context/AuthContext";
 import { TreatmentType } from '../../types';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -22,8 +23,6 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import { Label } from '../ui/label';
-import { Textarea } from '../ui/textarea';
-import { Switch } from '../ui/switch';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import {
   Select,
@@ -32,70 +31,144 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { toast } from 'sonner@2.0.3';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "../ui/alert-dialog"
+import { toast } from "sonner";
+import { getLocalDateTime } from '../../utils/dateHelpers';
+
 
 export function TreatmentTypesPage() {
+  const { user } = useAuth();
+
   const { treatmentTypes, addTreatmentType, updateTreatmentType, deleteTreatmentType } = useData();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [treatmentTypeToDelete, settreatmentTypeToDelete] = useState<TreatmentType | null>(null);
+
+  // Páginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
   const [selectedType, setSelectedType] = useState<TreatmentType | null>(null);
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    estimatedDuration: 45,
-    estimatedCost: 0,
-    isActive: true,
+    tra_ID: 0,
+    tra_Descripcion: ''
   });
 
+  // Validaciones
+  const [formError, setFormError] = useState("");
+  const [editFormError, setEditFormError] = useState("");
+
   const filteredTypes = treatmentTypes.filter((type) => {
-    const matchesSearch = type.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      type.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || 
-      (statusFilter === 'active' && type.isActive) || 
-      (statusFilter === 'inactive' && !type.isActive);
+    const matchesSearch = type.tra_Descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === 'all' ||
+      (statusFilter === 'active' && type.tra_Estado) ||
+      (statusFilter === 'inactive' && !type.tra_Estado);
     return matchesSearch && matchesStatus;
   });
 
-  const handleCreateType = () => {
-    addTreatmentType(formData);
+  // Paginación
+  const totalRecords = filteredTypes.length;
+  const totalPages = Math.ceil(totalRecords / recordsPerPage);
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredTypes.slice(indexOfFirstRecord, indexOfLastRecord);
+
+
+  // CREAR
+  const handleCreateType = async () => {
+    // Validación en blanco
+    if (!formData.tra_Descripcion.trim()) {
+      setFormError("El nombre es obligatorio.");
+      toast.error("El nombre del área no puede estar vacío.");
+      return;
+    }
+    const message = await addTreatmentType({
+      tra_Descripcion: formData.tra_Descripcion,
+      usu_UsuarioCreacion: Number(user?.data?.id),
+      tra_FechaCreacion: getLocalDateTime(),
+    });
+    // Si el backend dice error
+    if (!message.toLowerCase().includes("correctamente")) {
+      setFormError(message);
+      toast.error(message);
+      return;
+    }
+    // Si fue exitoso
+    toast.success(message);
     setIsCreateDialogOpen(false);
-    setFormData({ name: '', description: '', estimatedDuration: 45, estimatedCost: 0, isActive: true });
-    toast.success('Tipo de tratamiento creado exitosamente');
+    setFormData({ tra_ID: 0, tra_Descripcion: "" });
+    setFormError("");
   };
 
-  const handleEditType = () => {
+  // EDITAR
+  const handleEditType = async () => {
+    if (!formData.tra_Descripcion.trim()) {
+      setEditFormError("El nombre no puede estar vacío.");
+      toast.error("El nombre no puede estar vacío.");
+      return;
+    }
     if (selectedType) {
-      updateTreatmentType(selectedType.id, formData);
+      const message = await updateTreatmentType(selectedType.tra_ID, {
+        tra_ID: selectedType.tra_ID,
+        tra_Descripcion: formData.tra_Descripcion,
+        usu_UsuarioModificacion: Number(user?.data?.id),
+        tra_FechaModificacion: getLocalDateTime()
+      });
+      // Si el SP devolvió error
+      if (!message.toLowerCase().includes("correctamente")) {
+        setEditFormError(message);
+        toast.error(message);
+        return;
+      }
+      // Si el SP devolvió éxito
+      toast.success(message);
       setIsEditDialogOpen(false);
+      setEditFormError("");
       setSelectedType(null);
-      setFormData({ name: '', description: '', estimatedDuration: 45, estimatedCost: 0, isActive: true });
-      toast.success('Tipo de tratamiento actualizado exitosamente');
+      setFormData({ tra_ID: 0, tra_Descripcion: "" });
     }
   };
 
-  const handleDeleteType = (type: TreatmentType) => {
-    if (window.confirm(`¿Está seguro que desea eliminar el tipo de tratamiento "${type.name}"?`)) {
-      deleteTreatmentType(type.id);
-      toast.success('Tipo de tratamiento eliminado exitosamente');
+  const handleDeleteType = async () => {
+    if (!treatmentTypeToDelete) return;
+    const message = await deleteTreatmentType(treatmentTypeToDelete.tra_ID, {
+      tra_ID: treatmentTypeToDelete.tra_ID,
+      usu_UsuarioEliminacion: Number(user?.data?.id),
+      tra_FechaEliminacion: getLocalDateTime(),
+      tra_Descripcion: "string"
+    });
+
+    if (!message.toLowerCase().includes("exitosamente")) {
+      toast.error(message);
+      return;
     }
+    toast.success(message);
+    setIsDeleteDialogOpen(false);
+    settreatmentTypeToDelete(null);
   };
 
   const openCreateDialog = () => {
-    setFormData({ name: '', description: '', estimatedDuration: 45, estimatedCost: 0, isActive: true });
+    setFormData({ tra_ID: 0, tra_Descripcion: '' });
     setIsCreateDialogOpen(true);
   };
 
   const openEditDialog = (type: TreatmentType) => {
     setSelectedType(type);
     setFormData({
-      name: type.name,
-      description: type.description,
-      estimatedDuration: type.estimatedDuration,
-      estimatedCost: type.estimatedCost,
-      isActive: type.isActive,
+      tra_ID: type.tra_ID,
+      tra_Descripcion: type.tra_Descripcion
     });
     setIsEditDialogOpen(true);
   };
@@ -196,24 +269,32 @@ export function TreatmentTypesPage() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>ID</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead>Descripción</TableHead>
-                  <TableHead>Duración Estimada</TableHead>
-                  <TableHead>Costo Estimado</TableHead>
+                  <TableHead>Usuario Creador</TableHead>
+                  <TableHead>Fecha Creación</TableHead>
                   <TableHead>Estado</TableHead>
                   <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredTypes.map((type) => (
-                  <TableRow key={type.id} className="hover:bg-gray-50">
-                    <TableCell className="font-medium">{type.name}</TableCell>
-                    <TableCell className="max-w-md truncate">{type.description}</TableCell>
-                    <TableCell>{type.estimatedDuration} minutos</TableCell>
-                    <TableCell>L {type.estimatedCost.toFixed(2)}</TableCell>
+                {currentRecords.map((type) => (
+                  <TableRow key={type.tra_ID} className="hover:bg-gray-50">
+                    <TableCell className="font-medium">
+                      {type.tra_ID}
+                    </TableCell>
+                    <TableCell className="font-medium">{type.tra_Descripcion}</TableCell>
                     <TableCell>
-                      <Badge variant={type.isActive ? 'default' : 'secondary'} className={type.isActive ? 'bg-green-600' : ''}>
-                        {type.isActive ? 'Activo' : 'Inactivo'}
+                      {type.nombreCompleto_C ?? "—"}
+                    </TableCell>
+                    <TableCell>
+                      {type.tra_FechaCreacion
+                        ? new Date(type.tra_FechaCreacion).toLocaleDateString("es-HN")
+                        : "—"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={type.tra_Estado ? 'default' : 'secondary'} className={type.tra_Estado ? 'bg-green-600' : ''}>
+                        {type.tra_Estado ? 'Activo' : 'Inactivo'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
@@ -239,7 +320,10 @@ export function TreatmentTypesPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDeleteType(type)}
+                          onClick={() => {
+                            settreatmentTypeToDelete(type);
+                            setIsDeleteDialogOpen(true);
+                          }}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
                           <Trash2 className="w-3 h-3 mr-1" />
@@ -252,11 +336,50 @@ export function TreatmentTypesPage() {
               </TableBody>
             </Table>
           )}
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-between items-center mt-4">
+              {/* Info */}
+              <p className="text-sm text-gray-600">
+                Mostrando{" "}
+                <span className="font-semibold">
+                  {indexOfFirstRecord + 1} – {Math.min(indexOfLastRecord, totalRecords)}
+                </span>{" "}
+                de <span className="font-semibold">{totalRecords}</span> registros
+              </p>
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                >
+                  Anterior
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Siguiente
+                </Button>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
       {/* Create Dialog */}
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+      <Dialog
+        open={isCreateDialogOpen}
+        onOpenChange={(open: any) => {
+          setIsCreateDialogOpen(open);
+          if (!open) {
+            setFormError("");
+            setFormData({ tra_ID: 0, tra_Descripcion: "" });
+          }
+        }}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Crear Nuevo Tipo de Tratamiento</DialogTitle>
@@ -268,54 +391,26 @@ export function TreatmentTypesPage() {
             <div className="space-y-2 col-span-2">
               <Label htmlFor="name">Nombre</Label>
               <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Ej: Limpieza Dental"
+                value={formData.tra_Descripcion}
+                onChange={(e) => {
+                  setFormData({ ...formData, tra_Descripcion: e.target.value });
+                  setFormError("");  // quitar error cuando el usuario escribe
+                }}
+                placeholder="Ej: Endodoncia"
+                className={`${formError ? "border-red-500" : ""}`}
               />
-            </div>
-            <div className="space-y-2 col-span-2">
-              <Label htmlFor="description">Descripción</Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Describe el tipo de tratamiento"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="duration">Duración Estimada (minutos)</Label>
-              <Input
-                id="duration"
-                type="number"
-                value={formData.estimatedDuration}
-                onChange={(e) => setFormData({ ...formData, estimatedDuration: parseInt(e.target.value) || 45 })}
-                min="15"
-                step="15"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="cost">Costo Estimado (Lempiras)</Label>
-              <Input
-                id="cost"
-                type="number"
-                value={formData.estimatedCost}
-                onChange={(e) => setFormData({ ...formData, estimatedCost: parseFloat(e.target.value) || 0 })}
-                min="0"
-                step="50"
-              />
-            </div>
-            <div className="flex items-center space-x-2 col-span-2">
-              <Switch
-                id="isActive"
-                checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-              />
-              <Label htmlFor="isActive">Tipo activo</Label>
+              {formError && (
+                <p className="text-red-600 text-sm mt-1">{formError}</p>
+              )}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+            <Button variant="outline" onClick={() => {
+              setIsCreateDialogOpen(false);
+              setFormError("");          // limpiar error
+              setFormData({ tra_ID: 0, tra_Descripcion: "" }); // limpiar textbox
+            }}
+            >
               Cancelar
             </Button>
             <Button onClick={handleCreateType} className="bg-[#004aad] hover:bg-[#003687]">
@@ -326,7 +421,16 @@ export function TreatmentTypesPage() {
       </Dialog>
 
       {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+      <Dialog
+        open={isEditDialogOpen}
+        onOpenChange={(open: any) => {
+          setIsEditDialogOpen(open);
+          if (!open) {
+            setEditFormError("");
+            setFormData({ tra_ID: 0, tra_Descripcion: "" });
+          }
+        }}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Editar Tipo de Tratamiento</DialogTitle>
@@ -339,51 +443,25 @@ export function TreatmentTypesPage() {
               <Label htmlFor="edit-name">Nombre</Label>
               <Input
                 id="edit-name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.tra_Descripcion}
+                onChange={(e) => {
+                  setFormData({ ...formData, tra_Descripcion: e.target.value });
+                  setEditFormError("");
+                }}
+                className={editFormError ? "border-red-500" : ""}
               />
-            </div>
-            <div className="space-y-2 col-span-2">
-              <Label htmlFor="edit-description">Descripción</Label>
-              <Textarea
-                id="edit-description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-duration">Duración Estimada (minutos)</Label>
-              <Input
-                id="edit-duration"
-                type="number"
-                value={formData.estimatedDuration}
-                onChange={(e) => setFormData({ ...formData, estimatedDuration: parseInt(e.target.value) || 45 })}
-                min="15"
-                step="15"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-cost">Costo Estimado (Lempiras)</Label>
-              <Input
-                id="edit-cost"
-                type="number"
-                value={formData.estimatedCost}
-                onChange={(e) => setFormData({ ...formData, estimatedCost: parseFloat(e.target.value) || 0 })}
-                min="0"
-                step="50"
-              />
-            </div>
-            <div className="flex items-center space-x-2 col-span-2">
-              <Switch
-                id="edit-isActive"
-                checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-              />
-              <Label htmlFor="edit-isActive">Tipo activo</Label>
+              {editFormError && (
+                <p className="text-red-600 text-sm mt-1">{editFormError}</p>
+              )}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button variant="outline" onClick={() => {
+              setIsEditDialogOpen(false);
+              setEditFormError("");      // limpiar error
+              setFormData({ tra_ID: 0, tra_Descripcion: "" });
+            }}
+            >
               Cancelar
             </Button>
             <Button onClick={handleEditType} className="bg-[#004aad] hover:bg-[#003687]">
@@ -400,41 +478,65 @@ export function TreatmentTypesPage() {
             <DialogTitle>Detalles del Tipo de Tratamiento</DialogTitle>
           </DialogHeader>
           {selectedType && (
-            <div className="space-y-4 py-4">
-              <div>
-                <Label className="text-gray-600">Nombre</Label>
-                <p className="mt-1">{selectedType.name}</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Descripción</Label>
-                <p className="mt-1">{selectedType.description}</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Duración Estimada</Label>
-                <p className="mt-1">{selectedType.estimatedDuration} minutos</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Costo Estimado</Label>
-                <p className="mt-1">L {selectedType.estimatedCost.toFixed(2)}</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Estado</Label>
-                <div className="mt-1">
-                  <Badge variant={selectedType.isActive ? 'default' : 'secondary'} className={selectedType.isActive ? 'bg-green-600' : ''}>
-                    {selectedType.isActive ? 'Activo' : 'Inactivo'}
-                  </Badge>
+            <div className="space-y-8 py-4">
+              {/* GRID DE 2 COLUMNAS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div>
+                  <Label className="text-gray-600">Nombre</Label>
+                  <p className="mt-1">{selectedType.tra_Descripcion}</p>
+                </div>
+                <div>
+                  <Label className="text-gray-600">Estado</Label>
+                  <div className="mt-1">
+                    <Badge
+                      variant={selectedType.tra_Estado ? "default" : "secondary"}
+                      className={selectedType.tra_Estado ? "bg-green-600" : ""}
+                    >
+                      {selectedType.tra_Estado ? "Activo" : "Inactivo"}
+                    </Badge>
+                  </div>
                 </div>
               </div>
-              <div>
-                <Label className="text-gray-600">Fecha de Creación</Label>
-                <p className="mt-1">
-                  {new Date(selectedType.createdAt).toLocaleDateString('es-HN', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </p>
-              </div>
+              {/* Auditoría */}
+              <h3 className="text-lg font-semibold mt-4">Auditoría</h3>
+              <table className="w-full border text-sm">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border p-2">Acción</th>
+                    <th className="border p-2">Usuario</th>
+                    <th className="border p-2">Fecha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border p-2">Creación</td>
+                    <td className="border p-2">{selectedType.nombreCompleto_C ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedType.tra_FechaCreacion
+                        ? new Date(selectedType.tra_FechaCreacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2">Modificación</td>
+                    <td className="border p-2">{selectedType.nombreCompleto_M ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedType.tra_FechaModificacion
+                        ? new Date(selectedType.tra_FechaModificacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2">Eliminación</td>
+                    <td className="border p-2">{selectedType.nombreCompleto_E ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedType.tra_FechaEliminacion
+                        ? new Date(selectedType.tra_FechaEliminacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           )}
           <DialogFooter>
@@ -442,6 +544,34 @@ export function TreatmentTypesPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar Eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Seguro que querés eliminar el registro{" "}
+              <span className="font-semibold text-red-600">
+                {treatmentTypeToDelete?.tra_Descripcion}
+              </span>
+              ? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-[#004aad] hover:bg-[#003687]"
+              onClick={async () => {
+                if (treatmentTypeToDelete) {
+                  await handleDeleteType();
+                  setIsDeleteDialogOpen(false);
+                }
+              }}
+            >
+              Sí, Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
