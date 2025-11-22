@@ -1,7 +1,8 @@
 --USE SUDENEXT
 
+
 ---------------------------------------------------  PERSONAL  ----------------------------------------------------
-----------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
 GO
 INSERT INTO Gral.tbPersonal (per_Nombres, per_Apellidos, per_EstadoCivil, per_Sexo, per_FechaNac, per_Telefono, per_Direccion, per_Correo, are_ID, usu_UsuarioCreacion, per_FechaCreacion)
 VALUES ('María Fernanda', 'Lopez Rivera', 'CS', 'F', '1992-03-05', 99887766, 'Colonia El Carmen, San Pedro Sula', 'maria.lopez@unah.hn', 1, 1, GETDATE());
@@ -42,7 +43,6 @@ GO
 INSERT INTO Gral.tbPersonal (per_Nombres, per_Apellidos, per_EstadoCivil, per_Sexo, per_FechaNac, per_Telefono, per_Direccion, per_Correo, are_ID, usu_UsuarioCreacion, per_FechaCreacion)
 VALUES ('Ricardo Antonio', 'Flores Aguilar', 'UL', 'M', '1987-04-30', 97561234, 'Colonia El Prado, Tegucigalpa', 'ricardo.flores@unah.hn', 1, 1, GETDATE());
 GO
-
 ---------------------------------------------------  TIPO CONSULTA  ----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 INSERT INTO [Acad].[tbTipoConsulta] 
@@ -144,4 +144,38 @@ GO
 INSERT INTO [Acce].[tbRoles]
 		(rol_Descripcion, usu_UsuarioCreacion, rol_FechaCreacion)
 VALUES	('Consejero',			1,				GETDATE())
+GO
+
+---------------------------------------------------  USUARIOS  ----------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = 'NO1';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+
+INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
+VALUES						('ricardo.flores@unah.hn',			@Pass,		11, 		4,			1,						GETDATE(),			1);
+GO
+
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = 'NO2';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+
+INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
+VALUES						('jose.zelaya@unah.hn',			@Pass,		5, 		3,			1,						GETDATE(),			1);
+GO
+
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = 'NO3';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+
+INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
+VALUES						('ana.castro@unah.hn',			@Pass,		4, 		2,			1,						GETDATE(),			1);
+GO
+
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = 'NO4';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+
+INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
+VALUES						('carlos.martinez@unah.hn',			@Pass,		3, 		5,			1,						GETDATE(),			1);
 GO

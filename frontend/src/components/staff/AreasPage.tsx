@@ -98,7 +98,6 @@ export function AreasPage() {
     // Si el backend dice error
     if (!message.toLowerCase().includes("correctamente")) {
       setFormError(message);
-      console.log(message);
       toast.error(message);
       return;
     }

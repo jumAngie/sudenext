@@ -1,14 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{5ED56434-95EA-4ED8-AB4C-BD8E38F8D29A}|..\\SUDENEXT.Entities\\SUDENEXT.Entities.csproj|c:\\users\\pc\\documents\\github\\sudenext\\backend\\api\\sudenext.entities\\dto\\usuariosloginresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5ED56434-95EA-4ED8-AB4C-BD8E38F8D29A}|..\\SUDENEXT.Entities\\SUDENEXT.Entities.csproj|c:\\users\\pc\\documents\\github\\sudenext\\backend\\api\\sudenext.entities\\entities\\tbpersonal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -16,37 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "UsuariosLoginResult.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\DTO\\UsuariosLoginResult.cs",
-              "RelativeDocumentMoniker": "..\\SUDENEXT.Entities\\DTO\\UsuariosLoginResult.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\DTO\\UsuariosLoginResult.cs",
-              "RelativeToolTip": "..\\SUDENEXT.Entities\\DTO\\UsuariosLoginResult.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAowBgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-22T16:33:04.851Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "tbPersonal.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\Entities\\tbPersonal.cs",
-              "RelativeDocumentMoniker": "..\\SUDENEXT.Entities\\Entities\\tbPersonal.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\Entities\\tbPersonal.cs",
-              "RelativeToolTip": "..\\SUDENEXT.Entities\\Entities\\tbPersonal.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAYwBMAAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-22T16:32:39.536Z",
-              "EditorCaption": ""
             }
           ]
         }

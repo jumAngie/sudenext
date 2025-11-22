@@ -40,7 +40,6 @@ export async function updateAreaAPI(payload: any) {
 
 // ELIMINAR
 export async function deleteAreaAPI(payload: any) {
-  console.log(payload);
   const res = await fetch(`${API_URL}/Areas/Eliminar`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

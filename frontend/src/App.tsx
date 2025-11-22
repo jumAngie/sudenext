@@ -32,35 +32,22 @@ function AppContent() {
   const [currentStaffPage, setCurrentStaffPage] = useState('dashboard');
   const [showLogin, setShowLogin] = useState(false);
 
-  const handleLoginSuccess = (user) => {
-    if (user.type === "student") {
-      // nada que hacer, App automáticamente muestra StudentDashboard
-      return;
-    }
+  const handleLoginSuccess = (user:any) => {
+    if (user.type === "student") return;
 
     if (user.type === "staff") {
       switch (user.data.roleId) {
-        case 1:
-          setCurrentStaffPage("dashboard");      // Admin
-          break;
-        case 2:
-          setCurrentStaffPage("dental-appointments-list"); // Odontología
-          break;
-        case 3:
-          setCurrentStaffPage("medical-checkins-list");    // Medicina
-          break;
-        case 4:
-          setCurrentStaffPage("academic-consultations-list"); // Asesor Académico
-          break;
-        case 5:
-          setCurrentStaffPage("support-sessions-list"); // Consejero / Psicología
-          break;
-        default:
-          setCurrentStaffPage("dashboard");
+        case 1: setCurrentStaffPage("dashboard"); break;
+        case 2: setCurrentStaffPage("dental-appointments-list"); break;
+        case 3: setCurrentStaffPage("medical-checkins-list"); break;
+        case 4: setCurrentStaffPage("academic-consultations-list"); break;
+        case 5: setCurrentStaffPage("support-sessions-list"); break;
+        default: setCurrentStaffPage("dashboard");
       }
     }
   };
 
+  // 🔵 LOADING
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#004aad] to-[#edba0d]">
@@ -72,88 +59,58 @@ function AppContent() {
     );
   }
 
+  // 🔵 SIN USUARIO → LANDING
   if (!user && !showLogin) {
     return <LandingPage onLoginClick={() => setShowLogin(true)} />;
   }
 
+  // 🔵 SIN USUARIO → LOGIN
   if (!user && showLogin) {
-   return (
-  <LoginForm 
-    onBackToLanding={() => setShowLogin(false)} 
-    onLoginSuccess={handleLoginSuccess}
-  />
-);
+    return (
+      <LoginForm
+        onBackToLanding={() => setShowLogin(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
+    );
   }
 
-  if (user?.type === 'student') {
+  // 🔵 USUARIO ESTUDIANTE
+  if (user?.type === "student") {
     return <StudentDashboard />;
   }
 
-  // Staff Dashboard with different pages (simplified routing)
+  // 🔥 VALIDACIÓN CRÍTICA → evita pantalla en blanco
+  if (user?.type === "staff" && !user.data) {
+    return <div className="text-center p-10">Error: datos de usuario inválidos.</div>;
+  }
+
+  // Staff routing
   const renderStaffPage = () => {
     switch (currentStaffPage) {
-      case 'dashboard':
-        return <StaffDashboard />;
-
-      // Psychology Module
-      case 'support-sessions-list':
-        return <SupportSessionsListPage />;
-      case 'assign-counselor':
-        return <AssignCounselorPage />;
-      case 'action-plans':
-        return <ActionPlansPage />;
-
-      // Dentistry Module
-      case 'dental-appointments-list':
-        return <DentalAppointmentsListPage />;
-      case 'dental-treatment':
-        return <DentalTreatmentPage />;
-      case 'assign-dental':
-        return <AssignDentalPage />;
-
-      // Medicine Module
-      case 'medical-checkins-list':
-        return <MedicalCheckInsListPage />;
-      case 'medical-checkin':
-        return <MedicalCheckInPage />;
-
-      // Academic Module
-      case 'academic-consultations-list':
-        return <AcademicConsultationsListPage />;
-      case 'academic-consultations':
-        return <AcademicConsultationsPage />;
-      case 'consultation-types':
-        return <ConsultationTypesPage />;
-
-      // Dentistry - Treatment Types
-      case 'treatment-types':
-        return <TreatmentTypesPage />;
-
-      // General Section
-      case 'areas':
-        return <AreasPage />;
-      case 'personnel':
-        return <PersonnelPage />;
-
-      // Access Section
-      case 'roles':
-        return <RolesPage />;
-      case 'users':
-        return <UsersPage />;
-
-      // Reports
-      case 'download-reports':
-        return <DownloadReportsPage />;
-
-      // Profile
-      case 'profile':
-        return <ProfilePage />;
-
-      default:
-        return <StaffDashboard />;
+      case 'dashboard': return <StaffDashboard />;
+      case 'support-sessions-list': return <SupportSessionsListPage />;
+      case 'assign-counselor': return <AssignCounselorPage />;
+      case 'action-plans': return <ActionPlansPage />;
+      case 'dental-appointments-list': return <DentalAppointmentsListPage />;
+      case 'dental-treatment': return <DentalTreatmentPage />;
+      case 'assign-dental': return <AssignDentalPage />;
+      case 'medical-checkins-list': return <MedicalCheckInsListPage />;
+      case 'medical-checkin': return <MedicalCheckInPage />;
+      case 'academic-consultations-list': return <AcademicConsultationsListPage />;
+      case 'academic-consultations': return <AcademicConsultationsPage />;
+      case 'consultation-types': return <ConsultationTypesPage />;
+      case 'treatment-types': return <TreatmentTypesPage />;
+      case 'areas': return <AreasPage />;
+      case 'personnel': return <PersonnelPage />;
+      case 'roles': return <RolesPage />;
+      case 'users': return <UsersPage />;
+      case 'download-reports': return <DownloadReportsPage />;
+      case 'profile': return <ProfilePage />;
+      default: return <StaffDashboard />;
     }
   };
 
+  // 🔥 STAFF LAYOUT con validación fuerte
   return (
     <StaffLayout
       currentPage={currentStaffPage}

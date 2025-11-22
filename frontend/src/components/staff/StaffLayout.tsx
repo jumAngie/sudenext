@@ -287,8 +287,8 @@ export function StaffLayout({
   });
 
   const toggleGroup = (groupId: string) => {
-    setExpandedGroups(prev => 
-      prev.includes(groupId) 
+    setExpandedGroups(prev =>
+      prev.includes(groupId)
         ? prev.filter(id => id !== groupId)
         : [...prev, groupId]
     );
@@ -322,7 +322,7 @@ export function StaffLayout({
         if (subItem) return subItem.label;
       }
     }
-    
+
     return "Dashboard";
   };
 
@@ -413,11 +413,10 @@ export function StaffLayout({
                   // Single menu item
                   <Button
                     variant={currentPage === item.id ? "default" : "ghost"}
-                    className={`w-full justify-start ${
-                      currentPage === item.id
+                    className={`w-full justify-start ${currentPage === item.id
                         ? "bg-[#004aad] text-white hover:bg-[#003687]"
                         : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    }`}
+                      }`}
                     onClick={() => handleMenuClick(item.id)}
                   >
                     <span className="flex-shrink-0">{item.icon}</span>
@@ -428,9 +427,8 @@ export function StaffLayout({
                   <div className="space-y-1">
                     <Button
                       variant="ghost"
-                      className={`w-full justify-start text-gray-700 hover:bg-gray-100 hover:text-gray-900 ${
-                        isCurrentPageInGroup(item) ? 'bg-gray-100' : ''
-                      }`}
+                      className={`w-full justify-start text-gray-700 hover:bg-gray-100 hover:text-gray-900 ${isCurrentPageInGroup(item) ? 'bg-gray-100' : ''
+                        }`}
                       onClick={() => toggleGroup(item.id)}
                     >
                       <span className="flex-shrink-0">{item.icon}</span>
@@ -443,27 +441,26 @@ export function StaffLayout({
                         )}
                       </span>
                     </Button>
-                    
+
                     {expandedGroups.includes(item.id) && (
                       <div className="ml-6 space-y-1">
                         {item.items
                           .filter(subItem => subItem.roles.includes(staff.role))
                           .map((subItem) => (
-                          <Button
-                            key={subItem.id}
-                            variant={currentPage === subItem.id ? "default" : "ghost"}
-                            size="sm"
-                            className={`w-full justify-start text-sm ${
-                              currentPage === subItem.id
-                                ? "bg-[#004aad] text-white hover:bg-[#003687]"
-                                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                            }`}
-                            onClick={() => handleMenuClick(subItem.id)}
-                          >
-                            <span className="flex-shrink-0">{subItem.icon}</span>
-                            <span className="ml-2 truncate">{subItem.label}</span>
-                          </Button>
-                        ))}
+                            <Button
+                              key={subItem.id}
+                              variant={currentPage === subItem.id ? "default" : "ghost"}
+                              size="sm"
+                              className={`w-full justify-start text-sm ${currentPage === subItem.id
+                                  ? "bg-[#004aad] text-white hover:bg-[#003687]"
+                                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                                }`}
+                              onClick={() => handleMenuClick(subItem.id)}
+                            >
+                              <span className="flex-shrink-0">{subItem.icon}</span>
+                              <span className="ml-2 truncate">{subItem.label}</span>
+                            </Button>
+                          ))}
                       </div>
                     )}
                   </div>
@@ -527,7 +524,6 @@ export function StaffLayout({
             </div>
           </div>
         </header>
-
         {/* Page Content */}
         <main className="flex-1 p-6">{children}</main>
       </div>

@@ -47,7 +47,7 @@ BEGIN
     BEGIN
         SELECT 
             0 AS codeStatus,
-            'El estudiante no está matriculado actualmente.' AS messageStatus;
+            'El estudiante no está matriculado en el período actual.' AS messageStatus;
         RETURN;
     END;
 
