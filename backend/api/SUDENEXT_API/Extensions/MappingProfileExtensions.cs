@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SUDENEXT.API.Models.ModelsAcademico;
+using SUDENEXT.API.Models.ModelsAcceso;
 using SUDENEXT.API.Models.ModelsGeneral;
 using SUDENEXT.API.Models.ModelsOdontologia;
 using SUDENEXT.API.Models.ModelsPsicologia;
@@ -21,6 +22,7 @@ namespace SUDENEXT.API.Extensions
             #endregion
 
             #region Acceso
+            CreateMap<LoginUsuariosViewModel, tbUsuarios>().ReverseMap();
             #endregion
 
             #region General

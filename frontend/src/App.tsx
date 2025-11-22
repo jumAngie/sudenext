@@ -32,6 +32,35 @@ function AppContent() {
   const [currentStaffPage, setCurrentStaffPage] = useState('dashboard');
   const [showLogin, setShowLogin] = useState(false);
 
+  const handleLoginSuccess = (user) => {
+    if (user.type === "student") {
+      // nada que hacer, App automáticamente muestra StudentDashboard
+      return;
+    }
+
+    if (user.type === "staff") {
+      switch (user.data.roleId) {
+        case 1:
+          setCurrentStaffPage("dashboard");      // Admin
+          break;
+        case 2:
+          setCurrentStaffPage("dental-appointments-list"); // Odontología
+          break;
+        case 3:
+          setCurrentStaffPage("medical-checkins-list");    // Medicina
+          break;
+        case 4:
+          setCurrentStaffPage("academic-consultations-list"); // Asesor Académico
+          break;
+        case 5:
+          setCurrentStaffPage("support-sessions-list"); // Consejero / Psicología
+          break;
+        default:
+          setCurrentStaffPage("dashboard");
+      }
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#004aad] to-[#edba0d]">
@@ -48,7 +77,12 @@ function AppContent() {
   }
 
   if (!user && showLogin) {
-    return <LoginForm onBackToLanding={() => setShowLogin(false)} />;
+   return (
+  <LoginForm 
+    onBackToLanding={() => setShowLogin(false)} 
+    onLoginSuccess={handleLoginSuccess}
+  />
+);
   }
 
   if (user?.type === 'student') {
@@ -60,7 +94,7 @@ function AppContent() {
     switch (currentStaffPage) {
       case 'dashboard':
         return <StaffDashboard />;
-      
+
       // Psychology Module
       case 'support-sessions-list':
         return <SupportSessionsListPage />;
@@ -68,7 +102,7 @@ function AppContent() {
         return <AssignCounselorPage />;
       case 'action-plans':
         return <ActionPlansPage />;
-      
+
       // Dentistry Module
       case 'dental-appointments-list':
         return <DentalAppointmentsListPage />;
@@ -76,13 +110,13 @@ function AppContent() {
         return <DentalTreatmentPage />;
       case 'assign-dental':
         return <AssignDentalPage />;
-      
+
       // Medicine Module
       case 'medical-checkins-list':
         return <MedicalCheckInsListPage />;
       case 'medical-checkin':
         return <MedicalCheckInPage />;
-      
+
       // Academic Module
       case 'academic-consultations-list':
         return <AcademicConsultationsListPage />;
@@ -90,31 +124,31 @@ function AppContent() {
         return <AcademicConsultationsPage />;
       case 'consultation-types':
         return <ConsultationTypesPage />;
-      
+
       // Dentistry - Treatment Types
       case 'treatment-types':
         return <TreatmentTypesPage />;
-      
+
       // General Section
       case 'areas':
         return <AreasPage />;
       case 'personnel':
         return <PersonnelPage />;
-      
+
       // Access Section
       case 'roles':
         return <RolesPage />;
       case 'users':
         return <UsersPage />;
-      
+
       // Reports
       case 'download-reports':
         return <DownloadReportsPage />;
-      
+
       // Profile
       case 'profile':
         return <ProfilePage />;
-      
+
       default:
         return <StaffDashboard />;
     }

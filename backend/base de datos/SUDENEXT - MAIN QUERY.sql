@@ -45,7 +45,7 @@ SET @Clave = '0987654321';
 SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
 
 INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
-VALUES						('Felps',			@Pass,		1, 		1,			1,						GETDATE(),			1);
+VALUES						('luis.sab@unah.hn',			@Pass,		1, 		1,			1,						GETDATE(),			1);
 GO
 
 CREATE TABLE Acce.tbPantallas

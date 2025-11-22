@@ -27,11 +27,14 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 import logoUnah from "figma:asset/be64fce97fdf5b7fdbb6109969f91e39af37bc6f.png";
 import logoSudecad from "figma:asset/22cd37652b59616ba81f702b45c65f8b7ad8d496.png";
 
+
 interface LoginFormProps {
   onBackToLanding?: () => void;
+  onLoginSuccess?: (user: any) => void;
 }
 
-export function LoginForm({ onBackToLanding }: LoginFormProps) {
+
+export function LoginForm({ onBackToLanding, onLoginSuccess }: LoginFormProps) {
   const { login, isLoading } = useAuth();
   const [formData, setFormData] = useState({
     identifier: "",
@@ -41,18 +44,30 @@ export function LoginForm({ onBackToLanding }: LoginFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    // Validación básica
     if (!formData.identifier || !formData.password) {
       toast.error("Por favor completa todos los campos");
       return;
     }
+    // Ejecutar login
     const result = await login(formData);
+    // Error → mensaje real del backend
     if (!result.success) {
-      toast.error(result.message);  // <-- mensaje REAL del backend
+      toast.error(result.message);
       return;
     }
     toast.success("Bienvenido 👋");
+
+    // Obtener usuario del localStorage (AuthContext ya lo guardó)
+    const user = JSON.parse(localStorage.getItem("sudenext-user") || "null");
+
+    if (!user) {
+      toast.error("Error inesperado: usuario no encontrado.");
+      return;
+    }
+    onLoginSuccess(user);
   };
+
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));

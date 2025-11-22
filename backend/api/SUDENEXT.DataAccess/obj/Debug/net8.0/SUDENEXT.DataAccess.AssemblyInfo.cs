@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SUDENEXT.DataAccess")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3b3d64be9e30e073f142c6792ff537dc5113458a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eceb5eb7062b8b6e5a9a432d655046c3ce765c97")]
 [assembly: System.Reflection.AssemblyProductAttribute("SUDENEXT.DataAccess")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SUDENEXT.DataAccess")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

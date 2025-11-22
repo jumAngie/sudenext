@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, Student, StaffMember, UserRole } from '../types';
 import { loginStudentAPI } from "../services/authService";
+import { loginStaffAPI } from "../services/authService";
 
 interface AuthContextType {
   user: User | null;
@@ -196,68 +197,96 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
     }
 
-  // POR AHORA el staff lo dejamos mock
-  if (credentials.type === "staff") {
-    const staff = mockStaff.find(s => s.email === credentials.identifier && credentials.password === "12345");
-    if (staff) {
-      const userData: User = { type: "staff", data: staff };
+    if (credentials.type === "staff") {
+      const response = await loginStaffAPI(credentials.identifier, credentials.password);
+
+      if (!response.success) {
+        setIsLoading(false);
+        return {
+          success: false,
+          message: response.message
+        };
+      }
+
+      const s = response.staff;
+
+      const userData: User = {
+        type: "staff",
+        data: {
+          id: s.usu_ID,
+          username: s.usu_Usuario,
+          roleId: s.rol_ID,
+          roleDescription: s.rol_Descripcion,
+          firstName: s.per_Nombres,
+          lastName: s.per_Apellidos,
+          email: s.per_Correo,
+          phone: s.per_Telefono,
+          sexo: s.per_Sexo,
+          estadoCivil: s.per_EstadoCivil,
+          fechaNac: s.per_FechaNac,
+          address: s.per_Direccion,
+          areaId: s.are_ID,
+          areaNombre: s.are_Nombre,
+        }
+      };
+
       setUser(userData);
       localStorage.setItem("sudenext-user", JSON.stringify(userData));
       setIsLoading(false);
-      return true;
+
+      return {
+        success: true,
+        message: response.message
+      };
     }
-  }
-
-  setIsLoading(false);
-  return false;
-};
+  };
 
 
-const logout = () => {
-  setUser(null);
-  localStorage.removeItem('sudenext-user');
-};
+    const logout = () => {
+      setUser(null);
+      localStorage.removeItem('sudenext-user');
+    };
 
-const changePassword = async (currentPassword: string, newPassword: string): Promise<boolean> => {
-  setIsLoading(true);
+    const changePassword = async (currentPassword: string, newPassword: string): Promise<boolean> => {
+      setIsLoading(true);
 
-  // Simulate API call delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-  if (user) {
-    if (currentPassword === '12345') {
-      // Update password in mock data
-      if (user.type === 'student') {
-        const studentIndex = mockStudents.findIndex(s => s.accountNumber === user.data.accountNumber);
-        if (studentIndex !== -1) {
-          mockStudents[studentIndex].password = newPassword;
-        }
-      } else {
-        const staffIndex = mockStaff.findIndex(s => s.email === user.data.email);
-        if (staffIndex !== -1) {
-          mockStaff[staffIndex].password = newPassword;
+      if (user) {
+        if (currentPassword === '12345') {
+          // Update password in mock data
+          if (user.type === 'student') {
+            const studentIndex = mockStudents.findIndex(s => s.accountNumber === user.data.accountNumber);
+            if (studentIndex !== -1) {
+              mockStudents[studentIndex].password = newPassword;
+            }
+          } else {
+            const staffIndex = mockStaff.findIndex(s => s.email === user.data.email);
+            if (staffIndex !== -1) {
+              mockStaff[staffIndex].password = newPassword;
+            }
+          }
+          setIsLoading(false);
+          return true;
         }
       }
+
       setIsLoading(false);
-      return true;
+      return false;
+    };
+
+    return (
+      <AuthContext.Provider value={{ user, login, logout, changePassword, isLoading }}>
+        {children}
+      </AuthContext.Provider>
+    );
+  }
+
+  export function useAuth() {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+      throw new Error('useAuth must be used within an AuthContext');
     }
+    return context;
   }
-
-  setIsLoading(false);
-  return false;
-};
-
-return (
-  <AuthContext.Provider value={{ user, login, logout, changePassword, isLoading }}>
-    {children}
-  </AuthContext.Provider>
-);
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthContext');
-  }
-  return context;
-}

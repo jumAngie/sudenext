@@ -28,9 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\ControllersAcceso\" />
     <Folder Include="Controllers\ControllersMedicina\" />
-    <Folder Include="Models\ModelsAcceso\" />
     <Folder Include="Models\ModelsMedicina\" />
   </ItemGroup>
 

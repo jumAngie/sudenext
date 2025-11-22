@@ -1,4 +1,6 @@
 ﻿using SUDENEXT.DataAccess.Repositories.Acce;
+using SUDENEXT.DataAccess.Repositories.Gral;
+using SUDENEXT.Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +25,26 @@ namespace SUDENEXT.BussinessLogic.Services.AccesoServices
         }
 
         #region Usuarios
+        public ServiceResult UsuariosLogin(tbUsuarios item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var usuario = _usuariosRepository.Login(item);
+
+                if (usuario.codeStatus == 0)
+                {
+                    return resultado.Forbidden(usuario.messageStatus);
+                }
+
+                return resultado.Ok(usuario);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Roles

@@ -127,3 +127,21 @@ INSERT INTO [Odon].[tbTratamientos]
 	  (tra_Descripcion, usu_UsuarioCreacion, tra_FechaCreacion)
 VALUES ('Protesís Dental', 1, GETDATE())
 GO
+---------------------------------------------------  ROLES  ------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
+INSERT INTO [Acce].[tbRoles]
+		(rol_Descripcion, usu_UsuarioCreacion, rol_FechaCreacion)
+VALUES	('Odontologo',			1,				GETDATE())
+GO
+INSERT INTO [Acce].[tbRoles]
+		(rol_Descripcion, usu_UsuarioCreacion, rol_FechaCreacion)
+VALUES	('Medico General',			1,				GETDATE())
+GO
+INSERT INTO [Acce].[tbRoles]
+		(rol_Descripcion, usu_UsuarioCreacion, rol_FechaCreacion)
+VALUES	('Asesor Académico',			1,				GETDATE())
+GO
+INSERT INTO [Acce].[tbRoles]
+		(rol_Descripcion, usu_UsuarioCreacion, rol_FechaCreacion)
+VALUES	('Consejero',			1,				GETDATE())
+GO

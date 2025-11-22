@@ -21,6 +21,7 @@ namespace SUDENEXT.DataAccess
         #endregion
 
         #region Acce
+        public static string UsuariosLogin = "Acce.sp_UsuariosLogin";
         #endregion
 
         #region Gral
