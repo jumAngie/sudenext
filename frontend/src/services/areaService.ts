@@ -1,6 +1,6 @@
-export const API_URL = "https://localhost:44327/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
-// LISTAR AREAS
+// LISTAR
 export async function fetchAreas() {
   const res = await fetch(`${API_URL}/Areas/Listar`, {
     method: "GET",
@@ -14,25 +14,33 @@ export async function fetchAreas() {
   const json = await res.json();
   return json.data;
 }
-
-export async function createAreaAPI(payload: any) {
-  const res = await fetch(`${API_URL}/Areas/Insertar`, {
+// INSERTAR
+export async function createAreaAPI(payload:any) {
+  const response = await fetch(`${API_URL}/Areas/Insertar`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error("Error insertando área");
-}
 
+  const result = await response.json();
+
+  // AQUI está el verdadero mensaje
+  return result.data?.messageStatus || "Error desconocido";
+}
+// EDITAR
 export async function updateAreaAPI(payload: any) {
   const res = await fetch(`${API_URL}/Areas/Editar`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
-  if (!res.ok) throw new Error("Error modificando área");
-}
 
+  const result = await res.json();
+
+  // Devolver siempre el mensaje del SP
+  return result.data?.messageStatus || "Error desconocido";
+}
+// ELIMINAR
 export async function deleteAreaAPI(payload: any) {
   const res = await fetch(`${API_URL}/Areas/Eliminar`, {
     method: "POST",

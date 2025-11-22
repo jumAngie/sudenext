@@ -58,8 +58,14 @@ export function AreasPage() {
   const recordsPerPage = 10;
   const [selectedArea, setSelectedArea] = useState<Area | null>(null);
   const [formData, setFormData] = useState({
-    are_Nombre: '',
+    are_ID: 0,
+    are_Nombre: ''
   });
+
+  // Validaciones
+  const [formError, setFormError] = useState("");
+  const [editFormError, setEditFormError] = useState("");
+
 
 
   const filteredAreas = areas.filter((area) => {
@@ -78,33 +84,63 @@ export function AreasPage() {
 
   const currentRecords = filteredAreas.slice(indexOfFirstRecord, indexOfLastRecord);
 
+  // CREAR 
   const handleCreateArea = async () => {
-    await addArea({
+    // Validación en blanco
+    if (!formData.are_Nombre.trim()) {
+      setFormError("El nombre es obligatorio.");
+      toast.error("El nombre del área no puede estar vacío.");
+      return;
+    }
+    const message = await addArea({
       are_Nombre: formData.are_Nombre,
       usu_UsuarioCreacion: 1,
       are_FechaCreacion: new Date().toISOString().slice(0, 19),
-
     });
+    // Si el backend dice error
+    if (!message.toLowerCase().includes("correctamente")) {
+      setFormError(message);           // campo en rojo
+      toast.error(message);            // toast rojo
+      return;                          // NO cerrar modal
+    }
+    // Si fue exitoso
+    toast.success(message);
     setIsCreateDialogOpen(false);
-    setFormData({ are_Nombre: '' });
-    toast.success('Área creada exitosamente');
+    setFormData({ are_ID: 0, are_Nombre: "" });
+    setFormError("");
   };
 
 
+  /// EDITAR
   const handleEditArea = async () => {
+    if (!formData.are_Nombre.trim()) {
+      setEditFormError("El nombre no puede estar vacío.");
+      toast.error("El nombre no puede estar vacío.");
+      return;
+    }
+
     if (selectedArea) {
-      await updateArea(selectedArea.are_ID, {
+      const message = await updateArea(selectedArea.are_ID, {
+        are_ID: selectedArea.are_ID,
         are_Nombre: formData.are_Nombre,
         usu_UsuarioModificacion: 1,
-        are_FechaModificacion: new Date().toISOString().slice(0, 19),
+        are_FechaModificacion: new Date().toISOString().slice(0, 19)
       });
-
+      // Si el SP devolvió error
+      if (!message.toLowerCase().includes("correctamente")) {
+        setEditFormError(message);
+        toast.error(message);
+        return; // NO CERRAR MODAL
+      }
+      // Si el SP devolvió éxito
+      toast.success(message);
       setIsEditDialogOpen(false);
+      setEditFormError("");
       setSelectedArea(null);
-      setFormData({ are_Nombre: '' });
-      toast.success('Área actualizada exitosamente');
+      setFormData({ are_ID: 0, are_Nombre: "" });
     }
   };
+
 
 
   const handleDeleteArea = async (area: Area) => {
@@ -129,13 +165,14 @@ export function AreasPage() {
   };
 
   const openCreateDialog = () => {
-    setFormData({ are_Nombre: '' });
+    setFormData({ are_ID: 0, are_Nombre: '' });
     setIsCreateDialogOpen(true);
   };
 
   const openEditDialog = (area: Area) => {
     setSelectedArea(area);
     setFormData({
+      are_ID: area.are_ID,
       are_Nombre: area.are_Nombre,
     });
     setIsEditDialogOpen(true);
@@ -347,7 +384,17 @@ export function AreasPage() {
       </Card>
 
       {/* Create Dialog */}
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+      <Dialog
+        open={isCreateDialogOpen}
+        onOpenChange={(open: any) => {
+          setIsCreateDialogOpen(open);
+
+          if (!open) {
+            setFormError("");
+            setFormData({ are_ID: 0, are_Nombre: "" });
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Crear Nueva Área</DialogTitle>
@@ -359,18 +406,31 @@ export function AreasPage() {
             <div className="space-y-2">
               <Label htmlFor="name">Nombre</Label>
               <Input
-                id="name"
                 value={formData.are_Nombre}
-                onChange={(e) => setFormData({ ...formData, are_Nombre: e.target.value })}
-                placeholder="Ej: Odontología"
+                onChange={(e) => {
+                  setFormData({ ...formData, are_Nombre: e.target.value });
+                  setFormError("");  // quitar error cuando el usuario escribe
+                }}
+                className={`${formError ? "border-red-500" : ""}`}
               />
+              {formError && (
+                <p className="text-red-600 text-sm mt-1">{formError}</p>
+              )}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsCreateDialogOpen(false);
+                setFormError("");          // limpiar error
+                setFormData({ are_ID: 0, are_Nombre: "" }); // limpiar textbox
+              }}
+            >
               Cancelar
             </Button>
-            <Button onClick={handleCreateArea} className="bg-[#004aad] hover:bg-[#003687]">
+
+            <Button onClick={handleCreateArea} className="bg-[#004aad] hover:bg-[#000000]">
               Crear Área
             </Button>
           </DialogFooter>
@@ -378,7 +438,16 @@ export function AreasPage() {
       </Dialog>
 
       {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+      <Dialog
+        open={isEditDialogOpen}
+        onOpenChange={(open: any) => {
+          setIsEditDialogOpen(open);
+          if (!open) {
+            setEditFormError("");
+            setFormData({ are_ID: 0, are_Nombre: "" });
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Editar Área</DialogTitle>
@@ -392,12 +461,26 @@ export function AreasPage() {
               <Input
                 id="edit-name"
                 value={formData.are_Nombre}
-                onChange={(e) => setFormData({ ...formData, are_Nombre: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, are_Nombre: e.target.value });
+                  setEditFormError("");
+                }}
+                className={editFormError ? "border-red-500" : ""}
               />
+              {editFormError && (
+                <p className="text-red-600 text-sm mt-1">{editFormError}</p>
+              )}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsEditDialogOpen(false);
+                setEditFormError("");      // limpiar error
+                setFormData({ are_ID: 0, are_Nombre: "" });
+              }}
+            >
               Cancelar
             </Button>
             <Button onClick={handleEditArea} className="bg-[#004aad] hover:bg-[#003687]">
