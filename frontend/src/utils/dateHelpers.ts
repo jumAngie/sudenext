@@ -27,3 +27,11 @@ export const getMaxDate = (monthsFromNow: number = 3) => {
   date.setMonth(date.getMonth() + monthsFromNow);
   return date.toISOString().split('T')[0];
 };
+
+export function getLocalDateTime() {
+  const now = new Date();
+  const offsetMs = now.getTimezoneOffset() * 60 * 1000;
+  const local = new Date(now.getTime() - offsetMs);
+
+  return local.toISOString().slice(0, 19); // "2025-11-21T23:15:00"
+}

@@ -237,3 +237,31 @@ input.border-red-500 {
   border-width: 2px !important;
   background-color: #ffe5e5;
 }
+
+/* SUCCESS */
+.toaster .toast-success {
+  background-color: var(--success-bg) !important;
+  color: var(--success-text) !important;
+  border: 1px solid var(--success-border) !important;
+}
+
+/* ERROR */
+.toaster .toast-error {
+  background-color: var(--error-bg) !important;
+  color: var(--error-text) !important;
+  border: 1px solid var(--error-border) !important;
+}
+
+/* WARNING */
+.toaster .toast-warning {
+  background-color: var(--warning-bg) !important;
+  color: var(--warning-text) !important;
+  border: 1px solid var(--warning-border) !important;
+}
+
+/* INFO */
+.toaster .toast-info {
+  background-color: var(--info-bg) !important;
+  color: var(--info-text) !important;
+  border: 1px solid var(--info-border) !important;
+}

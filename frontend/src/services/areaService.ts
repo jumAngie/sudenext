@@ -6,14 +6,14 @@ export async function fetchAreas() {
     method: "GET",
     headers: { "Content-Type": "application/json" }
   });
-
   if (!res.ok) {
     throw new Error("Error al obtener las áreas");
   }
-
   const json = await res.json();
   return json.data;
 }
+
+
 // INSERTAR
 export async function createAreaAPI(payload:any) {
   const response = await fetch(`${API_URL}/Areas/Insertar`, {
@@ -21,12 +21,11 @@ export async function createAreaAPI(payload:any) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-
   const result = await response.json();
-
-  // AQUI está el verdadero mensaje
   return result.data?.messageStatus || "Error desconocido";
 }
+
+
 // EDITAR
 export async function updateAreaAPI(payload: any) {
   const res = await fetch(`${API_URL}/Areas/Editar`, {
@@ -34,18 +33,19 @@ export async function updateAreaAPI(payload: any) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
-
   const result = await res.json();
-
-  // Devolver siempre el mensaje del SP
   return result.data?.messageStatus || "Error desconocido";
 }
+
+
 // ELIMINAR
 export async function deleteAreaAPI(payload: any) {
+  console.log(payload);
   const res = await fetch(`${API_URL}/Areas/Eliminar`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
-  if (!res.ok) throw new Error("Error eliminando área");
+  const result = await res.json();
+  return result.data?.messageStatus || "Error desconocido";
 }

@@ -22,8 +22,6 @@ import {
   DialogTitle,
 } from '../ui/dialog';
 import { Label } from '../ui/label';
-import { Textarea } from '../ui/textarea';
-import { Switch } from '../ui/switch';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import {
   Select,
@@ -34,7 +32,6 @@ import {
 } from '../ui/select';
 import {
   AlertDialog,
-  AlertDialogTrigger,
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogFooter,
@@ -43,7 +40,8 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "../ui/alert-dialog"
-import { toast } from 'sonner@2.0.3';
+import { toast } from "sonner";
+import { getLocalDateTime } from '../../utils/dateHelpers';
 
 export function AreasPage() {
   const { areas, addArea, updateArea, deleteArea } = useData();
@@ -95,13 +93,14 @@ export function AreasPage() {
     const message = await addArea({
       are_Nombre: formData.are_Nombre,
       usu_UsuarioCreacion: 1,
-      are_FechaCreacion: new Date().toISOString().slice(0, 19),
+      are_FechaCreacion: getLocalDateTime(),
     });
     // Si el backend dice error
     if (!message.toLowerCase().includes("correctamente")) {
-      setFormError(message);           // campo en rojo
-      toast.error(message);            // toast rojo
-      return;                          // NO cerrar modal
+      setFormError(message);
+      console.log(message);
+      toast.error(message);
+      return;
     }
     // Si fue exitoso
     toast.success(message);
@@ -118,19 +117,18 @@ export function AreasPage() {
       toast.error("El nombre no puede estar vacío.");
       return;
     }
-
     if (selectedArea) {
       const message = await updateArea(selectedArea.are_ID, {
         are_ID: selectedArea.are_ID,
         are_Nombre: formData.are_Nombre,
         usu_UsuarioModificacion: 1,
-        are_FechaModificacion: new Date().toISOString().slice(0, 19)
+        are_FechaModificacion: getLocalDateTime()
       });
       // Si el SP devolvió error
       if (!message.toLowerCase().includes("correctamente")) {
         setEditFormError(message);
         toast.error(message);
-        return; // NO CERRAR MODAL
+        return;
       }
       // Si el SP devolvió éxito
       toast.success(message);
@@ -142,27 +140,26 @@ export function AreasPage() {
   };
 
 
+// ELIMINAR
+  const handleDeleteArea = async () => {
+    if (!areaToDelete) return;
 
-  const handleDeleteArea = async (area: Area) => {
-    try {
-      await deleteArea(area.are_ID, {
-        are_ID: area.are_ID,
-        are_Nombre: area.are_Nombre,
-        usu_UsuarioCreacion: area.usu_UsuarioCreacion ?? 0,
-        are_FechaCreacion: area.are_FechaCreacion ?? new Date().toISOString().slice(0, 19),
-        usu_UsuarioModificacion: area.usu_UsuarioModificacion ?? 0,
-        are_FechaModificacion: area.are_FechaModificacion ?? new Date().toISOString().slice(0, 19),
-        usu_UsuarioEliminacion: 1,
-        are_FechaEliminacion: new Date().toISOString().slice(0, 19),
-        are_Estado: false,
-      });
+    const message = await deleteArea(areaToDelete.are_ID, {
+      are_ID: areaToDelete.are_ID,
+      usu_UsuarioEliminacion: 1,
+      are_FechaEliminacion:  getLocalDateTime(),
+      are_Nombre: "string"
+    });
 
-      toast.success("Área eliminada exitosamente");
-    } catch (error) {
-      console.error("Error al eliminar área:", error);
-      toast.error("No se pudo eliminar el área");
+    if (!message.toLowerCase().includes("exitosamente")) {
+      toast.error(message);
+      return;
     }
+    toast.success(message);
+    setIsDeleteDialogOpen(false);
+    setAreaToDelete(null);
   };
+
 
   const openCreateDialog = () => {
     setFormData({ are_ID: 0, are_Nombre: '' });
@@ -591,7 +588,7 @@ export function AreasPage() {
               className="bg-[#004aad] hover:bg-[#003687]"
               onClick={async () => {
                 if (areaToDelete) {
-                  await handleDeleteArea(areaToDelete);
+                  await handleDeleteArea();
                   setIsDeleteDialogOpen(false);
                 }
               }}

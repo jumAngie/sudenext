@@ -91,14 +91,9 @@ interface DataContextType {
     id: number,
     payload: {
       are_ID: number;
-      are_Nombre: string;
-      usu_UsuarioCreacion: number | null;
-      are_FechaCreacion: string | null;
-      usu_UsuarioModificacion: number | null;
-      are_FechaModificacion: string | null;
+      are_Nombre: string,
       usu_UsuarioEliminacion: number;
       are_FechaEliminacion: string;
-      are_Estado: boolean;
     }
   ) => Promise<void>;
 
@@ -783,20 +778,16 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
           are_ID: a.are_ID,
           are_Nombre: a.are_Nombre,
           are_Estado: a.are_Estado,
-
           are_FechaCreacion: a.are_FechaCreacion,
           usu_UsuarioCreacion: a.usu_UsuarioCreacion,
           nombreCompleto_C: a.nombreCompleto_C,
-
           are_FechaModificacion: a.are_FechaModificacion,
           usu_UsuarioModificacion: a.usu_UsuarioModificacion,
           nombreCompleto_M: a.nombreCompleto_M,
-
           are_FechaEliminacion: a.are_FechaEliminacion,
           usu_UsuarioEliminacion: a.usu_UsuarioEliminacion,
           nombreCompleto_E: a.nombreCompleto_E,
         }));
-
         setAreas(formatted);
       } catch (err) {
         console.error("Error cargando áreas", err);
@@ -935,46 +926,37 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
-  // Areas
-const addArea = async (payload: any) => {
-  const message = await createAreaAPI(payload);
-  if (message.toLowerCase().includes("correctamente")) {
-    const data = await fetchAreas();
-    setAreas(data);
-  }
-  return message;
-};
-
-  const updateArea = async (id: number, payload: any) => {
-  const message = await updateAreaAPI(payload);
-  // Si se actualizó correctamente, refrescamos la lista
-  if (message.toLowerCase().includes("correctamente")) {
-    const data = await fetchAreas();
-    setAreas(data);
-  }
-  return message;
-};
-
-  const deleteArea = async (
-    id: number,
-    payload: {
-      are_ID: number;
-      are_Nombre: string;
-      usu_UsuarioCreacion: number | null;
-      are_FechaCreacion: string | null;
-      usu_UsuarioModificacion: number | null;
-      are_FechaModificacion: string | null;
-      usu_UsuarioEliminacion: number;
-      are_FechaEliminacion: string;
-      are_Estado: boolean;
+  //  ------------------------------------------------------- Areas -------------------------------------------------------
+  //  ---------------------------------------------------------------------------------------------------------------------
+  const addArea = async (payload: any) => {
+    const message = await createAreaAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchAreas();
+      setAreas(data);
     }
-  ) => {
-    await deleteAreaAPI(payload);
-    const data = await fetchAreas();
-    setAreas(data);
+    return message;
   };
 
-  // Personnel
+  const updateArea = async (id: number, payload: any) => {
+    const message = await updateAreaAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchAreas();
+      setAreas(data);
+    }
+    return message;
+  };
+
+  const deleteArea = async (id: number, payload: any) => {
+    const message = await deleteAreaAPI(payload);
+    if (message.toLowerCase().includes("exitosamente")) {
+      const data = await fetchAreas();
+      setAreas(data);
+    }
+    return message;
+  };
+
+  //  ------------------------------------------------------- Personal -------------------------------------------------------
+  //  ---------------------------------------------------------------------------------------------------------------------
   const addPersonnel = (person: Omit<Personnel, "id" | "createdAt">) => {
     const newPerson: Personnel = {
       ...person,
