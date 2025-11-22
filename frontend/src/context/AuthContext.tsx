@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, Student, StaffMember, UserRole } from '../types';
+import { loginStudentAPI } from "../services/authService";
 
 interface AuthContextType {
   user: User | null;
@@ -154,35 +155,57 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = async (credentials: { identifier: string; password: string; type: 'student' | 'staff' }): Promise<boolean> => {
-    setIsLoading(true);
-    
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+const login = async (credentials: { identifier: string; password: string; type: 'student' | 'staff' }): Promise<boolean> => {
+  setIsLoading(true);
 
-    if (credentials.type === 'student') {
-      const student = mockStudents.find(s => s.accountNumber === credentials.identifier);
-      if (student && credentials.password === '12345') {
-        const userData: User = { type: 'student', data: student };
-        setUser(userData);
-        localStorage.setItem('sudenext-user', JSON.stringify(userData));
-        setIsLoading(false);
-        return true;
-      }
-    } else {
-      const staff = mockStaff.find(s => s.email === credentials.identifier);
-      if (staff && credentials.password === '12345') {
-        const userData: User = { type: 'staff', data: staff };
-        setUser(userData);
-        localStorage.setItem('sudenext-user', JSON.stringify(userData));
-        setIsLoading(false);
-        return true;
-      }
+  await new Promise(resolve => setTimeout(resolve, 300)); // opcional: mini delay visual
+
+  if (credentials.type === "student") {
+
+    const response = await loginStudentAPI(credentials.identifier, credentials.password);
+
+    if (response.success) {
+      const studentData = response.student;
+
+      const userData: User = {
+        type: "student",
+        data: {
+          id: studentData.est_ID,
+          accountNumber: studentData.est_NumeroCuenta,
+          name: studentData.est_NombreCompleto,
+          email: studentData.est_Correo,
+          phone: studentData.est_Celular,
+          career: studentData.est_Carrera,
+          status: studentData.est_EstadoM,
+        },
+      };
+
+      setUser(userData);
+      localStorage.setItem("sudenext-user", JSON.stringify(userData));
+      setIsLoading(false);
+      return true;
     }
 
     setIsLoading(false);
     return false;
-  };
+  }
+
+  // POR AHORA el staff lo dejamos mock
+  if (credentials.type === "staff") {
+    const staff = mockStaff.find(s => s.email === credentials.identifier && credentials.password === "12345");
+    if (staff) {
+      const userData: User = { type: "staff", data: staff };
+      setUser(userData);
+      localStorage.setItem("sudenext-user", JSON.stringify(userData));
+      setIsLoading(false);
+      return true;
+    }
+  }
+
+  setIsLoading(false);
+  return false;
+};
+
 
   const logout = () => {
     setUser(null);
