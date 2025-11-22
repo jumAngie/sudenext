@@ -51,7 +51,6 @@ BEGIN
 END;
 GO
 
-
 ---CREAR
 CREATE OR ALTER PROCEDURE Gral.sp_CrearArea
 	@are_Nombre VARCHAR(25),
@@ -94,9 +93,9 @@ BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		-- Validar existencia
-		IF NOT EXISTS (SELECT 1 FROM Gral.tbAreas WHERE are_ID = @are_ID AND are_Estado = 1)
+		IF EXISTS (SELECT 1 FROM Gral.tbAreas WHERE are_Nombre = @are_Nombre AND are_Estado = 1 AND are_ID != @are_ID)
 		BEGIN
-			SELECT 'No se encontró el registro activo con el ID especificado.' AS MessageStatus;
+			SELECT 'El registro ya existe.' AS MessageStatus;
 			RETURN;
 		END
 		UPDATE Gral.tbAreas
