@@ -33,6 +33,8 @@ namespace SUDENEXT.DataAccess
         public static string CrearAreas = "Gral.sp_CrearArea";
         public static string EditarAreas = "Gral.sp_EditarArea";
         public static string EliminarAreas = "Gral.sp_EliminarArea";
+
+        public static string EstudiantesLogin = "Gral.sp_EstudiantesLogin";
         #endregion
 
         #region Med

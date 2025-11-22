@@ -116,6 +116,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.EstudiantesController",
+    "Method": "InicioSesion",
+    "RelativePath": "api/Estudiantes/Login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "estudiante",
+        "Type": "SUDENEXT.API.Models.ModelsGeneral.LoginEstudiantesViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
     "Method": "Update",
     "RelativePath": "api/Personal/Editar",

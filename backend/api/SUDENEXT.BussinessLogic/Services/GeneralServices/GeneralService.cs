@@ -1,4 +1,5 @@
-﻿using SUDENEXT.DataAccess.Repositories.Gral;
+﻿using SUDENEXT.DataAccess.Repositories.Acce;
+using SUDENEXT.DataAccess.Repositories.Gral;
 using SUDENEXT.Entities.Entities;
 using System;
 using System.Collections.Generic;
@@ -87,6 +88,26 @@ namespace SUDENEXT.BussinessLogic.Services.GeneralServices
         #endregion
 
         #region Estudiantes
+        public ServiceResult EstudiantesLogin(tbEstudiantes item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var estudiante = _estudiantesRepository.Login(item);
+
+                if (estudiante.codeStatus == 0)
+                {
+                    return resultado.Forbidden(estudiante.messageStatus);
+                }
+
+                return resultado.Ok(estudiante);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Personal

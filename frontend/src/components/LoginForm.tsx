@@ -46,11 +46,12 @@ export function LoginForm({ onBackToLanding }: LoginFormProps) {
       toast.error("Por favor completa todos los campos");
       return;
     }
-
-    const success = await login(formData);
-    if (!success) {
-      toast.error("Credenciales inválidas. Intenta de nuevo.");
+    const result = await login(formData);
+    if (!result.success) {
+      toast.error(result.message);  // <-- mensaje REAL del backend
+      return;
     }
+    toast.success("Bienvenido 👋");
   };
 
   const handleInputChange = (field: string, value: string) => {

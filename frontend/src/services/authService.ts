@@ -5,8 +5,8 @@ export async function loginStudentAPI(identifier: string, password: string) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            numeroCuenta: identifier,
-            contrasena: password,
+            est_NumeroCuenta: identifier,
+            est_Contra: password,
         }),
     });
 

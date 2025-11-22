@@ -17,7 +17,7 @@ const mockStudents: Student[] = [
   {
     id: 'student-1',
     accountNumber: '20222000215',
-    name: 'Angie Yahaira Campos Arias',
+    name: 'Angie Y. Campos Arias',
     email: 'angie.campos@unah.hn',
     phone: '9999-8888',
     career: 'Informática Administrativa'
@@ -147,7 +147,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in from localStorage
     const savedUser = localStorage.getItem('sudenext-user');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
@@ -155,40 +154,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
-const login = async (credentials: { identifier: string; password: string; type: 'student' | 'staff' }): Promise<boolean> => {
-  setIsLoading(true);
+  const login = async (credentials: { identifier: string; password: string; type: 'student' | 'staff' }) => {
+    setIsLoading(true);
 
-  await new Promise(resolve => setTimeout(resolve, 300)); // opcional: mini delay visual
+    await new Promise(resolve => setTimeout(resolve, 300));
 
-  if (credentials.type === "student") {
+    if (credentials.type === "student") {
+      const response = await loginStudentAPI(credentials.identifier, credentials.password);
 
-    const response = await loginStudentAPI(credentials.identifier, credentials.password);
+      if (response.success) {
+        const studentData = response.student;
 
-    if (response.success) {
-      const studentData = response.student;
+        const userData: User = {
+          type: "student",
+          data: {
+            id: studentData.est_ID,
+            accountNumber: studentData.est_NumeroCuenta,
+            name: studentData.est_NombreCompleto,
+            email: studentData.est_Correo,
+            phone: studentData.est_Celular,
+            career: studentData.est_Carrera,
+            status: studentData.est_EstadoM,
+          },
+        };
 
-      const userData: User = {
-        type: "student",
-        data: {
-          id: studentData.est_ID,
-          accountNumber: studentData.est_NumeroCuenta,
-          name: studentData.est_NombreCompleto,
-          email: studentData.est_Correo,
-          phone: studentData.est_Celular,
-          career: studentData.est_Carrera,
-          status: studentData.est_EstadoM,
-        },
-      };
+        setUser(userData);
+        localStorage.setItem("sudenext-user", JSON.stringify(userData));
+        setIsLoading(false);
 
-      setUser(userData);
-      localStorage.setItem("sudenext-user", JSON.stringify(userData));
+        return {
+          success: true,
+          message: "Inicio de sesión exitoso",
+        };
+      }
+
+      // ❗ aquí es cuando falla el login
       setIsLoading(false);
-      return true;
+      return {
+        success: false,
+        message: response.message
+      };
     }
-
-    setIsLoading(false);
-    return false;
-  }
 
   // POR AHORA el staff lo dejamos mock
   if (credentials.type === "staff") {
@@ -207,45 +213,45 @@ const login = async (credentials: { identifier: string; password: string; type: 
 };
 
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('sudenext-user');
-  };
+const logout = () => {
+  setUser(null);
+  localStorage.removeItem('sudenext-user');
+};
 
-  const changePassword = async (currentPassword: string, newPassword: string): Promise<boolean> => {
-    setIsLoading(true);
-    
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+const changePassword = async (currentPassword: string, newPassword: string): Promise<boolean> => {
+  setIsLoading(true);
 
-    if (user) {
-      if (currentPassword === '12345') {
-        // Update password in mock data
-        if (user.type === 'student') {
-          const studentIndex = mockStudents.findIndex(s => s.accountNumber === user.data.accountNumber);
-          if (studentIndex !== -1) {
-            mockStudents[studentIndex].password = newPassword;
-          }
-        } else {
-          const staffIndex = mockStaff.findIndex(s => s.email === user.data.email);
-          if (staffIndex !== -1) {
-            mockStaff[staffIndex].password = newPassword;
-          }
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  if (user) {
+    if (currentPassword === '12345') {
+      // Update password in mock data
+      if (user.type === 'student') {
+        const studentIndex = mockStudents.findIndex(s => s.accountNumber === user.data.accountNumber);
+        if (studentIndex !== -1) {
+          mockStudents[studentIndex].password = newPassword;
         }
-        setIsLoading(false);
-        return true;
+      } else {
+        const staffIndex = mockStaff.findIndex(s => s.email === user.data.email);
+        if (staffIndex !== -1) {
+          mockStaff[staffIndex].password = newPassword;
+        }
       }
+      setIsLoading(false);
+      return true;
     }
+  }
 
-    setIsLoading(false);
-    return false;
-  };
+  setIsLoading(false);
+  return false;
+};
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout, changePassword, isLoading }}>
-      {children}
-    </AuthContext.Provider>
-  );
+return (
+  <AuthContext.Provider value={{ user, login, logout, changePassword, isLoading }}>
+    {children}
+  </AuthContext.Provider>
+);
 }
 
 export function useAuth() {

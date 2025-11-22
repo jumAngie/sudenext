@@ -29,6 +29,9 @@ namespace SUDENEXT.API.Extensions
 
             CreateMap<AreasViewModel, tbAreas>().ReverseMap();
             CreateMap<ListadoAreasViewModel, ListadoAreasDTO>().ReverseMap();
+
+            CreateMap<EstudiantesViewModel, tbEstudiantes>().ReverseMap();
+            CreateMap<LoginEstudiantesViewModel, tbEstudiantes>().ReverseMap();
             #endregion
 
             #region Odontología

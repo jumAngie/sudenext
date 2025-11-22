@@ -1,12 +1,17 @@
 ---------------------------------------------------  ESTUDIANTES  -----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 ---LISTAR
+GO
 CREATE OR ALTER PROCEDURE Gral.sp_EstudiantesLogin
-	@est_NumeroCuenta     NVARCHAR(20),
-	@est_Contra          NVARCHAR(100)
+	@est_NumeroCuenta     VARCHAR(11),
+	@est_Contra           VARCHAR(255)
 AS
 BEGIN
     SET NOCOUNT ON;
+
+    -- Convertir contraseña ingresada a HASH
+    DECLARE @HashContra VARCHAR(255);
+    SET @HashContra = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @est_Contra), 2);
 
     -- Validar que exista el estudiante
     IF NOT EXISTS (SELECT 1 FROM Gral.tbEstudiantes WHERE est_NumeroCuenta = @est_NumeroCuenta)
@@ -17,12 +22,12 @@ BEGIN
         RETURN;
     END;
 
-    -- Validar contraseña
+    -- Validar contraseña hasheada
     IF NOT EXISTS (
         SELECT 1 
         FROM Gral.tbEstudiantes 
         WHERE est_NumeroCuenta = @est_NumeroCuenta
-        AND est_Contra = @est_Contra
+          AND est_Contra = @HashContra
     )
     BEGIN
         SELECT 
@@ -31,12 +36,12 @@ BEGIN
         RETURN;
     END;
 
-	-- Validar si el estudiante está matriculado (est_EstadoM = 1)
+    -- Validar si el estudiante está matriculado
     IF EXISTS (
         SELECT 1
         FROM Gral.tbEstudiantes
         WHERE est_NumeroCuenta = @est_NumeroCuenta
-          AND est_Contra = @est_Contra
+          AND est_Contra = @HashContra
           AND est_EstadoM = 0
     )
     BEGIN
@@ -46,6 +51,7 @@ BEGIN
         RETURN;
     END;
 
+    -- Login correcto devolver datos
     SELECT 
         1 AS codeStatus,
         'Inicio de sesión exitoso.' AS messageStatus,
@@ -57,6 +63,7 @@ BEGIN
         est_Carrera,
         est_EstadoM
     FROM Gral.tbEstudiantes
-    WHERE est_NumeroCuenta = @est_NumeroCuenta;
+    WHERE est_NumeroCuenta = @est_NumeroCuenta
+      AND est_Contra = @HashContra;
 END;
 GO
