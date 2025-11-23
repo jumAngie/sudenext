@@ -58,6 +58,8 @@ function StudentDashboardContent() {
     .filter((s) => s.studentId === student.id)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 3);
+
+    console.log(studentSupportSessions);
     
   const studentDentalAppointments = dentalAppointments
     .filter((a) => a.studentId === student.id)

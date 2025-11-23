@@ -382,143 +382,6 @@ const getCurrentMonthDates = () => {
 // Mock initial data
 const dates = getCurrentMonthDates();
 
-const initialSupportSessions: SupportSession[] = [
-  {
-    id: "support-1",
-    studentId: "1",
-    studentName: "Angie Yahaira Campos Arias",
-    accountNumber: "20222000215",
-    mainReason:
-      "Estrés académico y ansiedad antes de los exámenes finales. Necesito técnicas para manejar la presión.",
-    emotionalLevel: 4,
-    previousSessions: false,
-    preferredTime: "09:00",
-    modality: "presencial",
-    additionalComments: "Prefiero sesiones en horario matutino",
-    status: "pendiente",
-    createdAt: "2024-01-15T10:30:00Z",
-  },
-  {
-    id: "support-2",
-    studentId: "student-2",
-    studentName: "Cindy Nicole Reyes Arevalo",
-    accountNumber: "20222000224",
-    mainReason:
-      "Dificultades para concentrarme en los estudios debido a problemas familiares",
-    emotionalLevel: 3,
-    previousSessions: true,
-    preferredTime: "14:00",
-    modality: "virtual",
-    status: "asignada",
-    assignedCounselorId: "staff-5",
-    assignedCounselorName: "Elder Alexandro Lopez",
-    createdAt: "2024-01-14T08:15:00Z",
-    scheduledAt: dates.tomorrow,
-  },
-  {
-    id: "support-3",
-    studentId: "student-3",
-    studentName: "Elmer Isai Alvarez Carbajal",
-    accountNumber: "20210001123",
-    mainReason:
-      "Ansiedad social y dificultades para hacer amigos en la universidad",
-    emotionalLevel: 5,
-    previousSessions: false,
-    preferredTime: "10:00",
-    modality: "presencial",
-    additionalComments: "Me siento muy nervioso al hablar con nuevas personas",
-    status: "asignada",
-    assignedCounselorId: "staff-5",
-    assignedCounselorName: "Elder Alexandro Lopez",
-    createdAt: "2024-01-16T09:20:00Z",
-    scheduledAt: dates.dayAfter,
-  },
-  {
-    id: "support-4",
-    studentId: "student-4",
-    studentName: "Juan David Molina Sagastume",
-    accountNumber: "20240128910",
-    mainReason: "Procrastinación crónica y falta de motivación para estudiar",
-    emotionalLevel: 2,
-    previousSessions: true,
-    preferredTime: "15:00",
-    modality: "virtual",
-    status: "completada",
-    assignedCounselorId: "staff-5",
-    assignedCounselorName: "Elder Alexandro Lopez",
-    createdAt: "2024-01-10T11:45:00Z",
-    scheduledAt: dates.nextWeek,
-  },
-  {
-    id: "support-5",
-    studentId: "student-5",
-    studentName: "Luis Mario Aguilera Valle",
-    accountNumber: "20222000120",
-    mainReason:
-      "Presión por parte de los padres para mantener excelencia académica",
-    emotionalLevel: 4,
-    previousSessions: false,
-    preferredTime: "11:00",
-    modality: "presencial",
-    additionalComments:
-      "Mis padres esperan que sea perfecto y me genera mucha ansiedad",
-    status: "asignada",
-    assignedCounselorId: "staff-5",
-    assignedCounselorName: "Elder Alexandro Lopez",
-    createdAt: "2024-01-17T13:30:00Z",
-    scheduledAt: dates.inTenDays,
-  },
-  {
-    id: "support-6",
-    studentId: "student-6",
-    studentName: "Nathaly Valeria Durán Castillo",
-    accountNumber: "20222000123",
-    mainReason:
-      "Duelo por pérdida familiar que está afectando mi rendimiento académico",
-    emotionalLevel: 5,
-    previousSessions: false,
-    preferredTime: "16:00",
-    modality: "presencial",
-    additionalComments:
-      "Perdí a mi abuelo hace un mes y no he podido concentrarme",
-    status: "asignada",
-    assignedCounselorId: "staff-5",
-    assignedCounselorName: "Elder Alexandro Lopez",
-    createdAt: "2024-01-18T10:15:00Z",
-    scheduledAt: dates.inFifteenDays,
-  },
-  {
-    id: "support-7",
-    studentId: "student-7",
-    studentName: "Gerson David Franco Lobo",
-    accountNumber: "20222000125",
-    mainReason: "Baja autoestima y dudas sobre mi elección de carrera",
-    emotionalLevel: 3,
-    previousSessions: true,
-    preferredTime: "13:00",
-    modality: "virtual",
-    status: "asignada",
-    assignedCounselorId: "staff-5",
-    assignedCounselorName: "Elder Alexandro Lopez",
-    createdAt: "2024-01-19T14:20:00Z",
-    scheduledAt: dates.inTwentyDays,
-  },
-  {
-    id: "support-8",
-    studentId: "student-8",
-    studentName: "Jasser Evelio George Martinez",
-    accountNumber: "20222000187",
-    mainReason: "Ataques de pánico durante los exámenes",
-    emotionalLevel: 5,
-    previousSessions: false,
-    preferredTime: "09:30",
-    modality: "presencial",
-    additionalComments: "Los síntomas aparecen especialmente en matemáticas",
-    status: "pendiente",
-    createdAt: "2024-01-20T08:45:00Z",
-  },
-];
-
 const initialDentalAppointments: DentalAppointment[] = [
   {
     id: "dental-1",
@@ -727,21 +590,59 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   //  ------------------------------------------------------- Sesiones de Apoyo -------------------------------------------------------
   //  ---------------------------------------------------------------------------------------------------------------------
+  const mapSessions = (data: any[]) => {
+    return data.map((s) => ({
+      id: s.sol_ID,
+      studentId: s.est_ID,
+      studentName: s.est_NombreCompleto,
+      mainReason: s.sol_MotivoConsulta,
+      emotionalLevel: s.sol_MalestarEmocional,
+      preferredTime: s.sol_HorarioPref,
+      previousSessions: s.sol_Asistencia ? "Sí" : "No",
+      createdAt: s.sol_FechaCreacion,
+      status: s.sol_Asignada ? "asignada" : "pendiente",
+      raw: s
+    }));
+  };
+
+  const loadSupportSessions = async () => {
+    try {
+      const data = await fetchSolicitudApoyo();
+      const mapped = mapSessions(data);
+      setSupportSessions(mapped);
+    } catch (err) {
+      console.error("Error cargando las sesiones", err);
+    }
+  };
+
+
+  useEffect(() => {
+    loadSupportSessions();
+  }, []);
+
+
   const addSupportSession = async (payload: any) => {
     const message = await createSolicitudApoyoAPI(payload);
-    await fetchSolicitudApoyo();
+    if (message.toLowerCase().includes("exitosamente")) {
+      await loadSupportSessions();
+    }
     return message;
   };
 
+
   const updateSupportSession = async (payload: any) => {
     const message = await updateSolicitudApoyoAPI(payload);
-    await fetchSolicitudApoyo();
+    if (message.toLowerCase().includes("exitosamente")) {
+      await loadSupportSessions();
+    }
     return message;
-  }
+  };
 
   const cancelSupportSession = async (payload: any) => {
     const message = await deleteSolicitudApoyoAPI(payload);
-    await fetchSolicitudApoyo();
+    if (message.toLowerCase().includes("exitosamente")) {
+      await loadSupportSessions();
+    }
     return message;
   };
 

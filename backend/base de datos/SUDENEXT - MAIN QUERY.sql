@@ -410,7 +410,6 @@ CREATE TABLE Psi.tbSolicitudApoyo
 (
     sol_ID INT IDENTITY (1,1),
     est_ID INT,
-    sol_ResumenSesion NVARCHAR (200) NOT NULL,
     sol_MotivoConsulta NVARCHAR (200) NOT NULL,
     sol_MalestarEmocional INT CHECK (sol_MalestarEmocional BETWEEN 1 AND 5),
     sol_Asistencia BIT DEFAULT 0,

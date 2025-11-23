@@ -43,8 +43,6 @@ export function SupportSessionModal({
     emotionalLevel: "",
     previousSessions: "",
     preferredTime: "",
-    modality: "",
-    additionalComments: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>(
@@ -70,10 +68,6 @@ export function SupportSessionModal({
       newErrors.preferredTime =
         "Debes seleccionar un horario preferido";
     }
-    if (!formData.modality) {
-      newErrors.modality = "Debes seleccionar la modalidad";
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -91,17 +85,15 @@ export function SupportSessionModal({
     const message = await addSupportSession({
       est_ID: student.id,
       sol_MotivoConsulta: formData.mainReason,
-      sol_ResumenSesion: formData.additionalComments || "",
       sol_MalestarEmocional: parseInt(formData.emotionalLevel),
       sol_HorarioPref: formData.preferredTime,
-      sol_Asistencia: false,
+      sol_Asistencia: formData.previousSessions ? true : false,
       sol_Estado: true,
       sol_FechaCreacion: getLocalDateTime(),
     });
     console.log("PAYLOAD ENVIADO:", {
       est_ID: student.id,
       sol_MotivoConsulta: formData.mainReason,
-      sol_ResumenSesion: formData.additionalComments || "",
       sol_MalestarEmocional: parseInt(formData.emotionalLevel),
       sol_HorarioPref: formData.preferredTime,
       sol_Asistencia: false,
@@ -121,8 +113,6 @@ export function SupportSessionModal({
       emotionalLevel: "",
       previousSessions: "",
       preferredTime: "",
-      modality: "",
-      additionalComments: "",
     });
 
     setErrors({});
@@ -204,7 +194,7 @@ export function SupportSessionModal({
             </Label>
             <RadioGroup
               value={formData.emotionalLevel}
-              onValueChange={(value) =>
+              onValueChange={(value: any) =>
                 handleInputChange("emotionalLevel", value)
               }
               className="flex flex-wrap gap-4"
@@ -246,7 +236,7 @@ export function SupportSessionModal({
             </Label>
             <RadioGroup
               value={formData.previousSessions}
-              onValueChange={(value) =>
+              onValueChange={(value:any) =>
                 handleInputChange("previousSessions", value)
               }
               className="flex gap-6"
@@ -288,7 +278,7 @@ export function SupportSessionModal({
             </Label>
             <Select
               value={formData.preferredTime}
-              onValueChange={(value) =>
+              onValueChange={(value: any) =>
                 handleInputChange("preferredTime", value)
               }
             >
@@ -317,70 +307,6 @@ export function SupportSessionModal({
               </p>
             )}
           </div>
-
-          {/* Modality */}
-          <div className="space-y-3">
-            <Label className="after:content-['*'] after:text-red-500 after:ml-1">
-              ¿Deseas que sea virtual o presencial?
-            </Label>
-            <RadioGroup
-              value={formData.modality}
-              onValueChange={(value) =>
-                handleInputChange("modality", value)
-              }
-              className="flex gap-6"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value="presencial"
-                  id="modality-presencial"
-                />
-                <Label
-                  htmlFor="modality-presencial"
-                  className="cursor-pointer"
-                >
-                  Presencial
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem
-                  value="virtual"
-                  id="modality-virtual"
-                />
-                <Label
-                  htmlFor="modality-virtual"
-                  className="cursor-pointer"
-                >
-                  Virtual
-                </Label>
-              </div>
-            </RadioGroup>
-            {errors.modality && (
-              <p className="text-sm text-red-600">
-                {errors.modality}
-              </p>
-            )}
-          </div>
-
-          {/* Additional Comments */}
-          <div className="space-y-2">
-            <Label htmlFor="additionalComments">
-              Comentarios adicionales (opcional)
-            </Label>
-            <Textarea
-              id="additionalComments"
-              placeholder="Cualquier información adicional que consideres importante..."
-              value={formData.additionalComments}
-              onChange={(e) =>
-                handleInputChange(
-                  "additionalComments",
-                  e.target.value,
-                )
-              }
-              rows={3}
-            />
-          </div>
-
           {/* Action Buttons */}
           <div className="flex justify-end gap-3 pt-4 border-t">
             <Button

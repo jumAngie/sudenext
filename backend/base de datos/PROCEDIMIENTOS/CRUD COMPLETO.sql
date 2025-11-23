@@ -1,3 +1,6 @@
+USE SUDENEXT
+GO
+
 ---------------------------------------------------  AREAS  -----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 
@@ -798,7 +801,6 @@ BEGIN
         sol.sol_ID,
         sol.est_ID,
         est.est_NombreCompleto,
-        sol.sol_ResumenSesion,
         sol.sol_MotivoConsulta,
         sol.sol_MalestarEmocional,
         sol.sol_Asistencia,
@@ -828,7 +830,6 @@ BEGIN
         sol.sol_ID,
         sol.est_ID,
         est.est_NombreCompleto,
-        sol.sol_ResumenSesion,
         sol.sol_MotivoConsulta,
         sol.sol_MalestarEmocional,
         sol.sol_Asistencia,
@@ -850,7 +851,6 @@ GO
 ---CREAR
 CREATE OR ALTER PROCEDURE Psi.sp_CrearSolicitudApoyo
 	@est_ID	INT,
-	@sol_ResumenSesion NVARCHAR(200),
 	@sol_MotivoConsulta NVARCHAR(200),
 	@sol_MalestarEmocional INT,
 	@sol_Asistencia	BIT,
@@ -862,9 +862,9 @@ BEGIN
 	BEGIN TRY
 		
 		INSERT INTO Psi.tbSolicitudApoyo
-		(est_ID, sol_ResumenSesion, sol_MotivoConsulta, sol_MalestarEmocional, sol_Asistencia, sol_HorarioPref, sol_FechaCreacion)
+		(est_ID, sol_MotivoConsulta, sol_MalestarEmocional, sol_Asistencia, sol_HorarioPref, sol_FechaCreacion)
 		VALUES
-		(@est_ID, @sol_ResumenSesion, @sol_MotivoConsulta, @sol_MalestarEmocional, @sol_Asistencia, @sol_HorarioPref, @sol_FechaCreacion);
+		(@est_ID,  @sol_MotivoConsulta, @sol_MalestarEmocional, @sol_Asistencia, @sol_HorarioPref, @sol_FechaCreacion);
 
 		SELECT 'Registro creado correctamente.' AS MessageStatus;
 	END TRY
@@ -879,7 +879,6 @@ GO
 CREATE OR ALTER PROCEDURE Psi.sp_EditarSolicitudApoyo
 	@sol_ID INT,
 	@est_ID	INT,
-	@sol_ResumenSesion NVARCHAR(200),
 	@sol_MotivoConsulta NVARCHAR(200),
 	@sol_MalestarEmocional INT,
 	@sol_Asistencia	BIT,
@@ -892,7 +891,6 @@ BEGIN
 
 		UPDATE Psi.tbSolicitudApoyo
 		SET est_ID = @est_ID,
-			sol_ResumenSesion = @sol_ResumenSesion,
 			sol_MotivoConsulta = @sol_MotivoConsulta, 
 			sol_MalestarEmocional = @sol_MalestarEmocional, 
 			sol_Asistencia = @sol_Asistencia, 

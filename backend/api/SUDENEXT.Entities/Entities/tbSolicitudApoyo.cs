@@ -11,8 +11,6 @@ public partial class tbSolicitudApoyo
 
     public int? est_ID { get; set; }
 
-    public string sol_ResumenSesion { get; set; }
-
     public string sol_MotivoConsulta { get; set; }
 
     public int? sol_MalestarEmocional { get; set; }

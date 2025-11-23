@@ -511,9 +511,6 @@ public partial class db_SUDENEXTContext : DbContext
             entity.Property(e => e.sol_MotivoConsulta)
                 .IsRequired()
                 .HasMaxLength(200);
-            entity.Property(e => e.sol_ResumenSesion)
-                .IsRequired()
-                .HasMaxLength(200);
 
             entity.HasOne(d => d.est).WithMany(p => p.tbSolicitudApoyo)
                 .HasForeignKey(d => d.est_ID)

@@ -40,8 +40,6 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
         emotionalLevel: session.emotionalLevel.toString(),
         previousSessions: session.previousSessions ? 'si' : 'no',
         preferredTime: session.preferredTime,
-        modality: session.modality,
-        additionalComments: session.additionalComments || ''
       });
     } else {
       const appointment = request as DentalAppointment;
@@ -67,8 +65,6 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
         emotionalLevel: parseInt(editData.emotionalLevel),
         previousSessions: editData.previousSessions === 'si',
         preferredTime: editData.preferredTime,
-        modality: editData.modality as 'virtual' | 'presencial',
-        additionalComments: editData.additionalComments || undefined
       });
     } else {
       const appointment = request as DentalAppointment;
@@ -170,33 +166,6 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
               </SelectContent>
             </Select>
           </div>
-
-          <div className="space-y-3">
-            <Label>Modalidad</Label>
-            <RadioGroup
-              value={editData.modality}
-              onValueChange={(value) => setEditData(prev => ({ ...prev, modality: value }))}
-              className="flex gap-6"
-            >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="presencial" id="edit-modality-presencial" />
-                <Label htmlFor="edit-modality-presencial" className="cursor-pointer">Presencial</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="virtual" id="edit-modality-virtual" />
-                <Label htmlFor="edit-modality-virtual" className="cursor-pointer">Virtual</Label>
-              </div>
-            </RadioGroup>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Comentarios adicionales (opcional)</Label>
-            <Textarea
-              value={editData.additionalComments}
-              onChange={(e) => setEditData(prev => ({ ...prev, additionalComments: e.target.value }))}
-              rows={3}
-            />
-          </div>
         </div>
       );
     }
@@ -226,25 +195,7 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
             <h4 className="font-medium text-gray-900 mb-1">Horario preferido</h4>
             <p className="text-gray-700">{session.preferredTime}</p>
           </div>
-          <div>
-            <h4 className="font-medium text-gray-900 mb-1">Modalidad</h4>
-            <p className="text-gray-700 capitalize">{session.modality}</p>
-          </div>
         </div>
-        
-        {session.additionalComments && (
-          <div>
-            <h4 className="font-medium text-gray-900 mb-1">Comentarios adicionales</h4>
-            <p className="text-gray-700">{session.additionalComments}</p>
-          </div>
-        )}
-        
-        {session.assignedCounselorName && (
-          <div>
-            <h4 className="font-medium text-gray-900 mb-1">Consejero asignado</h4>
-            <p className="text-gray-700">{session.assignedCounselorName}</p>
-          </div>
-        )}
       </div>
     );
   };

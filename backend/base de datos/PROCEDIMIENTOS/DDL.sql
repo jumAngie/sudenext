@@ -1,3 +1,5 @@
+USE SUDENEXT
+GO
 ---- DDL Personal Sin Usuario
 CREATE OR ALTER PROCEDURE Gral.sp_DDLPersonalSinUsuario
 AS

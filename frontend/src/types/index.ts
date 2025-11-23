@@ -33,11 +33,8 @@ export interface SupportSession {
   emotionalLevel: number;
   previousSessions: boolean;
   preferredTime: string;
-  modality: 'virtual' | 'presencial';
-  additionalComments?: string;
   status: 'pendiente' | 'asignada' | 'completada' | 'rechazada';
   assignedCounselorId?: string;
-  assignedCounselorName?: string;
   createdAt: string;
   scheduledAt?: string;
 }

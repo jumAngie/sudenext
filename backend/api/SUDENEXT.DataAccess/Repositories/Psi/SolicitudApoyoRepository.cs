@@ -36,7 +36,6 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@est_ID", item.est_ID, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@sol_ResumenSesion", item.sol_ResumenSesion, DbType.String, ParameterDirection.Input);
             parametros.Add("@sol_MotivoConsulta", item.sol_MotivoConsulta, DbType.String, ParameterDirection.Input);
             parametros.Add("@sol_MalestarEmocional", item.sol_MalestarEmocional, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@sol_Asistencia", item.sol_Asistencia, DbType.Boolean, ParameterDirection.Input);
@@ -74,7 +73,6 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
             var parametros = new DynamicParameters();
             parametros.Add("@sol_ID", item.sol_ID, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@est_ID", item.est_ID, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@sol_ResumenSesion", item.sol_ResumenSesion, DbType.String, ParameterDirection.Input);
             parametros.Add("@sol_MotivoConsulta", item.sol_MotivoConsulta, DbType.String, ParameterDirection.Input);
             parametros.Add("@sol_MalestarEmocional", item.sol_MalestarEmocional, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@sol_Asistencia", item.sol_Asistencia, DbType.Boolean, ParameterDirection.Input);
