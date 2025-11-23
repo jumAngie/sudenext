@@ -716,7 +716,11 @@ BEGIN
 		INSERT INTO Odon.tbSolicitudOdonAsignada
 		(sco_ID, per_ID, sca_Cancel,usu_UsuarioCreacion,sca_FechaCreacion)
 		VALUES
-		(@sco_ID, @per_ID, @sca_Cancel, @usu_UsuarioCreacion,@sca_FechaCreacion);
+		(@sco_ID, @per_ID, @sca_Cancel, @usu_UsuarioCreacion, @sca_FechaCreacion);
+
+		UPDATE Odon.tbSolicitudCitaOdon
+		SET	   sco_Asignada = 1
+		WHERE  sco_ID = @sco_ID
 
 		SELECT 'Registro creado correctamente.' AS MessageStatus;
 	END TRY
@@ -802,7 +806,8 @@ BEGIN
         sol.sol_Estado,
         sol.sol_FechaCreacion,
         sol.sol_FechaModificacion,
-        sol.sol_FechaEliminacion
+        sol.sol_FechaEliminacion,
+		sol.sol_Asignada
 
     FROM Psi.tbSolicitudApoyo sol
         INNER JOIN Gral.tbEstudiantes est ON sol.est_ID = est.est_ID

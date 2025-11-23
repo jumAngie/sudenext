@@ -301,6 +301,7 @@ CREATE TABLE Odon.tbSolicitudCitaOdon
     sco_FechaModificacion    DATETIME NULL,
     sco_FechaEliminacion     DATETIME NULL,
     sco_Estado               BIT DEFAULT 1,
+	sco_Asignada			 BIT DEFAULT 0,
 
 	CONSTRAINT PK_Odon_tbSolicitudCitaOdon_sco_ID	PRIMARY KEY(sco_ID),
 	CONSTRAINT FK_Odon_tbSolicitudCitaOdon_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY(est_ID) REFERENCES Gral.tbEstudiantes(est_ID),
@@ -420,7 +421,8 @@ CREATE TABLE Psi.tbSolicitudApoyo
 	sol_FechaCreacion			    DATETIME NOT NULL,
 	sol_FechaModificacion		    DATETIME DEFAULT NULL,
 	sol_FechaEliminacion			DATETIME DEFAULT NULL,
-	sol_Estado 				        BIT DEFAULT 1
+	sol_Estado 				        BIT DEFAULT 1,
+	sol_Asignada					BIT DEFAULT 0
 
     CONSTRAINT PK_Psi_tbSolicitudApoyo_sol_ID PRIMARY KEY(sol_ID),
     CONSTRAINT FK_Psi_tbSolicitudApoyo_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY (est_ID) REFERENCES Gral.tbEstudiantes (est_ID)
