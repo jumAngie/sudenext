@@ -31,6 +31,17 @@ namespace SUDENEXT.API.Controllers.ControllersPsicologia
 
         }
 
+        [HttpGet("ListarTOP5")]
+        public IActionResult ListadoTOP5(int est_ID)
+        {
+            tbSolicitudApoyo tbSolicitudApoyo = new tbSolicitudApoyo();
+            tbSolicitudApoyo.est_ID = est_ID;
+            var listado = _psicologiaService.ListadoSolicitudApoyoEstudiante(tbSolicitudApoyo);
+            listado.Data = _mapper.Map<IEnumerable<ListadoSolicitudApoyoViewModel>>(listado.Data);
+            return Ok(listado);
+
+        }
+
         [HttpPost("Insertar")]
         public IActionResult Insert(SolicitudApoyoViewModel solicitudApoyoViewModel)
         {

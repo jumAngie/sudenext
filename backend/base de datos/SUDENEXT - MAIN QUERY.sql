@@ -290,7 +290,7 @@ CREATE TABLE Odon.tbSolicitudCitaOdon
 	sco_ID			INT IDENTITY(1,1),
 	est_ID			INT,
 	sco_FechaP		DATE				NOT NULL,
-	sco_Hora		TIME				NOT NULL,
+	sco_Hora		VARCHAR(10),
 	sco_Motivo		NVARCHAR(255)		NOT NULL,
 	sco_Prioridad	CHAR(1) DEFAULT 'B' NOT NULL,
 	sco_Cancelar	BIT DEFAULT 0		NULL,
@@ -414,7 +414,7 @@ CREATE TABLE Psi.tbSolicitudApoyo
     sol_MotivoConsulta NVARCHAR (200) NOT NULL,
     sol_MalestarEmocional INT CHECK (sol_MalestarEmocional BETWEEN 1 AND 5),
     sol_Asistencia BIT DEFAULT 0,
-    sol_HorarioPref TIME,
+    sol_HorarioPref VARCHAR(10),
 	sol_Cancelacion BIT DEFAULT 0,
 	sol_FechaCancelacion DATETIME NULL,
 	

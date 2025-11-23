@@ -258,6 +258,64 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcceso.RolesController",
+    "Method": "Update",
+    "RelativePath": "api/Roles/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "rolesView",
+        "Type": "SUDENEXT.API.Models.ModelsAcceso.RolesViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcceso.RolesController",
+    "Method": "Delete",
+    "RelativePath": "api/Roles/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "rolesView",
+        "Type": "SUDENEXT.API.Models.ModelsAcceso.RolesViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcceso.RolesController",
+    "Method": "Insert",
+    "RelativePath": "api/Roles/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "rolesView",
+        "Type": "SUDENEXT.API.Models.ModelsAcceso.RolesViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcceso.RolesController",
+    "Method": "Index",
+    "RelativePath": "api/Roles/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.SolicitudApoyoController",
     "Method": "Update",
     "RelativePath": "api/SolicitudApoyo/Editar",
@@ -313,6 +371,22 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.SolicitudApoyoController",
+    "Method": "ListadoTOP5",
+    "RelativePath": "api/SolicitudApoyo/ListarTOP5",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "est_ID",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {

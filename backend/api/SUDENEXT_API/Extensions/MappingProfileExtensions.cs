@@ -26,6 +26,9 @@ namespace SUDENEXT.API.Extensions
 
             CreateMap<ListadoUsuariosViewModel, ListadoUsuariosDTO>().ReverseMap();
             CreateMap<UsuariosViewModel, tbUsuarios>().ReverseMap();
+
+            CreateMap<ListadoRolesViewModel, ListadoRolesDTO>().ReverseMap();
+            CreateMap<RolesViewModel, tbRoles>().ReverseMap();
             #endregion
 
             #region General

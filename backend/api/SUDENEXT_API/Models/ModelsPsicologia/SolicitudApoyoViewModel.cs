@@ -6,7 +6,7 @@
 
         public int? est_ID { get; set; }
 
-        public string est_NombreCompleto { get; set; }
+        public string? est_NombreCompleto { get; set; }
 
         public string sol_ResumenSesion { get; set; }
 
@@ -16,7 +16,7 @@
 
         public bool? sol_Asistencia { get; set; }
 
-        public TimeSpan? sol_HorarioPref { get; set; }
+        public string sol_HorarioPref { get; set; }
         public bool? sol_Cancelacion { get; set; }
 
         public DateTime? sol_FechaCancelacion { get; set; }

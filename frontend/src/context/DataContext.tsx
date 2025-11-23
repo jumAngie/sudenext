@@ -51,13 +51,50 @@ import {
   deleteUsuarioAPI
 } from "/src/services/usuarioService.ts";
 
+import {
+  fetchRoles,
+  createRolesAPI,
+  updateRolesAPI,
+  deleteRolesAPI
+} from "/src/services/rolService.ts";
+
+import {
+  fetchSolicitudApoyo,
+  createSolicitudApoyoAPI,
+  updateSolicitudApoyoAPI,
+  deleteSolicitudApoyoAPI,
+} from "/src/services/solicitudApoyoService.ts";
+
 interface DataContextType {
-  // Support Sessions
+  // Support Sessions (API real)
   supportSessions: SupportSession[];
-  addSupportSession: (
-    session: Omit<SupportSession, "id" | "createdAt">
-  ) => void;
-  updateSupportSession: (id: string, updates: Partial<SupportSession>) => void;
+  //fetchSupportSessions: () => Promise<void>;
+  addSupportSession: (payload: {
+    est_ID: number;
+    sol_MotivoConsulta: string;
+    sol_ResumenSesion: string;
+    sol_MalestarEmocional: number;
+    sol_HorarioPref: string;
+    sol_Asistencia: boolean;
+    sol_Estado: boolean;
+    sol_FechaCreacion: string;
+  }) => Promise<string>;
+
+  updateSupportSession: (payload: {
+    sol_ID: number;
+    sol_MotivoConsulta: string;
+    sol_ResumenSesion: string;
+    sol_MalestarEmocional: number;
+    sol_HorarioPref: string;
+    sol_FechaModificacion: string;
+  }) => Promise<string>;
+
+  cancelSupportSession: (payload: {
+    sol_ID: number;
+    sol_Cancelacion: boolean;
+    sol_FechaCancelacion: string;
+  }) => Promise<string>;
+
 
   // Action Plans
   actionPlans: ActionPlan[];
@@ -125,6 +162,34 @@ interface DataContextType {
       are_Nombre: string,
       usu_UsuarioEliminacion: number;
       are_FechaEliminacion: string;
+    }
+  ) => Promise<void>;
+
+  // Roles
+  roles: Role[];
+  addRole: (payload: {
+    rol_Descripcion: string;
+    usu_UsuarioCreacion: number;
+    rol_FechaCreacion: string;
+  }) => Promise<void>;
+
+  updateRole: (
+    id: number,
+    payload: {
+      rol_ID: number;
+      rol_Descripcion: string;
+      usu_UsuarioModificacion: number;
+      rol_FechaModificacion: string;
+    }
+  ) => Promise<void>;
+
+  deleteRole: (
+    id: number,
+    payload: {
+      rol_ID: number;
+      rol_Descripcion: string,
+      usu_UsuarioEliminacion: number;
+      rol_FechaEliminacion: string;
     }
   ) => Promise<void>;
 
@@ -264,12 +329,6 @@ interface DataContextType {
       per_FechaEliminacion: string;
     }
   ) => Promise<void>;
-
-  // Roles
-  roles: Role[];
-  addRole: (role: Omit<Role, "id" | "createdAt">) => void;
-  updateRole: (id: string, updates: Partial<Role>) => void;
-  deleteRole: (id: string) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -326,7 +385,7 @@ const dates = getCurrentMonthDates();
 const initialSupportSessions: SupportSession[] = [
   {
     id: "support-1",
-    studentId: "student-1",
+    studentId: "1",
     studentName: "Angie Yahaira Campos Arias",
     accountNumber: "20222000215",
     mainReason:
@@ -634,55 +693,6 @@ const initialDentalTreatments: DentalTreatment[] = [
   },
 ];
 
-const initialRoles: Role[] = [
-  {
-    id: "role-1",
-    name: "Administrador",
-    description: "Acceso completo a todas las funcionalidades del sistema",
-    permissions: [
-      "crear",
-      "editar",
-      "eliminar",
-      "ver_reportes",
-      "gestionar_usuarios",
-    ],
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "role-2",
-    name: "Odontólogo",
-    description: "Acceso a funcionalidades de odontología",
-    permissions: ["registrar_tratamientos", "ver_citas_dentales"],
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "role-3",
-    name: "Médico General",
-    description: "Acceso a funcionalidades de medicina general",
-    permissions: ["atender_pacientes", "ver_checkins"],
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "role-4",
-    name: "Consejero",
-    description: "Acceso a funcionalidades de psicología",
-    permissions: ["crear_planes", "ver_sesiones_apoyo"],
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "role-5",
-    name: "Asesor Académico",
-    description: "Acceso a funcionalidades de asesoría académica",
-    permissions: ["gestionar_consultas", "ver_consultas_academicas"],
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-];
-
 export function DataProvider({ children }: { children: React.ReactNode }) {
   // FUNCIONALES
   const [areas, setAreas] = useState<Area[]>([]);
@@ -691,12 +701,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [systemUsers, setSystemUsers] = useState<SystemUser[]>([]);
   const [personalSinUsuario, setPersonalSinUsuario] = useState<PersonalSinUsuario[]>([]);
   const [personnel, setPersonnel] = useState<Personnel[]>([]);
-
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [supportSessions, setSupportSessions] = useState<SupportSession[]>([]);
 
   // NO FUNCIONALES
-  const [supportSessions, setSupportSessions] = useState<SupportSession[]>(
-    initialSupportSessions
-  );
+
   const [actionPlans, setActionPlans] = useState<ActionPlan[]>([]);
   const [dentalAppointments, setDentalAppointments] = useState<
     DentalAppointment[]
@@ -710,33 +719,30 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [academicConsultations, setAcademicConsultations] = useState<
     AcademicConsultation[]
   >(initialAcademicConsultations);
-  const [roles, setRoles] = useState<Role[]>(initialRoles);
 
   // Generate unique ID
   const generateId = (prefix: string) =>
     `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-  // Support Sessions
-  const addSupportSession = (
-    session: Omit<SupportSession, "id" | "createdAt">
-  ) => {
-    const newSession: SupportSession = {
-      ...session,
-      id: generateId("support"),
-      createdAt: new Date().toISOString(),
-    };
-    setSupportSessions((prev) => [...prev, newSession]);
+
+  //  ------------------------------------------------------- Sesiones de Apoyo -------------------------------------------------------
+  //  ---------------------------------------------------------------------------------------------------------------------
+  const addSupportSession = async (payload: any) => {
+    const message = await createSolicitudApoyoAPI(payload);
+    await fetchSolicitudApoyo();
+    return message;
   };
 
-  const updateSupportSession = (
-    id: string,
-    updates: Partial<SupportSession>
-  ) => {
-    setSupportSessions((prev) =>
-      prev.map((session) =>
-        session.id === id ? { ...session, ...updates } : session
-      )
-    );
+  const updateSupportSession = async (payload: any) => {
+    const message = await updateSolicitudApoyoAPI(payload);
+    await fetchSolicitudApoyo();
+    return message;
+  }
+
+  const cancelSupportSession = async (payload: any) => {
+    const message = await deleteSolicitudApoyoAPI(payload);
+    await fetchSolicitudApoyo();
+    return message;
   };
 
   // Action Plans
@@ -1148,24 +1154,60 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     return message;
   };
 
-  // Roles
-  const addRole = (role: Omit<Role, "id" | "createdAt">) => {
-    const newRole: Role = {
-      ...role,
-      id: generateId("role"),
-      createdAt: new Date().toISOString(),
+  //  ------------------------------------------------------- Roles -------------------------------------------------------
+  //  ---------------------------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    const loadRoles = async () => {
+      try {
+        const data = await fetchRoles();
+        const formatted = data.map((a: any) => ({
+          rol_ID: a.rol_ID,
+          rol_Descripcion: a.rol_Descripcion,
+          rol_Estado: a.rol_Estado,
+          rol_FechaCreacion: a.rol_FechaCreacion,
+          usu_UsuarioCreacion: a.usu_UsuarioCreacion,
+          nombreCompleto_C: a.nombreCompleto_C,
+          rol_FechaModificacion: a.rol_FechaModificacion,
+          usu_UsuarioModificacion: a.usu_UsuarioModificacion,
+          nombreCompleto_M: a.nombreCompleto_M,
+          rol_FechaEliminacion: a.rol_FechaEliminacion,
+          usu_UsuarioEliminacion: a.usu_UsuarioEliminacion,
+          nombreCompleto_E: a.nombreCompleto_E,
+        }));
+        setRoles(formatted);
+      } catch (err) {
+        console.error("Error cargando roles", err);
+      }
     };
-    setRoles((prev) => [...prev, newRole]);
+
+    loadRoles();
+  }, []);
+
+  const addRole = async (payload: any) => {
+    const message = await createRolesAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchRoles();
+      setRoles(data);
+    }
+    return message;
   };
 
-  const updateRole = (id: string, updates: Partial<Role>) => {
-    setRoles((prev) =>
-      prev.map((role) => (role.id === id ? { ...role, ...updates } : role))
-    );
+  const updateRole = async (id: number, payload: any) => {
+    const message = await updateRolesAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchRoles();
+      setRoles(data);
+    }
+    return message;
   };
 
-  const deleteRole = (id: string) => {
-    setRoles((prev) => prev.filter((role) => role.id !== id));
+  const deleteRole = async (id: number, payload: any) => {
+    const message = await deleteRolesAPI(payload);
+    if (message.toLowerCase().includes("exitosamente")) {
+      const data = await fetchRoles();
+      setRoles(data);
+    }
+    return message;
   };
 
   return (
@@ -1174,6 +1216,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         supportSessions,
         addSupportSession,
         updateSupportSession,
+        cancelSupportSession,
         actionPlans,
         addActionPlan,
         dentalAppointments,

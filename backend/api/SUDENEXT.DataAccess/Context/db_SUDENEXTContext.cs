@@ -12,7 +12,6 @@ public partial class db_SUDENEXTContext : DbContext
     public db_SUDENEXTContext()
     {
     }
-
     public db_SUDENEXTContext(DbContextOptions<db_SUDENEXTContext> options)
         : base(options)
     {
@@ -506,6 +505,9 @@ public partial class db_SUDENEXTContext : DbContext
             entity.Property(e => e.sol_FechaModificacion)
                 .HasDefaultValueSql("(NULL)")
                 .HasColumnType("datetime");
+            entity.Property(e => e.sol_HorarioPref)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.sol_MotivoConsulta)
                 .IsRequired()
                 .HasMaxLength(200);
@@ -565,6 +567,9 @@ public partial class db_SUDENEXTContext : DbContext
             entity.Property(e => e.sco_FechaCreacion).HasColumnType("datetime");
             entity.Property(e => e.sco_FechaEliminacion).HasColumnType("datetime");
             entity.Property(e => e.sco_FechaModificacion).HasColumnType("datetime");
+            entity.Property(e => e.sco_Hora)
+                .HasMaxLength(10)
+                .IsUnicode(false);
             entity.Property(e => e.sco_Motivo)
                 .IsRequired()
                 .HasMaxLength(255);

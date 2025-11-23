@@ -196,6 +196,22 @@ export interface SystemUser {
   nombreCompleto_E: string | null;
 }
 
+export interface Role {
+  rol_ID: number,
+  rol_Descripcion: string,
+  rol_Estado: boolean,
+
+  rol_FechaCreacion: string | null;
+  usu_UsuarioCreacion: number | null;
+  nombreCompleto_C: string | null;
+  rol_FechaModificacion: string | null;
+  usu_UsuarioModificacion: number | null;
+  nombreCompleto_M: string | null;
+  rol_FechaEliminacion: string | null;
+  usu_UsuarioEliminacion: number | null;
+  nombreCompleto_E: string | null;
+}
+
 export interface Personnel {
   per_ID: number,
   per_Nombres: string,
@@ -227,13 +243,4 @@ export interface PersonalSinUsuario {
   per_ID: number,
   per_Nombres: string,
   per_Correo: string,
-}
-
-export interface Role {
-  id: string;
-  name: string;
-  description: string;
-  permissions: string[];
-  isActive: boolean;
-  createdAt: string;
 }

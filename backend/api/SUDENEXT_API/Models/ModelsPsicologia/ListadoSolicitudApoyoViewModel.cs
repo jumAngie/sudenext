@@ -16,7 +16,7 @@
 
         public bool? sol_Asistencia { get; set; }
 
-        public TimeSpan? sol_HorarioPref { get; set; }
+        public string sol_HorarioPref { get; set; }
 
 
         public int usu_UsuarioCreacion { get; set; }

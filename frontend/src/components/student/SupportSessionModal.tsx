@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import { Heart, Clock, MessageSquare } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -21,8 +22,8 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { useAuth } from "../../context/AuthContext";
 import { useData } from "../../context/DataContext";
 import { Student } from "../../types";
-import { toast } from "sonner@2.0.3";
-import { Heart, Clock, MessageSquare } from "lucide-react";
+import { toast } from "sonner";
+import { getLocalDateTime, convertPreferredTimeToTicks } from '../../utils/dateHelpers';
 
 interface SupportSessionModalProps {
   isOpen: boolean;
@@ -77,7 +78,7 @@ export function SupportSessionModal({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -87,23 +88,32 @@ export function SupportSessionModal({
       return;
     }
 
-    addSupportSession({
-      studentId: student.id,
-      studentName: student.name,
-      accountNumber: student.accountNumber,
-      mainReason: formData.mainReason,
-      emotionalLevel: parseInt(formData.emotionalLevel),
-      previousSessions: formData.previousSessions === "si",
-      preferredTime: formData.preferredTime,
-      modality: formData.modality as "virtual" | "presencial",
-      additionalComments:
-        formData.additionalComments || undefined,
-      status: "pendiente",
+    const message = await addSupportSession({
+      est_ID: student.id,
+      sol_MotivoConsulta: formData.mainReason,
+      sol_ResumenSesion: formData.additionalComments || "",
+      sol_MalestarEmocional: parseInt(formData.emotionalLevel),
+      sol_HorarioPref: formData.preferredTime,
+      sol_Asistencia: false,
+      sol_Estado: true,
+      sol_FechaCreacion: getLocalDateTime(),
     });
+    console.log("PAYLOAD ENVIADO:", {
+      est_ID: student.id,
+      sol_MotivoConsulta: formData.mainReason,
+      sol_ResumenSesion: formData.additionalComments || "",
+      sol_MalestarEmocional: parseInt(formData.emotionalLevel),
+      sol_HorarioPref: formData.preferredTime,
+      sol_Asistencia: false,
+      sol_Estado: true,
+      sol_FechaCreacion: getLocalDateTime(),
+    });
+    if (!message.toLowerCase().includes("correctamente")) {
+      toast.error(message);
+      return;
+    }
 
-    toast.success(
-      "Solicitud de sesión de apoyo enviada correctamente",
-    );
+    toast.success(message);
 
     // Reset form
     setFormData({

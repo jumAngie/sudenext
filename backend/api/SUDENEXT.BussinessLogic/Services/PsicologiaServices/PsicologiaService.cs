@@ -104,6 +104,22 @@ namespace SUDENEXT.BussinessLogic.Services.PsicologiaServices
 
         }
 
+        public ServiceResult ListadoSolicitudApoyoEstudiante(tbSolicitudApoyo item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _solicitudApoyoRepository.ListadoTOP5Estudiante(item);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+
+        }
+
         public ServiceResult CrearSolicitudApoyo(tbSolicitudApoyo item)
         {
             var result = new ServiceResult();

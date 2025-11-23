@@ -47,6 +47,8 @@ import { getLocalDateTime } from '../../utils/dateHelpers';
 
 export function UsersPage() {
   const { user } = useAuth();
+  const { user: authUser } = useAuth();
+
 
   const { systemUsers, addSystemUser, updateSystemUser, deleteSystemUser, roles } = useData();
   const [searchTerm, setSearchTerm] = useState('');
@@ -95,17 +97,30 @@ export function UsersPage() {
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = filteredUsers.slice(indexOfFirstRecord, indexOfLastRecord);
 
-  // CREAR
+
   const handleCreateUser = async () => {
-    if (!selectedPersonal || !formData.rol_ID || !formData.usu_Usuario.trim() || !formData.usu_Contrasena.trim()) {
+    const { usu_Usuario, usu_Contrasena, rol_ID, per_ID } = formData;
+    console.log(usu_Usuario, usu_Contrasena, rol_ID, per_ID);
+    // VALIDACIONES
+    if (!selectedPersonal || !rol_ID || !usu_Usuario.trim() || !usu_Contrasena.trim()) {
+      setFormError("Debe llenar todos los campos");
       toast.error("Debe llenar todos los campos");
       return;
     }
+
+    // CONTRASEÑA SEGURA
+    const regexPassword = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/;
+    if (!regexPassword.test(usu_Contrasena)) {
+      setFormError("La contraseña debe tener mínimo 6 caracteres, incluir letras y números.");
+      toast.error("Contraseña no cumple requisitos.");
+      return;
+    }
+
     const message = await addSystemUser({
-      usu_Usuario: formData.usu_Usuario,
-      usu_Contrasena: formData.usu_Contrasena,
-      per_ID: formData.per_ID,
-      rol_ID: formData.rol_ID,
+      usu_Usuario,
+      usu_Contrasena,
+      per_ID,
+      rol_ID,
       usu_UsuarioCreacion: Number(user?.data?.id),
       usu_FechaCreacion: getLocalDateTime(),
     });
@@ -126,11 +141,42 @@ export function UsersPage() {
     setFormError("");
   };
 
+  /* // CREAR
+   const handleCreateUser = async () => {
+     if (!selectedPersonal || !formData.rol_ID || !formData.usu_Usuario.trim() || !formData.usu_Contrasena.trim()) {
+       toast.error("Debe llenar todos los campos");
+       return;
+     }
+     const message = await addSystemUser({
+       usu_Usuario: formData.usu_Usuario,
+       usu_Contrasena: formData.usu_Contrasena,
+       per_ID: formData.per_ID,
+       rol_ID: formData.rol_ID,
+       usu_UsuarioCreacion: Number(user?.data?.id),
+       usu_FechaCreacion: getLocalDateTime(),
+     });
+     if (!message.toLowerCase().includes("correctamente")) {
+       setFormError(message);
+       toast.error(message);
+       return;
+     }
+     toast.success(message);
+     setIsCreateDialogOpen(false);
+     setFormData({
+       usu_ID: 0,
+       usu_Usuario: '',
+       usu_Contrasena: '',
+       per_ID: 0,
+       rol_ID: 0
+     });
+     setFormError("");
+   };
+ */
   // EDITAR
   const handleEditUser = async () => {
     if (selectedUser) {
-      if (!selectedUser.usu_Usuario || !selectedUser.per_ID || !selectedUser.rol_ID || !selectedPersonal) {
-        toast.error("Debe llenar todos los campos");
+      if (!selectedUser.rol_ID) {
+        toast.error("Debe escoger un rol.");
         return;
       }
 
@@ -198,11 +244,11 @@ export function UsersPage() {
   const openEditDialog = (user: SystemUser) => {
     setSelectedUser(user);
     setFormData({
-      usu_ID: 0,
-      usu_Usuario: '',
+      usu_ID: user.usu_ID,
+      usu_Usuario: user.usu_Usuario,
       usu_Contrasena: '',
-      per_ID: 0,
-      rol_ID: 0
+      per_ID: user.per_ID,
+      rol_ID: user.rol_ID
     });
     setIsEditDialogOpen(true);
   };
@@ -271,8 +317,8 @@ export function UsersPage() {
                 <SelectContent>
                   <SelectItem value="all">Todos los roles</SelectItem>
                   {roles.map((role) => (
-                    <SelectItem key={role.id} value={role.id}>
-                      {role.name}
+                    <SelectItem key={role.rol_ID} value={role.rol_ID}>
+                      {role.rol_Descripcion}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -330,24 +376,24 @@ export function UsersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentRecords.map((user) => (
-                  <TableRow key={user.usu_ID} className="hover:bg-gray-50">
+                {currentRecords.map((userSystem) => (
+                  <TableRow key={userSystem.usu_ID} className="hover:bg-gray-50">
                     <TableCell className="font-medium">
-                      {user.usu_ID}
+                      {userSystem.usu_ID}
                     </TableCell>
-                    <TableCell className="font-medium">{user.usu_Usuario}</TableCell>
-                    <TableCell>{user.per_Nombres}</TableCell>
+                    <TableCell className="font-medium">{userSystem.usu_Usuario}</TableCell>
+                    <TableCell>{userSystem.per_Nombres}</TableCell>
                     <TableCell>
-                      <Badge variant="outline">{user.rol_Descripcion}</Badge>
+                      <Badge variant="outline">{userSystem.rol_Descripcion}</Badge>
                     </TableCell>
                     <TableCell>
-                      {user.usu_FechaCreacion
-                        ? new Date(user.usu_FechaCreacion).toLocaleDateString("es-HN")
+                      {userSystem.usu_FechaCreacion
+                        ? new Date(userSystem.usu_FechaCreacion).toLocaleDateString("es-HN")
                         : "—"}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={user.usu_Estado ? 'default' : 'secondary'} className={user.usu_Estado ? 'bg-green-600' : ''}>
-                        {user.usu_Estado ? 'Activo' : 'Inactivo'}
+                      <Badge variant={userSystem.usu_Estado ? 'default' : 'secondary'} className={userSystem.usu_Estado ? 'bg-green-600' : ''}>
+                        {userSystem.usu_Estado ? 'Activo' : 'Inactivo'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
@@ -355,7 +401,7 @@ export function UsersPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => openViewDialog(user)}
+                          onClick={() => openViewDialog(userSystem)}
                           className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                         >
                           <Eye className="w-3 h-3 mr-1" />
@@ -364,24 +410,26 @@ export function UsersPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => openEditDialog(user)}
+                          onClick={() => openEditDialog(userSystem)}
                           className="text-[#edba0d] hover:text-[#d4a50c] hover:bg-yellow-50"
                         >
                           <Pencil className="w-3 h-3 mr-1" />
                           Editar
                         </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setSystemUserToDelete(user);
-                            setIsDeleteDialogOpen(true);
-                          }}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                        >
-                          <EyeClosed className="w-3 h-3 mr-1" />
-                          Desactivar
-                        </Button>
+                        {Number(authUser?.data?.id) !== userSystem.usu_ID && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setSystemUserToDelete(userSystem);
+                              setIsDeleteDialogOpen(true);
+                            }}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <EyeClosed className="w-3 h-3 mr-1" />
+                            Desactivar
+                          </Button>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -431,6 +479,83 @@ export function UsersPage() {
               Ingrese los datos del usuario a crear
             </DialogDescription>
           </DialogHeader>
+          <div className="space-y-4 py-4">
+            {/* PERSONAL */}
+            <div className="space-y-2">
+              <Label>Seleccione Personal</Label>
+              <Select
+                onValueChange={(value: any) => {
+                  const persona = personalSinUsuario.find(p => p.per_ID === parseInt(value));
+                  setSelectedPersonal(persona);
+                  setFormData({
+                    ...formData,
+                    per_ID: persona.per_ID,
+                    usu_Usuario: persona.per_Correo
+                  });
+                  setFormError("");
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccione un empleado" />
+                </SelectTrigger>
+                <SelectContent>
+                  {personalSinUsuario.map((p) => (
+                    <SelectItem key={p.per_ID} value={String(p.per_ID)}>
+                      {p.per_Nombres}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* CORREO */}
+            <div className="space-y-2">
+              <Label>Correo Institucional</Label>
+              <Input
+                value={formData.usu_Usuario}
+                readOnly
+                className={`bg-gray-100 ${formError && !formData.usu_Usuario ? "border-red-500" : ""}`}
+              />
+            </div>
+
+            {/* CONTRASEÑA */}
+            <div className="space-y-2">
+              <Label>Contraseña</Label>
+              <Input
+                type="password"
+                value={formData.usu_Contrasena}
+                onChange={(e) => {
+                  setFormData({ ...formData, usu_Contrasena: e.target.value });
+                  setFormError("");
+                }}
+                className={`${formError && !formData.usu_Contrasena ? "border-red-500" : ""}`}
+              />
+            </div>
+
+            {/* ROL */}
+            <div className="space-y-2">
+              <Label>Rol</Label>
+              <Select
+                onValueChange={(value: any) => {
+                  setFormData({ ...formData, rol_ID: parseInt(value) });
+                  setFormError("");
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccione rol" />
+                </SelectTrigger>
+                <SelectContent>
+                  {roles.map((role) => (
+                    <SelectItem key={role.rol_ID} value={(role.rol_ID)}>
+                      {role.rol_Descripcion}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {formError && <p className="text-red-500 text-sm">{formError}</p>}
+          </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
               Cancelar
@@ -448,19 +573,69 @@ export function UsersPage() {
           <DialogHeader>
             <DialogTitle>Editar Usuario</DialogTitle>
             <DialogDescription>
-              Modifique los datos del usuario
+              Sólo puede modificar el rol del usuario
             </DialogDescription>
           </DialogHeader>
+
+          <div className="space-y-4 py-4">
+
+            {/* CORREO (readonly) */}
+            <div className="space-y-2">
+              <Label>Correo</Label>
+              <Input
+                value={formData.usu_Usuario}
+                readOnly
+                className="bg-gray-100 text-gray-700"
+              />
+            </div>
+
+            {/* ROL */}
+            <div className="space-y-2">
+              <Label>Rol</Label>
+              <Select
+                value={String(formData.rol_ID)}
+                onValueChange={(value: any) =>
+                  setFormData({ ...formData, rol_ID: parseInt(value) })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccione rol" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  {roles.map((r) => (
+                    <SelectItem key={r.rol_ID} value={String(r.rol_ID)}>
+                      {r.rol_Descripcion}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {editFormError && (
+              <p className="text-red-500 text-sm">{editFormError}</p>
+            )}
+
+          </div>
+
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
               Cancelar
             </Button>
-            <Button onClick={handleEditUser} className="bg-[#004aad] hover:bg-[#003687]">
+
+            <Button
+              onClick={handleEditUser}
+              className="bg-[#004aad] hover:bg-[#003687]"
+            >
               Guardar Cambios
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
 
       {/* View Dialog */}
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>

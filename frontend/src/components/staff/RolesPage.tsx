@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
+import { useAuth } from "../../context/AuthContext";
 import { Role } from '../../types';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -32,91 +33,152 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { toast } from 'sonner@2.0.3';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "../ui/alert-dialog"
+import { toast } from "sonner";
+import { getLocalDateTime } from '../../utils/dateHelpers';
 
 export function RolesPage() {
+  const { user } = useAuth();
+
   const { roles, addRole, updateRole, deleteRole } = useData();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [roleToDelete, setroleToDelete] = useState<Role | null>(null);
+
+  // Páginación
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 10;
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    permissions: [] as string[],
-    isActive: true,
+    role_ID: 0,
+    rol_Descripcion: ''
   });
-  const [permissionInput, setPermissionInput] = useState('');
+
+  // Validaciones
+  const [formError, setFormError] = useState("");
+  const [editFormError, setEditFormError] = useState("");
 
   const filteredRoles = roles.filter((role) => {
-    const matchesSearch = role.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      role.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || 
-      (statusFilter === 'active' && role.isActive) || 
-      (statusFilter === 'inactive' && !role.isActive);
+    const matchesSearch = role.rol_Descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === 'all' ||
+      (statusFilter === 'active' && role.rol_Estado) ||
+      (statusFilter === 'inactive' && !role.rol_Estado);
     return matchesSearch && matchesStatus;
   });
 
-  const handleCreateRole = () => {
-    addRole(formData);
-    setIsCreateDialogOpen(false);
-    setFormData({ name: '', description: '', permissions: [], isActive: true });
-    setPermissionInput('');
-    toast.success('Rol creado exitosamente');
-  };
+  // Paginación
+  const totalRecords = filteredRoles.length;
+  const totalPages = Math.ceil(totalRecords / recordsPerPage);
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredRoles.slice(indexOfFirstRecord, indexOfLastRecord);
 
-  const handleEditRole = () => {
-    if (selectedRole) {
-      updateRole(selectedRole.id, formData);
-      setIsEditDialogOpen(false);
-      setSelectedRole(null);
-      setFormData({ name: '', description: '', permissions: [], isActive: true });
-      setPermissionInput('');
-      toast.success('Rol actualizado exitosamente');
+  // CREAR
+  const handleCreateRole = async () => {
+    // Validación en blanco
+    if (!formData.rol_Descripcion.trim()) {
+      setFormError("El nombre es obligatorio.");
+      toast.error("El nombre del área no puede estar vacío.");
+      return;
     }
-  };
-
-  const handleDeleteRole = (role: Role) => {
-    if (window.confirm(`¿Está seguro que desea eliminar el rol "${role.name}"?`)) {
-      deleteRole(role.id);
-      toast.success('Rol eliminado exitosamente');
-    }
-  };
-
-  const addPermission = () => {
-    if (permissionInput.trim() && !formData.permissions.includes(permissionInput.trim())) {
-      setFormData({
-        ...formData,
-        permissions: [...formData.permissions, permissionInput.trim()]
-      });
-      setPermissionInput('');
-    }
-  };
-
-  const removePermission = (permission: string) => {
-    setFormData({
-      ...formData,
-      permissions: formData.permissions.filter(p => p !== permission)
+    const message = await addRole({
+      rol_Descripcion: formData.rol_Descripcion,
+      usu_UsuarioCreacion: Number(user?.data?.id),
+      rol_FechaCreacion: getLocalDateTime(),
     });
+    // Si el backend dice error
+    if (!message.toLowerCase().includes("correctamente")) {
+      setFormError(message);
+      toast.error(message);
+      return;
+    }
+    // Si fue exitoso
+    toast.success(message);
+    setIsCreateDialogOpen(false);
+    setFormData({
+      role_ID: 0,
+      rol_Descripcion: ''
+    });
+    setFormError("");
+  };
+
+  // EDITAR
+  const handleEditRole = async () => {
+    if (!formData.rol_Descripcion.trim()) {
+      setEditFormError("El nombre no puede estar vacío.");
+      toast.error("El nombre no puede estar vacío.");
+      return;
+    }
+    if (selectedRole) {
+      const message = await updateRole(selectedRole.rol_ID, {
+        rol_ID: selectedRole.rol_ID,
+        rol_Descripcion: formData.rol_Descripcion,
+        usu_UsuarioModificacion: Number(user?.data?.id),
+        rol_FechaModificacion: getLocalDateTime()
+      });
+      // Si el SP devolvió error
+      if (!message.toLowerCase().includes("correctamente")) {
+        setEditFormError(message);
+        toast.error(message);
+        return;
+      }
+      // Si el SP devolvió éxito
+      toast.success(message);
+      setIsEditDialogOpen(false);
+      setEditFormError("");
+      setSelectedRole(null);
+      setFormData({
+        role_ID: 0,
+        rol_Descripcion: ''
+      });
+    }
+  };
+
+  const handleDeleteRole = async () => {
+    if (!roleToDelete) return;
+    const message = await deleteRole(roleToDelete.rol_ID, {
+      rol_ID: roleToDelete.rol_ID,
+      usu_UsuarioEliminacion: Number(user?.data?.id),
+      rol_FechaEliminacion: getLocalDateTime(),
+      rol_Descripcion: "string"
+    });
+
+    if (!message.toLowerCase().includes("exitosamente")) {
+      toast.error(message);
+      return;
+    }
+    toast.success(message);
+    setIsDeleteDialogOpen(false);
+    setroleToDelete(null);
   };
 
   const openCreateDialog = () => {
-    setFormData({ name: '', description: '', permissions: [], isActive: true });
-    setPermissionInput('');
+    setFormData({
+      role_ID: 0,
+      rol_Descripcion: ''
+    });
     setIsCreateDialogOpen(true);
   };
 
   const openEditDialog = (role: Role) => {
     setSelectedRole(role);
     setFormData({
-      name: role.name,
-      description: role.description,
-      permissions: [...role.permissions],
-      isActive: role.isActive,
+      role_ID: role.rol_ID,
+      rol_Descripcion: role.rol_Descripcion,
     });
-    setPermissionInput('');
     setIsEditDialogOpen(true);
   };
 
@@ -216,35 +278,32 @@ export function RolesPage() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>ID</TableHead>
                   <TableHead>Nombre</TableHead>
-                  <TableHead>Descripción</TableHead>
-                  <TableHead>Permisos</TableHead>
+                  <TableHead>Usuario Creador</TableHead>
+                  <TableHead>Fecha Creación</TableHead>
                   <TableHead>Estado</TableHead>
                   <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredRoles.map((role) => (
-                  <TableRow key={role.id} className="hover:bg-gray-50">
-                    <TableCell className="font-medium">{role.name}</TableCell>
-                    <TableCell className="max-w-md truncate">{role.description}</TableCell>
+                {currentRecords.map((role) => (
+                  <TableRow key={role.rol_ID} className="hover:bg-gray-50">
+                    <TableCell className="font-medium">
+                      {role.rol_ID}
+                    </TableCell>
+                    <TableCell className="font-medium">{role.rol_Descripcion}</TableCell>
                     <TableCell>
-                      <div className="flex gap-1 flex-wrap">
-                        {role.permissions.slice(0, 2).map((perm, idx) => (
-                          <Badge key={idx} variant="outline" className="text-xs">
-                            {perm}
-                          </Badge>
-                        ))}
-                        {role.permissions.length > 2 && (
-                          <Badge variant="outline" className="text-xs">
-                            +{role.permissions.length - 2}
-                          </Badge>
-                        )}
-                      </div>
+                      {role.nombreCompleto_C ?? "—"}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={role.isActive ? 'default' : 'secondary'} className={role.isActive ? 'bg-green-600' : ''}>
-                        {role.isActive ? 'Activo' : 'Inactivo'}
+                      {role.rol_FechaCreacion
+                        ? new Date(role.rol_FechaCreacion).toLocaleDateString("es-HN")
+                        : "—"}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={role.rol_Estado ? 'default' : 'secondary'} className={role.rol_Estado ? 'bg-green-600' : ''}>
+                        {role.rol_Estado ? 'Activo' : 'Inactivo'}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
@@ -270,7 +329,10 @@ export function RolesPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDeleteRole(role)}
+                          onClick={() => {
+                            setroleToDelete(role);
+                            setIsDeleteDialogOpen(true);
+                          }}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
                           <Trash2 className="w-3 h-3 mr-1" />
@@ -283,11 +345,53 @@ export function RolesPage() {
               </TableBody>
             </Table>
           )}
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-between items-center mt-4">
+              {/* Info */}
+              <p className="text-sm text-gray-600">
+                Mostrando{" "}
+                <span className="font-semibold">
+                  {indexOfFirstRecord + 1} – {Math.min(indexOfLastRecord, totalRecords)}
+                </span>{" "}
+                de <span className="font-semibold">{totalRecords}</span> registros
+              </p>
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                >
+                  Anterior
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                >
+                  Siguiente
+                </Button>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
       {/* Create Dialog */}
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+      <Dialog
+        open={isCreateDialogOpen}
+        onOpenChange={(open: any) => {
+          setIsCreateDialogOpen(open);
+          if (!open) {
+            setFormError("");
+            setFormData({
+              role_ID: 0,
+              rol_Descripcion: ''
+            });
+          }
+        }}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Crear Nuevo Rol</DialogTitle>
@@ -299,53 +403,29 @@ export function RolesPage() {
             <div className="space-y-2">
               <Label htmlFor="name">Nombre</Label>
               <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.rol_Descripcion}
+                onChange={(e) => {
+                  setFormData({ ...formData, rol_Descripcion: e.target.value });
+                  setFormError("");  // quitar error cuando el usuario escribe
+                }}
                 placeholder="Ej: Administrador"
+                className={`${formError ? "border-red-500" : ""}`}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Descripción</Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Describe el rol"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Permisos</Label>
-              <div className="flex gap-2">
-                <Input
-                  value={permissionInput}
-                  onChange={(e) => setPermissionInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addPermission())}
-                  placeholder="Agregar permiso"
-                />
-                <Button type="button" onClick={addPermission} variant="outline">
-                  <Plus className="w-4 h-4" />
-                </Button>
-              </div>
-              <div className="flex gap-2 flex-wrap mt-2">
-                {formData.permissions.map((perm, idx) => (
-                  <Badge key={idx} variant="secondary" className="cursor-pointer" onClick={() => removePermission(perm)}>
-                    {perm} ×
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="isActive"
-                checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-              />
-              <Label htmlFor="isActive">Rol activo</Label>
+              {formError && (
+                <p className="text-red-600 text-sm mt-1">{formError}</p>
+              )}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+            <Button variant="outline" onClick={() => {
+              setIsCreateDialogOpen(false);
+              setFormError("");
+              setFormData({
+                role_ID: 0,
+                rol_Descripcion: ''
+              });
+            }}
+            >
               Cancelar
             </Button>
             <Button onClick={handleCreateRole} className="bg-[#004aad] hover:bg-[#003687]">
@@ -356,8 +436,19 @@ export function RolesPage() {
       </Dialog>
 
       {/* Edit Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-2xl">
+      <Dialog
+        open={isEditDialogOpen}
+        onOpenChange={(open: any) => {
+          setIsEditDialogOpen(open);
+          if (!open) {
+            setEditFormError("");
+            setFormData({
+              role_ID: 0,
+              rol_Descripcion: ''
+            });
+          }
+        }}
+      ><DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Editar Rol</DialogTitle>
             <DialogDescription>
@@ -369,51 +460,28 @@ export function RolesPage() {
               <Label htmlFor="edit-name">Nombre</Label>
               <Input
                 id="edit-name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                value={formData.rol_Descripcion}
+                onChange={(e) => {
+                  setFormData({ ...formData, rol_Descripcion: e.target.value });
+                  setEditFormError("");
+                }}
+                className={editFormError ? "border-red-500" : ""}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-description">Descripción</Label>
-              <Textarea
-                id="edit-description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Permisos</Label>
-              <div className="flex gap-2">
-                <Input
-                  value={permissionInput}
-                  onChange={(e) => setPermissionInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addPermission())}
-                  placeholder="Agregar permiso"
-                />
-                <Button type="button" onClick={addPermission} variant="outline">
-                  <Plus className="w-4 h-4" />
-                </Button>
-              </div>
-              <div className="flex gap-2 flex-wrap mt-2">
-                {formData.permissions.map((perm, idx) => (
-                  <Badge key={idx} variant="secondary" className="cursor-pointer" onClick={() => removePermission(perm)}>
-                    {perm} ×
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="edit-isActive"
-                checked={formData.isActive}
-                onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
-              />
-              <Label htmlFor="edit-isActive">Rol activo</Label>
+              {editFormError && (
+                <p className="text-red-600 text-sm mt-1">{editFormError}</p>
+              )}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
-              Cancelar
+            <Button variant="outline" onClick={() => {
+              setIsEditDialogOpen(false);
+              setEditFormError("");      // limpiar error
+              setFormData({
+                role_ID: 0,
+                rol_Descripcion: ''
+              });
+            }}
+            > Cancelar
             </Button>
             <Button onClick={handleEditRole} className="bg-[#004aad] hover:bg-[#003687]">
               Guardar Cambios
@@ -429,43 +497,65 @@ export function RolesPage() {
             <DialogTitle>Detalles del Rol</DialogTitle>
           </DialogHeader>
           {selectedRole && (
-            <div className="space-y-4 py-4">
-              <div>
-                <Label className="text-gray-600">Nombre</Label>
-                <p className="mt-1">{selectedRole.name}</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Descripción</Label>
-                <p className="mt-1">{selectedRole.description}</p>
-              </div>
-              <div>
-                <Label className="text-gray-600">Permisos</Label>
-                <div className="flex gap-2 flex-wrap mt-2">
-                  {selectedRole.permissions.map((perm, idx) => (
-                    <Badge key={idx} variant="outline">
-                      {perm}
+            <div className="space-y-8 py-4">
+              {/* GRID DE 2 COLUMNAS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div>
+                  <Label className="text-gray-600">Nombre</Label>
+                  <p className="mt-1">{selectedRole.rol_Descripcion}</p>
+                </div>
+                <div>
+                  <Label className="text-gray-600">Estado</Label>
+                  <div className="mt-1">
+                    <Badge
+                      variant={selectedRole.rol_Estado ? "default" : "secondary"}
+                      className={selectedRole.rol_Estado ? "bg-green-600" : ""}
+                    >
+                      {selectedRole.rol_Estado ? "Activo" : "Inactivo"}
                     </Badge>
-                  ))}
+                  </div>
                 </div>
               </div>
-              <div>
-                <Label className="text-gray-600">Estado</Label>
-                <div className="mt-1">
-                  <Badge variant={selectedRole.isActive ? 'default' : 'secondary'} className={selectedRole.isActive ? 'bg-green-600' : ''}>
-                    {selectedRole.isActive ? 'Activo' : 'Inactivo'}
-                  </Badge>
-                </div>
-              </div>
-              <div>
-                <Label className="text-gray-600">Fecha de Creación</Label>
-                <p className="mt-1">
-                  {new Date(selectedRole.createdAt).toLocaleDateString('es-HN', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </p>
-              </div>
+              {/* Auditoría */}
+              <h3 className="text-lg font-semibold mt-4">Auditoría</h3>
+              <table className="w-full border text-sm">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border p-2">Acción</th>
+                    <th className="border p-2">Usuario</th>
+                    <th className="border p-2">Fecha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border p-2">Creación</td>
+                    <td className="border p-2">{selectedRole.nombreCompleto_C ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedRole.rol_FechaCreacion
+                        ? new Date(selectedRole.rol_FechaCreacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2">Modificación</td>
+                    <td className="border p-2">{selectedRole.nombreCompleto_M ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedRole.rol_FechaModificacion
+                        ? new Date(selectedRole.rol_FechaModificacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border p-2">Eliminación</td>
+                    <td className="border p-2">{selectedRole.nombreCompleto_E ?? "—"}</td>
+                    <td className="border p-2">
+                      {selectedRole.rol_FechaEliminacion
+                        ? new Date(selectedRole.rol_FechaEliminacion).toLocaleString("es-HN")
+                        : "—"}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           )}
           <DialogFooter>
@@ -473,6 +563,34 @@ export function RolesPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar Eliminación</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Seguro que querés eliminar el registro{" "}
+              <span className="font-semibold text-red-600">
+                {roleToDelete?.rol_Descripcion}
+              </span>
+              ? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-[#004aad] hover:bg-[#003687]"
+              onClick={async () => {
+                if (roleToDelete) {
+                  await handleDeleteRole();
+                  setIsDeleteDialogOpen(false);
+                }
+              }}
+            >
+              Sí, Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div >
   );
 }

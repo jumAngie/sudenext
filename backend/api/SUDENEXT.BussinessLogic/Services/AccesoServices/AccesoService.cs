@@ -125,6 +125,66 @@ namespace SUDENEXT.BussinessLogic.Services.AccesoServices
         #endregion
 
         #region Roles
+        public ServiceResult ListadoRolesCompleto()
+        {
+
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _rolesRepository.ListadoCompleto();
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult CrearRol(tbRoles item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _rolesRepository.Insert(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EditarRol(tbRoles item)
+        {
+
+            var result = new ServiceResult();
+            try
+            {
+                var list = _rolesRepository.Update(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult EliminarRoles(tbRoles item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _rolesRepository.Delete(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region RolesXPantallas

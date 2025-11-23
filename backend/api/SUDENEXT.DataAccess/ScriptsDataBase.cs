@@ -29,6 +29,11 @@ namespace SUDENEXT.DataAccess
         public static string EliminarUsuarios = "Acce.sp_DesactivarUsuario";
 
         public static string CambiarContrasenia = "Acce.sp_CambiarContrasenia";
+
+        public static string ListarRol = "Acce.sp_ListarRoles";
+        public static string CrearRol = "Acce.sp_CrearRol";
+        public static string EditarRol = "Acce.sp_EditarRol";
+        public static string EliminarRol = "Acce.sp_EliminarRol";
         #endregion
 
         #region Gral
@@ -67,6 +72,8 @@ namespace SUDENEXT.DataAccess
         public static string CrearSolicitudApoyo = "Psi.sp_CrearSolicitudApoyo";
         public static string EditarSolicitudApoyo = "Psi.sp_EditarSolicitudApoyo";
         public static string EliminarSolicitudApoyo = "Psi.sp_EliminarSolicitudApoyo";
+
+        public static string ListarSolicitudApoyoEstudiante = "Psi.sp_ListarSolicitudApoyo_Estudiante";
         #endregion
     }
 }

@@ -40,7 +40,7 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
             parametros.Add("@sol_MotivoConsulta", item.sol_MotivoConsulta, DbType.String, ParameterDirection.Input);
             parametros.Add("@sol_MalestarEmocional", item.sol_MalestarEmocional, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@sol_Asistencia", item.sol_Asistencia, DbType.Boolean, ParameterDirection.Input);
-            parametros.Add("@sol_HorarioPref", item.sol_HorarioPref, DbType.Time, ParameterDirection.Input);
+            parametros.Add("@sol_HorarioPref", item.sol_HorarioPref, DbType.String, ParameterDirection.Input);
             parametros.Add("@sol_FechaCreacion", item.sol_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.CrearSolicitudApoyo, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
@@ -59,6 +59,14 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
             return db.Query<ListadoSolicitudSesionApoyoDTO>(ScriptsDataBase.ListarSolicitudApoyo, null, commandType: CommandType.StoredProcedure);
         }
 
+        public IEnumerable<ListadoSolicitudSesionApoyoDTO> ListadoTOP5Estudiante(tbSolicitudApoyo item)
+        {
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@est_ID", item.est_ID, DbType.Int32, ParameterDirection.Input);
+            return db.Query<ListadoSolicitudSesionApoyoDTO>(ScriptsDataBase.ListarSolicitudApoyoEstudiante,  parametros, commandType: CommandType.StoredProcedure);
+        }
+
         public RequestStatus Update(tbSolicitudApoyo item)
         {
             using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
@@ -70,7 +78,7 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
             parametros.Add("@sol_MotivoConsulta", item.sol_MotivoConsulta, DbType.String, ParameterDirection.Input);
             parametros.Add("@sol_MalestarEmocional", item.sol_MalestarEmocional, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@sol_Asistencia", item.sol_Asistencia, DbType.Boolean, ParameterDirection.Input);
-            parametros.Add("@sol_HorarioPref", item.sol_HorarioPref, DbType.Time, ParameterDirection.Input);
+            parametros.Add("@sol_HorarioPref", item.sol_HorarioPref, DbType.String, ParameterDirection.Input);
             parametros.Add("@sol_FechaModificacion", item.sol_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarSolicitudApoyo, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;

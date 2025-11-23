@@ -35,3 +35,35 @@ export function getLocalDateTime() {
 
   return local.toISOString().slice(0, 19); // "2025-11-21T23:15:00"
 }
+
+export function convertPreferredTimeToTicks(time: string) {
+  // Convertimos rangos a hora específica
+  let parsedHour = 0;
+
+  switch (time) {
+    case "7-9 AM":
+      parsedHour = 7;
+      break;
+    case "10-12 AM":
+      parsedHour = 10;
+      break;
+    case "1-3 PM":
+      parsedHour = 13;
+      break;
+    case "3-5 PM":
+      parsedHour = 15;
+      break;
+    default:
+      return 0; // o podés mandar null si el backend lo acepta
+  }
+
+  // Creamos un Date con esa hora
+  const date = new Date();
+  date.setHours(parsedHour, 0, 0, 0);
+
+  // .NET TimeSpan usa ticks = 100 nanosegundos
+  const ticks = date.getHours() * 60 * 60 * 1000 * 10000;
+
+  return ticks;
+}
+

@@ -19,7 +19,7 @@ public partial class tbSolicitudApoyo
 
     public bool? sol_Asistencia { get; set; }
 
-    public TimeSpan? sol_HorarioPref { get; set; }
+    public string sol_HorarioPref { get; set; }
 
     public bool? sol_Cancelacion { get; set; }
 

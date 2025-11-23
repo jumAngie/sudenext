@@ -13,7 +13,7 @@ public partial class tbSolicitudCitaOdon
 
     public DateTime sco_FechaP { get; set; }
 
-    public TimeSpan sco_Hora { get; set; }
+    public string sco_Hora { get; set; }
 
     public string sco_Motivo { get; set; }
 
