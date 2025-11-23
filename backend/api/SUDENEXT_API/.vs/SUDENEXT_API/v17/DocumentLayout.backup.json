@@ -1,12 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{B3222012-D49A-4127-AC07-877FDA63F06B}|SUDENEXT.API.csproj|c:\\users\\pc\\documents\\github\\sudenext\\backend\\api\\sudenext_api\\controllers\\controllersgeneral\\personalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B3222012-D49A-4127-AC07-877FDA63F06B}|SUDENEXT.API.csproj|solutionrelative:controllers\\controllersgeneral\\personalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -14,24 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PersonalController.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\Controllers\\ControllersGeneral\\PersonalController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ControllersGeneral\\PersonalController.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\Controllers\\ControllersGeneral\\PersonalController.cs",
-              "RelativeToolTip": "Controllers\\ControllersGeneral\\PersonalController.cs",
-              "ViewState": "AgIAACwAAAAAAAAAAAAUwDoAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-23T05:28:35.346Z",
-              "EditorCaption": ""
             }
           ]
         }
