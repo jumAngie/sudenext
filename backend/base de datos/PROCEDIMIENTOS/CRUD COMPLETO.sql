@@ -1,6 +1,137 @@
 USE SUDENEXT
 GO
+---------------------------------------------------  DIAGNOSTICOS MÉDICOS  -------------------------------------
+----------------------------------------------------------------------------------------------------------------
 
+---LISTAR
+CREATE OR ALTER PROCEDURE Med.sp_ListarDiagnosticosMed
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT 
+		-- Datos principales del área
+		med.dia_ID,
+		med.est_ID,
+		med.dia_DiagnosticoPrin,
+		med.dia_Estado,
+
+		-- ======== DATOS DEL USUARIO CREADOR ========
+		usuC.usu_ID AS usu_UsuarioCreacion,
+		usuC.usu_Usuario AS Usuario_C,
+		perC.per_ID AS ID_Creador,
+		(perC.per_Nombres + ' ' + perC.per_Apellidos) AS NombreCompleto_C,
+		med.dia_FechaCreacion,
+
+		-- ======== DATOS DEL USUARIO MODIFICADOR ========
+		usuM.usu_ID AS usu_UsuarioModificacion,
+		usuM.usu_Usuario AS Usuario_M,
+		perM.per_ID AS ID_Modificador,
+		(perM.per_Nombres + ' ' + perM.per_Apellidos) AS NombreCompleto_M,
+		med.dia_FechaModificacion,
+
+		-- ======== DATOS DEL USUARIO ELIMINADOR ========
+		usuE.usu_ID AS usu_UsuarioEliminacion,
+		usuE.usu_Usuario AS Usuario_E,
+		perE.per_ID AS ID_Eliminador,
+		(perE.per_Nombres + ' ' + perE.per_Apellidos) AS NombreCompleto_E,
+		med.dia_FechaEliminacion
+
+	FROM Med.tbDiagnosticosMedicos med
+		INNER JOIN Gral.tbEstudiantes est ON med.est_ID = est.est_ID
+		-- JOIN con Usuario Creador
+		INNER JOIN Acce.tbUsuarios usuC ON med.usu_UsuarioCreacion = usuC.usu_ID
+		INNER JOIN Gral.tbPersonal perC ON usuC.per_ID = perC.per_ID
+
+		-- JOIN con Usuario Modificador
+		LEFT JOIN Acce.tbUsuarios usuM ON med.usu_UsuarioModificacion = usuM.usu_ID
+		LEFT JOIN Gral.tbPersonal perM ON usuM.per_ID = perM.per_ID
+
+		-- JOIN con Usuario Eliminador
+		LEFT JOIN Acce.tbUsuarios usuE ON med.usu_UsuarioEliminacion = usuE.usu_ID
+		LEFT JOIN Gral.tbPersonal perE ON usuE.per_ID = perE.per_ID
+
+	WHERE med.dia_Estado = 1;
+END;
+GO
+
+---CREAR
+CREATE OR ALTER PROCEDURE Med.sp_CrearDiagnosticosMed
+	@est_ID	INT, 
+	@dia_DiagnosticoPrin NVARCHAR(200),
+	@usu_UsuarioCreacion INT,
+	@dia_FechaCreacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		INSERT INTO Med.tbDiagnosticosMedicos
+		(est_ID, dia_DiagnosticoPrin, usu_UsuarioCreacion, dia_FechaCreacion)
+		VALUES
+		(@est_ID, @dia_DiagnosticoPrin, @usu_UsuarioCreacion,@dia_FechaCreacion);
+
+		SELECT 'Registro creado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al crear el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+----EDITAR
+CREATE OR ALTER PROCEDURE Med.sp_EditarDiagnosticosMed
+	@dia_ID INT,
+	@est_ID	INT, 
+	@dia_DiagnosticoPrin NVARCHAR(200),
+	@usu_UsuarioModificacion INT,
+	@dia_FechaModificacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		
+		UPDATE Med.tbDiagnosticosMedicos
+		SET est_ID = @est_ID,
+			dia_DiagnosticoPrin = @dia_DiagnosticoPrin,
+			usu_UsuarioModificacion = @usu_UsuarioModificacion,
+			dia_FechaModificacion = @dia_FechaModificacion
+		WHERE dia_ID = @dia_ID;
+
+		SELECT 'Registro actualizado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al editar el registro: ', @ErrorMsg) AS MessageStatus;
+	RETURN;
+	END CATCH
+END;
+GO
+---ELIMINAR
+CREATE OR ALTER PROCEDURE Med.sp_EliminarDiagnosticosMed
+	@dia_ID INT,
+	@usu_UsuarioEliminacion INT,
+	@dia_FechaEliminacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+
+		UPDATE Med.tbDiagnosticosMedicos
+		SET dia_Estado = 0,
+			usu_UsuarioEliminacion = @usu_UsuarioEliminacion,
+			dia_FechaEliminacion = @dia_FechaEliminacion
+		WHERE dia_ID = @dia_ID;
+
+		SELECT 'Registro eliminado exitosamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al eliminar el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
 ---------------------------------------------------  AREAS  -----------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 
@@ -924,6 +1055,120 @@ BEGIN
 		SET sol_Cancelacion = 1,
 			sol_FechaEliminacion = @sol_FechaEliminacion
 		WHERE sol_ID = @sol_ID;
+
+		SELECT 'Registro eliminado exitosamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al eliminar el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+---------------------------------------------------  SOLICITUD DE CITA ODONTO  -----------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+---LISTAR
+CREATE OR ALTER PROCEDURE Odon.sp_ListarSolicitudCitaOdon
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        sco.sco_ID,
+        sco.est_ID,
+        est.est_NombreCompleto,
+        sco.sco_FechaP,
+        sco.sco_Hora,
+        sco.sco_Motivo,
+        sco.sco_Prioridad,
+		sco.sco_Cancelar,
+        sco.sco_Estado,
+        sco.sco_FechaCreacion,
+		sco.sco_Asignada
+
+    FROM Odon.tbSolicitudCitaOdon sco
+        INNER JOIN Gral.tbEstudiantes est ON sco.est_ID = est.est_ID
+END;
+GO
+
+---CREAR
+CREATE OR ALTER PROCEDURE Odon.sp_CrearCitaOdon
+	@est_ID	INT,
+	@sco_FechaP DATE,
+	@sco_Hora	VARCHAR(10),
+	@sco_Motivo NVARCHAR(255),
+	@sco_Prioridad CHAR(1),
+	@sco_FechaCreacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		
+		INSERT INTO Odon.tbSolicitudCitaOdon
+		(est_ID, sco_FechaP, sco_Hora, sco_Motivo, sco_Prioridad, sco_FechaCreacion)
+		VALUES
+		(@est_ID, @sco_FechaP, @sco_Hora, @sco_Motivo, @sco_Prioridad, @sco_FechaCreacion);
+
+		SELECT 'Registro creado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al crear el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+----EDITAR
+CREATE OR ALTER PROCEDURE Odon.sp_EditarCitaOdon
+	@sco_ID INT,
+	@est_ID	INT,
+	@sco_FechaP DATE,
+	@sco_Hora	VARCHAR(10),
+	@sco_Motivo NVARCHAR(255),
+	@sco_Prioridad CHAR(1),
+	@sol_FechaModificacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+
+		UPDATE Odon.tbSolicitudCitaOdon
+			SET est_ID = @est_ID,
+				sco_FechaP = @sco_FechaP,
+				sco_Hora = @sco_Hora,
+				sco_Motivo = @sco_Motivo,
+				sco_Prioridad = @sco_Prioridad
+		WHERE	sco_ID = @sco_ID;
+
+		SELECT 'Registro actualizado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al editar el registro: ', @ErrorMsg) AS MessageStatus;
+	RETURN;
+	END CATCH
+END;
+GO
+---ELIMINAR
+CREATE OR ALTER PROCEDURE Odon.sp_EliminarCitaOdon
+	@sco_ID INT,
+	@sco_FechaEliminacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		-- Validar existencia activa
+		IF NOT EXISTS (SELECT 1 FROM Odon.tbSolicitudCitaOdon WHERE sco_ID = @sco_ID AND sco_Estado = 1)
+		BEGIN
+			SELECT 'El registro no existe o ya fue eliminado.' AS MessageStatus;
+			RETURN;
+		END
+
+		UPDATE Odon.tbSolicitudCitaOdon
+		SET sco_Cancelar = 1,
+			sco_FechaCancelacion = GETDATE(),
+			sco_FechaEliminacion = @sco_FechaEliminacion
+		WHERE sco_ID = @sco_ID;
 
 		SELECT 'Registro eliminado exitosamente.' AS MessageStatus;
 	END TRY

@@ -37,6 +37,11 @@ namespace SUDENEXT.DataAccess
         #endregion
 
         #region Gral
+        public static string DDL_Consejeros = "Gral.sp_DDLConsejeros";
+        public static string DDL_Odontologo = "Gral.sp_DDLOdontologos";
+        public static string DDL_Asesor = "Gral.sp_DDLAsesor";
+        public static string DDL_Medico = "Gral.sp_DDLMedicos";
+
         public static string ListarPersonal = "Gral.sp_ListarPersonal";
         public static string CrearPersonal = "Gral.sp_CrearPersonal";
         public static string EditarPersonal = "Gral.sp_EditarPersonal";
@@ -52,14 +57,23 @@ namespace SUDENEXT.DataAccess
         #endregion
 
         #region Med
+        public static string ListarDiagnosticosMed = "Med.sp_ListarDiagnosticosMed";
+        public static string CrearDiagnosticosMed = "Med.sp_CrearDiagnosticosMed";
+        public static string EditarDiagnosticosMed = "Med.sp_EditarDiagnosticosMed";
+        public static string EliminarDiagnosticosMed = "Med.sp_EliminarDiagnosticosMed";
         #endregion
-        
+
 
         #region Odon
         public static string ListarTipoTratamiento =    "Odon.sp_ListarTipoTratamiento";
         public static string CrearTipoTratamiento =     "Odon.sp_CrearTipoTratamiento";
         public static string EditarTipoTratamiento =    "Odon.sp_EditarTipoTratamiento";
         public static string EliminarTipoTratamiento =  "Odon.sp_EliminarTipoTratamiento";
+
+        public static string ListarSolicitudCitaOdon = "Odon.sp_ListarSolicitudCitaOdon";
+        public static string CrearSolicitudCitaOdon = "Odon.sp_CrearCitaOdon";
+        public static string EditarSolicitudCitaOdon = "Odon.sp_EditarCitaOdon";
+        public static string EliminarSolicitudCitaOdon = "Odon.sp_EliminarCitaOdon";
         #endregion
 
         #region Psi
