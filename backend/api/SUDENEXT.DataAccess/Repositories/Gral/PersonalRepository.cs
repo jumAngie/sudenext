@@ -62,6 +62,13 @@ namespace SUDENEXT.DataAccess.Repositories.Gral
             return db.Query<ListadoPersonalDTO>(ScriptsDataBase.ListarPersonal, null, commandType: CommandType.StoredProcedure);
         }
 
+        public IEnumerable<tbPersonal> DDL_PersonalSinUsuario()
+        {
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            var parametros = new DynamicParameters();
+            return db.Query<tbPersonal>(ScriptsDataBase.DDL_ListarPersonal_SinUsuario, null, commandType: CommandType.StoredProcedure);
+        }
+
         public RequestStatus Update(tbPersonal item)
         {
             using var db = new SqlConnection(SUDENEXTContext.ConnectionString);

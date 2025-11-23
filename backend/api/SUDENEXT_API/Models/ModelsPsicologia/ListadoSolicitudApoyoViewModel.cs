@@ -40,5 +40,6 @@
         public DateTime? sol_FechaEliminacion { get; set; }
 
         public bool? sol_Estado { get; set; }
+        public bool? sol_Asignada { get; set; }
     }
 }

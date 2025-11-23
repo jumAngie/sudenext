@@ -131,7 +131,7 @@ export interface Area {
   are_ID: number;
   are_Nombre: string;
   are_Estado: boolean;
-  
+
   are_FechaCreacion: string | null;
   usu_UsuarioCreacion: number | null;
   nombreCompleto_C: string | null;
@@ -175,16 +175,58 @@ export interface ConsultationType {
   nombreCompleto_E: string | null;
 }
 
+export interface SystemUser {
+  usu_ID: number;
+  usu_Usuario: string;
+  usu_Contrasena: string;
+  per_ID: number;
+  per_Nombres: string;
+  rol_ID: number;
+  rol_Descripcion: string;
+  usu_Estado: boolean;
+
+  usu_FechaCreacion: string | null;
+  usu_UsuarioCreacion: number | null;
+  nombreCompleto_C: string | null;
+  usu_FechaModificacion: string | null;
+  usu_UsuarioModificacion: number | null;
+  nombreCompleto_M: string | null;
+  usu_FechaEliminacion: string | null;
+  usu_UsuarioEliminacion: number | null;
+  nombreCompleto_E: string | null;
+}
+
 export interface Personnel {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  areaId: string;
-  areaName: string;
-  position: string;
-  isActive: boolean;
-  createdAt: string;
+  per_ID: number,
+  per_Nombres: string,
+  per_Apellidos: string,
+  estadoCivil: string,
+  per_EstadoCivil: string,
+  sexo: string,
+  per_Sexo: string,
+  per_FechaNac: string | null,
+  per_Telefono: string,
+  per_Direccion: string,
+  per_Correo: string,
+  are_ID: number,
+  are_Nombre: string,
+  per_Estado: boolean;
+
+  per_FechaCreacion: string | null;
+  usu_UsuarioCreacion: number | null;
+  nombreCompleto_C: string | null;
+  per_FechaModificacion: string | null;
+  usu_UsuarioModificacion: number | null;
+  nombreCompleto_M: string | null;
+  per_FechaEliminacion: string | null;
+  usu_UsuarioEliminacion: number | null;
+  nombreCompleto_E: string | null;
+}
+
+export interface PersonalSinUsuario {
+  per_ID: number,
+  per_Nombres: string,
+  per_Correo: string,
 }
 
 export interface Role {
@@ -193,16 +235,5 @@ export interface Role {
   description: string;
   permissions: string[];
   isActive: boolean;
-  createdAt: string;
-}
-
-export interface SystemUser {
-  id: string;
-  name: string;
-  email: string;
-  roleId: string;
-  roleName: string;
-  isActive: boolean;
-  lastLogin?: string;
   createdAt: string;
 }

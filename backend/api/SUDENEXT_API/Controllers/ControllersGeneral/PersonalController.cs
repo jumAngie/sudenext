@@ -52,5 +52,13 @@ namespace SUDENEXT.API.Controllers.ControllersGeneral
             var respuesta = _generalService.EliminarPersonal(item);
             return Ok(respuesta);
         }
+
+        [HttpGet("PersonalSinUsuarioDDL")]
+        public IActionResult IndexSinUsuario()
+        {
+            var listado = _generalService.ListarPersonalSinUsuario();
+            listado.Data = _mapper.Map<IEnumerable<PersonalViewModel>>(listado.Data);
+            return Ok(listado);
+        }
     }
 }

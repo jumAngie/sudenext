@@ -36,6 +36,7 @@ namespace SUDENEXT.DataAccess
         public static string CrearPersonal = "Gral.sp_CrearPersonal";
         public static string EditarPersonal = "Gral.sp_EditarPersonal";
         public static string EliminarPersonal = "Gral.sp_EliminarPersonal";
+        public static string DDL_ListarPersonal_SinUsuario = "Gral.sp_DDLPersonalSinUsuario";
 
         public static string ListarAreas = "Gral.sp_ListarAreas";
         public static string CrearAreas = "Gral.sp_CrearArea";

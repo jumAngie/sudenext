@@ -190,6 +190,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
+    "Method": "IndexSinUsuario",
+    "RelativePath": "api/Personal/PersonalSinUsuarioDDL",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.PlanAccionController",
     "Method": "Update",
     "RelativePath": "api/PlanAccion/Editar",

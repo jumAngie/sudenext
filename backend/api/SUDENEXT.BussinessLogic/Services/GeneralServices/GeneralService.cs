@@ -171,6 +171,20 @@ namespace SUDENEXT.BussinessLogic.Services.GeneralServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult ListarPersonalSinUsuario()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _personalRepository.DDL_PersonalSinUsuario();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
     }

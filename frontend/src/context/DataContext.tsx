@@ -12,13 +12,23 @@ import {
   SystemUser,
   ConsultationType,
   TreatmentType,
+  PersonalSinUsuario
 } from "../types";
+
 import {
   fetchAreas,
   createAreaAPI,
   updateAreaAPI,
   deleteAreaAPI,
 } from "/src/services/areaService.ts";
+
+import {
+  fetchPersonalSinUsuario,
+  fetchPersonal,
+  createPersonalAPI,
+  updatePersonalAPI,
+  deletePersonalAPI
+} from "/src/services/personalService.ts";
 
 import {
   fetchTipoTratamientos,
@@ -33,6 +43,13 @@ import {
   updateTipoConsultaAPI,
   deleteTipoConsultaAPI
 } from "/src/services/tipoConsultaService.ts";
+
+import {
+  fetchUsuarios,
+  createUsuarioAPI,
+  updateUsuarioAPI,
+  deleteUsuarioAPI
+} from "/src/services/usuarioService.ts";
 
 interface DataContextType {
   // Support Sessions
@@ -167,23 +184,92 @@ interface DataContextType {
     }
   ) => Promise<void>;
 
+  // Usuarios
+  systemUsers: SystemUser[];
+  addSystemUser: (payload: {
+    usu_Usuario: string;
+    usu_Contrasena: string,
+    per_ID: number,
+    rol_ID: number,
+    usu_UsuarioCreacion: number;
+    usu_FechaCreacion: string;
+  }) => Promise<void>;
+
+  updateSystemUser: (
+    id: number,
+    payload: {
+      usu_ID: number;
+      usu_Usuario: string;
+      usu_Contrasena: string,
+      per_ID: number,
+      rol_ID: number,
+      usu_UsuarioModificacion: number;
+      usu_FechaModificacion: string;
+    }
+  ) => Promise<void>;
+
+  deleteSystemUser: (
+    id: number,
+    payload: {
+      usu_ID: number;
+      usu_Usuario: string;
+      usu_Contrasena: string,
+      usu_UsuarioEliminacion: number;
+      usu_FechaEliminacion: string;
+    }
+  ) => Promise<void>;
+
   // Personnel
+  personalSinUsuario: PersonalSinUsuario[];
   personnel: Personnel[];
-  addPersonnel: (person: Omit<Personnel, "id" | "createdAt">) => void;
-  updatePersonnel: (id: string, updates: Partial<Personnel>) => void;
-  deletePersonnel: (id: string) => void;
+  addPersonnel: (payload: {
+    per_Nombres: string;
+    per_Apellidos: string,
+    per_EstadoCivil: string,
+    per_Sexo: string,
+    per_FechaNac: string,
+    per_Telefono: string,
+    per_Direccion: string,
+    per_Correo: string,
+    are_ID: number,
+
+    usu_UsuarioCreacion: number;
+    per_FechaCreacion: string;
+  }) => Promise<void>;
+
+  updatePersonnel: (
+    id: number,
+    payload: {
+      per_ID: number;
+      per_Nombres: string;
+      per_Apellidos: string,
+      per_EstadoCivil: string,
+      per_Sexo: string,
+      per_FechaNac: string,
+      per_Telefono: string,
+      per_Direccion: string,
+      per_Correo: string,
+      are_ID: number,
+
+      usu_UsuarioModificacion: number;
+      per_FechaModificacion: string;
+    }
+  ) => Promise<void>;
+
+  deletePersonnel: (
+    id: number,
+    payload: {
+      per_ID: number;
+      usu_UsuarioEliminacion: number;
+      per_FechaEliminacion: string;
+    }
+  ) => Promise<void>;
 
   // Roles
   roles: Role[];
   addRole: (role: Omit<Role, "id" | "createdAt">) => void;
   updateRole: (id: string, updates: Partial<Role>) => void;
   deleteRole: (id: string) => void;
-
-  // System Users
-  systemUsers: SystemUser[];
-  addSystemUser: (user: Omit<SystemUser, "id" | "createdAt">) => void;
-  updateSystemUser: (id: string, updates: Partial<SystemUser>) => void;
-  deleteSystemUser: (id: string) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -548,67 +634,6 @@ const initialDentalTreatments: DentalTreatment[] = [
   },
 ];
 
-//const initialAreas: Area[] = [];
-//const initialTreatmentTypes: TreatmentType[] = [];
-
-const initialPersonnel: Personnel[] = [
-  {
-    id: "person-1",
-    name: "Dra. Sherlyn Nicole Monje",
-    email: "sherlyn.monje@unah.edu.hn",
-    phone: "9876-5432",
-    areaId: "area-1",
-    areaName: "Odontología",
-    position: "Odontóloga",
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "person-2",
-    name: "Dr. Marvin Adonay Alvarenga",
-    email: "marvin.alvarenga@unah.edu.hn",
-    phone: "9876-5433",
-    areaId: "area-2",
-    areaName: "Medicina General",
-    position: "Médico General",
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "person-3",
-    name: "Lic. Elder Alexandro Lopez",
-    email: "elder.lopez@unah.edu.hn",
-    phone: "9876-5434",
-    areaId: "area-3",
-    areaName: "Psicología",
-    position: "Psicólogo/Consejero",
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "person-4",
-    name: "Lic. Denis Roberto García",
-    email: "denis.garcia@unah.edu.hn",
-    phone: "9876-5435",
-    areaId: "area-4",
-    areaName: "Asesoría Académica",
-    position: "Asesor Académico",
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "person-5",
-    name: "Lic. Carlos Roberto Mejía",
-    email: "carlos.mejia@unah.edu.hn",
-    phone: "9876-5436",
-    areaId: "area-5",
-    areaName: "Administración",
-    position: "Administrador General",
-    isActive: true,
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-];
-
 const initialRoles: Role[] = [
   {
     id: "role-1",
@@ -658,64 +683,14 @@ const initialRoles: Role[] = [
   },
 ];
 
-const initialSystemUsers: SystemUser[] = [
-  {
-    id: "user-1",
-    name: "Carlos Roberto Mejía",
-    email: "carlos.mejia@unah.edu.hn",
-    roleId: "role-1",
-    roleName: "Administrador",
-    isActive: true,
-    lastLogin: "2024-01-28T09:30:00Z",
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "user-2",
-    name: "Sherlyn Nicole Monje",
-    email: "sherlyn.monje@unah.edu.hn",
-    roleId: "role-2",
-    roleName: "Odontólogo",
-    isActive: true,
-    lastLogin: "2024-01-28T08:15:00Z",
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "user-3",
-    name: "Marvin Adonay Alvarenga",
-    email: "marvin.alvarenga@unah.edu.hn",
-    roleId: "role-3",
-    roleName: "Médico General",
-    isActive: true,
-    lastLogin: "2024-01-27T14:20:00Z",
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "user-4",
-    name: "Elder Alexandro Lopez",
-    email: "elder.lopez@unah.edu.hn",
-    roleId: "role-4",
-    roleName: "Consejero",
-    isActive: true,
-    lastLogin: "2024-01-28T10:45:00Z",
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-  {
-    id: "user-5",
-    name: "Denis Roberto García",
-    email: "denis.garcia@unah.edu.hn",
-    roleId: "role-5",
-    roleName: "Asesor Académico",
-    isActive: true,
-    lastLogin: "2024-01-28T11:00:00Z",
-    createdAt: "2024-01-01T08:00:00Z",
-  },
-];
-
 export function DataProvider({ children }: { children: React.ReactNode }) {
   // FUNCIONALES
   const [areas, setAreas] = useState<Area[]>([]);
   const [treatmentTypes, setTreatmentTypes] = useState<TreatmentType[]>([]);
   const [consultationTypes, setConsultationTypes] = useState<ConsultationType[]>([]);
+  const [systemUsers, setSystemUsers] = useState<SystemUser[]>([]);
+  const [personalSinUsuario, setPersonalSinUsuario] = useState<PersonalSinUsuario[]>([]);
+  const [personnel, setPersonnel] = useState<Personnel[]>([]);
 
 
   // NO FUNCIONALES
@@ -735,11 +710,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [academicConsultations, setAcademicConsultations] = useState<
     AcademicConsultation[]
   >(initialAcademicConsultations);
-
-  const [personnel, setPersonnel] = useState<Personnel[]>(initialPersonnel);
   const [roles, setRoles] = useState<Role[]>(initialRoles);
-  const [systemUsers, setSystemUsers] =
-    useState<SystemUser[]>(initialSystemUsers);
 
   // Generate unique ID
   const generateId = (prefix: string) =>
@@ -1035,27 +1006,146 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     }
     return message;
   };
+  //  ------------------------------------------------------- Usuarios -------------------------------------------------------
+  //  ------------------------------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    const loadUsuarios = async () => {
+      try {
+        const data = await fetchUsuarios();
+        const formatted = data.map((a: any) => ({
+          usu_ID: a.usu_ID,
+          usu_Usuario: a.usu_Usuario,
+          per_ID: a.per_ID,
+          per_Nombres: a.per_Nombres,
+          rol_ID: a.rol_ID,
+          rol_Descripcion: a.rol_Descripcion,
+          usu_Estado: a.usu_Estado,
+          usu_FechaCreacion: a.usu_FechaCreacion,
+          usu_UsuarioCreacion: a.usu_UsuarioCreacion,
+          nombreCompleto_C: a.nombreCompleto_C,
+          usu_FechaModificacion: a.usu_FechaModificacion,
+          usu_UsuarioModificacion: a.usu_UsuarioModificacion,
+          nombreCompleto_M: a.nombreCompleto_M,
+          usu_FechaEliminacion: a.usu_FechaEliminacion,
+          usu_UsuarioEliminacion: a.usu_UsuarioEliminacion,
+          nombreCompleto_E: a.nombreCompleto_E,
+        }));
+        setSystemUsers(formatted);
+      } catch (err) {
+        console.error("Error cargando los usuarios", err);
+      }
+    };
+    loadUsuarios();
+  }, []);
+
+  const addSystemUser = async (payload: any) => {
+    const message = await createUsuarioAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchUsuarios();
+      setSystemUsers(data);
+    }
+    return message;
+  };
+
+  const updateSystemUser = async (id: number, payload: any) => {
+    const message = await updateUsuarioAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchUsuarios();
+      setSystemUsers(data);
+    }
+    return message;
+  };
+
+  const deleteSystemUser = async (id: number, payload: any) => {
+    const message = await deleteUsuarioAPI(payload);
+    if (message.toLowerCase().includes("exitosamente")) {
+      const data = await fetchUsuarios();
+      setSystemUsers(data);
+    }
+    return message;
+  };
   //  ------------------------------------------------------- Personal -------------------------------------------------------
   //  ---------------------------------------------------------------------------------------------------------------------
-  const addPersonnel = (person: Omit<Personnel, "id" | "createdAt">) => {
-    const newPerson: Personnel = {
-      ...person,
-      id: generateId("person"),
-      createdAt: new Date().toISOString(),
+  useEffect(() => {
+    const loadPersonalSinUsuario = async () => {
+      try {
+        const data = await fetchPersonalSinUsuario();
+        const formatted = data.map((a: any) => ({
+          per_ID: a.per_ID,
+          per_Nombres: a.per_Nombres,
+          per_Correo: a.per_Correo
+        }));
+        setPersonalSinUsuario(formatted);
+      } catch (err) {
+        console.error("Error cargando el personal", err);
+      }
     };
-    setPersonnel((prev) => [...prev, newPerson]);
+    loadPersonalSinUsuario();
+  }, []);
+
+  useEffect(() => {
+    const loadPersonal = async () => {
+      try {
+        const data = await fetchPersonal();
+        const formatted = data.map((a: any) => ({
+          per_ID: a.per_ID,
+          per_Nombres: a.per_Nombres,
+          per_Apellidos: a.per_Apellidos,
+          estadoCivil: a.estadoCivil,
+          per_EstadoCivil: a.per_EstadoCivil,
+          sexo: a.sexo,
+          per_Sexo: a.per_Sexo,
+          per_FechaNac: a.per_FechaNac,
+          per_Telefono: a.per_Telefono,
+          per_Direccion: a.per_Direccion,
+          per_Correo: a.per_Correo,
+          are_ID: a.are_ID,
+          are_Nombre: a.are_Nombre,
+          per_Estado: a.per_Estado,
+
+          per_FechaCreacion: a.usu_FechaCreacion,
+          usu_UsuarioCreacion: a.usu_UsuarioCreacion,
+          nombreCompleto_C: a.nombreCompleto_C,
+          per_FechaModificacion: a.usu_FechaModificacion,
+          usu_UsuarioModificacion: a.usu_UsuarioModificacion,
+          nombreCompleto_M: a.nombreCompleto_M,
+          per_FechaEliminacion: a.usu_FechaEliminacion,
+          usu_UsuarioEliminacion: a.usu_UsuarioEliminacion,
+          nombreCompleto_E: a.nombreCompleto_E,
+        }));
+        setPersonnel(formatted);
+      } catch (err) {
+        console.error("Error cargando el personal", err);
+      }
+    };
+    loadPersonal();
+  }, []);
+
+  const addPersonnel = async (payload: any) => {
+    const message = await createPersonalAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchPersonal();
+      setPersonnel(data);
+    }
+    return message;
   };
 
-  const updatePersonnel = (id: string, updates: Partial<Personnel>) => {
-    setPersonnel((prev) =>
-      prev.map((person) =>
-        person.id === id ? { ...person, ...updates } : person
-      )
-    );
+  const updatePersonnel = async (id: number, payload: any) => {
+    const message = await updatePersonalAPI(payload);
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchPersonal();
+      setPersonnel(data);
+    }
+    return message;
   };
 
-  const deletePersonnel = (id: string) => {
-    setPersonnel((prev) => prev.filter((person) => person.id !== id));
+  const deletePersonnel = async (id: number, payload: any) => {
+    const message = await deletePersonalAPI(payload);
+    if (message.toLowerCase().includes("exitosamente")) {
+      const data = await fetchPersonal();
+      setPersonnel(data);
+    }
+    return message;
   };
 
   // Roles
@@ -1076,26 +1166,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   const deleteRole = (id: string) => {
     setRoles((prev) => prev.filter((role) => role.id !== id));
-  };
-
-  // System Users
-  const addSystemUser = (user: Omit<SystemUser, "id" | "createdAt">) => {
-    const newUser: SystemUser = {
-      ...user,
-      id: generateId("user"),
-      createdAt: new Date().toISOString(),
-    };
-    setSystemUsers((prev) => [...prev, newUser]);
-  };
-
-  const updateSystemUser = (id: string, updates: Partial<SystemUser>) => {
-    setSystemUsers((prev) =>
-      prev.map((user) => (user.id === id ? { ...user, ...updates } : user))
-    );
-  };
-
-  const deleteSystemUser = (id: string) => {
-    setSystemUsers((prev) => prev.filter((user) => user.id !== id));
   };
 
   return (
@@ -1126,6 +1196,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         addPersonnel,
         updatePersonnel,
         deletePersonnel,
+        personalSinUsuario,
         roles,
         addRole,
         updateRole,
