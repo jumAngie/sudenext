@@ -1330,7 +1330,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
-
+		
 		UPDATE Acce.tbUsuarios
 		SET usu_Estado = 0,
 			usu_UsuarioEliminacion = @usu_UsuarioEliminacion,

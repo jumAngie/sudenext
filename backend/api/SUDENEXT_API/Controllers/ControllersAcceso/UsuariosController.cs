@@ -37,5 +37,46 @@ namespace SUDENEXT.API.Controllers.ControllersAcceso
             }
 
         }
+
+        [HttpGet("Listar")]
+        public IActionResult Index()
+        {
+            var listado = _accesoService.ListadoUsuariosCompleto();
+            listado.Data = _mapper.Map<IEnumerable<ListadoUsuariosViewModel>>(listado.Data);
+            return Ok(listado);
+
+        }
+
+        [HttpPost("Insertar")]
+        public IActionResult Insert(UsuariosViewModel usuariosViewModel)
+        {
+            var item = _mapper.Map<tbUsuarios>(usuariosViewModel);
+            var respuesta = _accesoService.CrearUsuario(item);
+            return Ok(respuesta);
+        }
+
+        [HttpPost("Editar")]
+        public IActionResult Update(UsuariosViewModel usuariosViewModel)
+        {
+            var item = _mapper.Map<tbUsuarios>(usuariosViewModel);
+            var respuesta = _accesoService.EditarUsuario(item);
+            return Ok(respuesta);
+        }
+
+        [HttpPost("Eliminar")]
+        public IActionResult Delete(UsuariosViewModel usuariosViewModel)
+        {
+            var item = _mapper.Map<tbUsuarios>(usuariosViewModel);
+            var respuesta = _accesoService.EliminarUsuario(item);
+            return Ok(respuesta);
+        }
+
+        [HttpPost("CambiarContra")]
+        public IActionResult CambiarContrasena(UsuariosViewModel usuariosViewModel)
+        {
+            var item = _mapper.Map<tbUsuarios>(usuariosViewModel);
+            var respuesta = _accesoService.CambiarContrasenia(item);
+            return Ok(respuesta);
+        }
     }
 }

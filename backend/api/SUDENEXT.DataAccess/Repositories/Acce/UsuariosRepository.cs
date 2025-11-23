@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SUDENEXT.DataAccess.Repositories.Acce
 {
-    public class UsuariosRepository : IRepository<tbRolesXPantallas>
+    public class UsuariosRepository : IRepository<tbUsuarios>
     {
         public UsuariosLoginResult Login(tbUsuarios item)
         {
@@ -24,29 +24,85 @@ namespace SUDENEXT.DataAccess.Repositories.Acce
             return resultado;
         }
 
-        public RequestStatus Delete(tbRolesXPantallas item)
+        public RequestStatus Delete(tbUsuarios item)
+        {
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@usu_ID", item.usu_ID, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usu_UsuarioEliminacion", item.usu_UsuarioEliminacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usu_FechaEliminacion", item.usu_FechaEliminacion, DbType.DateTime, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarUsuarios, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
+
+        public RequestStatus CambiarContrasenia(tbUsuarios item)
+        {
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@usu_ID", item.usu_ID, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usu_Contrasena", item.usu_Contrasena, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usu_UsuarioModificacion", item.usu_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usu_FechaModificacion", item.usu_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+
+            var answer = db.QueryFirst<string>(ScriptsDataBase.CambiarContrasenia, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
+
+        public tbUsuarios Find(int? id)
         {
             throw new NotImplementedException();
         }
 
-        public tbRolesXPantallas Find(int? id)
+        public RequestStatus Insert(tbUsuarios item)
+        {
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@usu_Usuario", item.usu_Usuario, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usu_Contrasena", item.usu_Contrasena, DbType.String, ParameterDirection.Input);
+            parametros.Add("@per_ID", item.per_ID, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@rol_ID", item.rol_ID, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usu_UsuarioCreacion", item.usu_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usu_FechaCreacion", item.usu_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
+            
+            var answer = db.QueryFirst<string>(ScriptsDataBase.CrearUsuarios, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
+
+        public IEnumerable<tbUsuarios> List()
         {
             throw new NotImplementedException();
         }
 
-        public RequestStatus Insert(tbRolesXPantallas item)
+        public IEnumerable<ListadoUsuariosDTO> ListadoCompleto()
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            var parametros = new DynamicParameters();
+            return db.Query<ListadoUsuariosDTO>(ScriptsDataBase.ListarUsuarios, null, commandType: CommandType.StoredProcedure);
         }
 
-        public IEnumerable<tbRolesXPantallas> List()
+        public RequestStatus Update(tbUsuarios item)
         {
-            throw new NotImplementedException();
-        }
-
-        public RequestStatus Update(tbRolesXPantallas item)
-        {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            
+            parametros.Add("@usu_ID", item.usu_ID, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usu_Usuario", item.usu_Usuario, DbType.String, ParameterDirection.Input);
+            parametros.Add("@per_ID", item.per_ID, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@rol_ID", item.rol_ID, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usu_UsuarioModificacion", item.usu_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usu_FechaModificacion", item.usu_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+            
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EditarUsuarios, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
         }
     }
 }

@@ -45,6 +45,83 @@ namespace SUDENEXT.BussinessLogic.Services.AccesoServices
                 return resultado.Error(ex.Message);
             }
         }
+
+        public ServiceResult ListadoUsuariosCompleto()
+        {
+
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _usuariosRepository.ListadoCompleto();
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult CrearUsuario(tbUsuarios item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _usuariosRepository.Insert(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EditarUsuario(tbUsuarios item)
+        {
+
+            var result = new ServiceResult();
+            try
+            {
+                var list = _usuariosRepository.Update(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult EliminarUsuario(tbUsuarios item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _usuariosRepository.Delete(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult CambiarContrasenia(tbUsuarios item)
+        {
+
+            var result = new ServiceResult();
+            try
+            {
+                var list = _usuariosRepository.CambiarContrasenia(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
         #endregion
 
         #region Roles

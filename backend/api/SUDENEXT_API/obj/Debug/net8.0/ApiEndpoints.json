@@ -423,6 +423,80 @@
   },
   {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersAcceso.UsuariosController",
+    "Method": "CambiarContrasena",
+    "RelativePath": "api/Usuarios/CambiarContra",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuariosViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsAcceso.UsuariosViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcceso.UsuariosController",
+    "Method": "Update",
+    "RelativePath": "api/Usuarios/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuariosViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsAcceso.UsuariosViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcceso.UsuariosController",
+    "Method": "Delete",
+    "RelativePath": "api/Usuarios/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuariosViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsAcceso.UsuariosViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcceso.UsuariosController",
+    "Method": "Insert",
+    "RelativePath": "api/Usuarios/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuariosViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsAcceso.UsuariosViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcceso.UsuariosController",
+    "Method": "Index",
+    "RelativePath": "api/Usuarios/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersAcceso.UsuariosController",
     "Method": "InicioSesion",
     "RelativePath": "api/Usuarios/Login",
     "HttpMethod": "POST",

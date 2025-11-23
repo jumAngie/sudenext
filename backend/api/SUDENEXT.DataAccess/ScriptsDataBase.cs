@@ -22,6 +22,13 @@ namespace SUDENEXT.DataAccess
 
         #region Acce
         public static string UsuariosLogin = "Acce.sp_UsuariosLogin";
+        
+        public static string ListarUsuarios = "Acce.sp_ListarUsuarios";
+        public static string CrearUsuarios = "Acce.sp_CrearUsuario";
+        public static string EditarUsuarios = "Acce.sp_EditarUsuario";
+        public static string EliminarUsuarios = "Acce.sp_DesactivarUsuario";
+
+        public static string CambiarContrasenia = "Acce.sp_CambiarContrasenia";
         #endregion
 
         #region Gral

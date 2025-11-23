@@ -23,6 +23,9 @@ namespace SUDENEXT.API.Extensions
 
             #region Acceso
             CreateMap<LoginUsuariosViewModel, tbUsuarios>().ReverseMap();
+
+            CreateMap<ListadoUsuariosViewModel, ListadoUsuariosDTO>().ReverseMap();
+            CreateMap<UsuariosViewModel, tbUsuarios>().ReverseMap();
             #endregion
 
             #region General
