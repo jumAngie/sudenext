@@ -9,9 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { SupportSession, DentalAppointment } from '../../types';
 import { useData } from '../../context/DataContext';
+import { useAuth } from "../../context/AuthContext";
 import { Eye, Edit, Trash2, Save, X } from 'lucide-react';
-import { toast } from 'sonner@2.0.3';
-import { getStatusColor, getEmotionalLevelText } from '../../utils/statusHelpers';
+import { toast } from "sonner";
+import { getLocalDateTime } from '../../utils/dateHelpers';
+import { Student } from "../../types";
+
+import { getStatusColor, getEmotionalLevelText, getEmotionalLevelColor } from '../../utils/statusHelpers';
 import { formatDateTime } from '../../utils/dateHelpers';
 
 interface RequestDetailsModalProps {
@@ -22,14 +26,23 @@ interface RequestDetailsModalProps {
 }
 
 export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestDetailsModalProps) {
-  const { updateSupportSession, updateDentalAppointment } = useData();
+  const { updateSupportSession, updateDentalAppointment, cancelSupportSession } = useData();
+  const { user } = useAuth();
+  const student = user?.data as Student;
+
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState<any>({});
 
   if (!request) return null;
 
-  const canEdit = request.status === 'pendiente';
-  const canCancel = request.status === 'pendiente' || request.status === 'asignada' || request.status === 'confirmada';
+  const isCanceled = request.status === "cancelada";
+
+  const canEdit =
+    request.status === "pendiente" && !isCanceled;
+  const canCancel =
+    (request.status === "pendiente" ||
+      request.status === "asignada") &&
+    !isCanceled;
 
   const startEdit = () => {
     setIsEditing(true);
@@ -52,52 +65,59 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
     }
   };
 
-  const saveChanges = () => {
-    if (type === 'support') {
+  const saveChanges = async () => {
+    if (type === "support") {
       const session = request as SupportSession;
-      if (!editData.mainReason?.trim()) {
-        toast.error('El motivo principal es obligatorio');
+
+      if (!editData.mainReason.trim()) {
+        toast.error("El motivo principal es obligatorio");
         return;
       }
-      
-      updateSupportSession(session.id, {
-        mainReason: editData.mainReason,
-        emotionalLevel: parseInt(editData.emotionalLevel),
-        previousSessions: editData.previousSessions === 'si',
-        preferredTime: editData.preferredTime,
-      });
-    } else {
-      const appointment = request as DentalAppointment;
-      if (!editData.reason?.trim()) {
-        toast.error('El motivo de la consulta es obligatorio');
+
+      const payload = {
+        sol_ID: session.id,
+        est_ID: student.id,
+        sol_MotivoConsulta: editData.mainReason,
+        sol_ResumenSesion: editData.additionalComments || "",
+        sol_MalestarEmocional: parseInt(editData.emotionalLevel),
+        sol_Asistencia: editData.previousSessions === "si",
+        sol_HorarioPref: editData.preferredTime,
+        sol_FechaModificacion: getLocalDateTime(),
+      };
+
+      const message = await updateSupportSession(session.id, payload);
+      console.log(message);
+      console.log(payload);
+      if (!message.toLowerCase().includes("correctamente")) {
+        toast.error(message);
         return;
       }
-      
-      updateDentalAppointment(appointment.id, {
-        preferredDate: editData.preferredDate,
-        preferredTime: editData.preferredTime,
-        reason: editData.reason,
-        priority: editData.priority as 'baja' | 'media' | 'alta'
-      });
+
+      toast.success(message);
+      setIsEditing(false);
+      return;
     }
-    
-    toast.success('Solicitud actualizada correctamente');
-    setIsEditing(false);
   };
 
-  const cancelRequest = () => {
-    if (type === 'support') {
-      updateSupportSession(request.id, { status: 'rechazada' });
-    } else {
-      updateDentalAppointment(request.id, { status: 'cancelada' });
+  const cancelRequest = async () => {
+    const payload = {
+      est_ID: student.id,
+      sol_ID: request.id,
+      sol_Cancelacion: true,
+      sol_FechaCancelacion: getLocalDateTime(),  // usuario del estudiante
+    };
+    const message = await cancelSupportSession(request.id, payload);
+    if (!message.toLowerCase().includes("exitosamente")) {
+      toast.error(message);
+      return;
     }
-    toast.success('Solicitud cancelada');
+    toast.success("Solicitud cancelada correctamente");
     onClose();
   };
 
   const renderSupportDetails = () => {
     const session = request as SupportSession;
-    
+
     if (isEditing) {
       return (
         <div className="space-y-4">
@@ -176,20 +196,21 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
           <h4 className="font-medium text-gray-900 mb-1">Motivo principal</h4>
           <p className="text-gray-700">{session.mainReason}</p>
         </div>
-        
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <h4 className="font-medium text-gray-900 mb-1">Nivel de malestar</h4>
-            <Badge className={getStatusColor(session.emotionalLevel >= 4 ? 'alta' : 'baja')}>
+            <Badge className={getEmotionalLevelColor(session.emotionalLevel)}>
               {getEmotionalLevelText(session.emotionalLevel)}
             </Badge>
           </div>
           <div>
             <h4 className="font-medium text-gray-900 mb-1">Sesiones previas</h4>
-            <p className="text-gray-700">{session.previousSessions ? 'Sí' : 'No'}</p>
+            <p className="text-gray-700">{session.previousSessions === "Sí" ? "Sí" : "No"}
+            </p>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <h4 className="font-medium text-gray-900 mb-1">Horario preferido</h4>
@@ -202,7 +223,7 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
 
   const renderDentalDetails = () => {
     const appointment = request as DentalAppointment;
-    
+
     if (isEditing) {
       return (
         <div className="space-y-4">
@@ -284,19 +305,19 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
             <p className="text-gray-700">{appointment.preferredTime}</p>
           </div>
         </div>
-        
+
         <div>
           <h4 className="font-medium text-gray-900 mb-1">Motivo de la consulta</h4>
           <p className="text-gray-700">{appointment.reason}</p>
         </div>
-        
+
         <div>
           <h4 className="font-medium text-gray-900 mb-1">Prioridad</h4>
           <Badge className={getStatusColor(appointment.priority)}>
             {appointment.priority.toUpperCase()}
           </Badge>
         </div>
-        
+
         {appointment.assignedDentistName && (
           <div>
             <h4 className="font-medium text-gray-900 mb-1">Odontólogo asignado</h4>
@@ -352,7 +373,7 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
                 Cancelar Solicitud
               </Button>
             )}
-            
+
             <div className="flex gap-3 ml-auto">
               {isEditing ? (
                 <>

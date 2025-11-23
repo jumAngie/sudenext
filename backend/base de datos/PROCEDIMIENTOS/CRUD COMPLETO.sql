@@ -814,8 +814,6 @@ BEGIN
 
     FROM Psi.tbSolicitudApoyo sol
         INNER JOIN Gral.tbEstudiantes est ON sol.est_ID = est.est_ID
-    WHERE 
-        sol.sol_Estado = 1;
 END;
 GO
 
@@ -923,8 +921,7 @@ BEGIN
 		END
 
 		UPDATE Psi.tbSolicitudApoyo
-		SET sol_Estado = 0,
-			sol_Cancelacion = 1,
+		SET sol_Cancelacion = 1,
 			sol_FechaEliminacion = @sol_FechaEliminacion
 		WHERE sol_ID = @sol_ID;
 

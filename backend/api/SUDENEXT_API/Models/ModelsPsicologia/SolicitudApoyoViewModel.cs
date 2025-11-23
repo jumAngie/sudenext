@@ -8,13 +8,14 @@
 
         public string? est_NombreCompleto { get; set; }
 
-        public string sol_MotivoConsulta { get; set; }
+        public string? sol_MotivoConsulta { get; set; }
 
         public int? sol_MalestarEmocional { get; set; }
 
         public bool? sol_Asistencia { get; set; }
 
-        public string sol_HorarioPref { get; set; }
+
+        public string? sol_HorarioPref { get; set; }
         public bool? sol_Cancelacion { get; set; }
 
         public DateTime? sol_FechaCancelacion { get; set; }

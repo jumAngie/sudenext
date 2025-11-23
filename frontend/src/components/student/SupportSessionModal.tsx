@@ -23,7 +23,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useData } from "../../context/DataContext";
 import { Student } from "../../types";
 import { toast } from "sonner";
-import { getLocalDateTime, convertPreferredTimeToTicks } from '../../utils/dateHelpers';
+import { getLocalDateTime } from '../../utils/dateHelpers';
 
 interface SupportSessionModalProps {
   isOpen: boolean;
@@ -81,13 +81,12 @@ export function SupportSessionModal({
       );
       return;
     }
-
     const message = await addSupportSession({
       est_ID: student.id,
       sol_MotivoConsulta: formData.mainReason,
       sol_MalestarEmocional: parseInt(formData.emotionalLevel),
       sol_HorarioPref: formData.preferredTime,
-      sol_Asistencia: formData.previousSessions ? true : false,
+      sol_Asistencia: formData.previousSessions === "si",
       sol_Estado: true,
       sol_FechaCreacion: getLocalDateTime(),
     });
@@ -104,9 +103,7 @@ export function SupportSessionModal({
       toast.error(message);
       return;
     }
-
     toast.success(message);
-
     // Reset form
     setFormData({
       mainReason: "",
@@ -114,7 +111,6 @@ export function SupportSessionModal({
       previousSessions: "",
       preferredTime: "",
     });
-
     setErrors({});
     onClose();
   };

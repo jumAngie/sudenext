@@ -15,7 +15,7 @@
         public bool? sol_Asistencia { get; set; }
 
         public string sol_HorarioPref { get; set; }
-
+        public bool? sol_Cancelacion { get; set; }
 
         public int usu_UsuarioCreacion { get; set; }
         public string Usuario_C { get; set; }

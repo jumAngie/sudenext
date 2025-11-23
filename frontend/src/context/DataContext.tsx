@@ -600,7 +600,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       preferredTime: s.sol_HorarioPref,
       previousSessions: s.sol_Asistencia ? "Sí" : "No",
       createdAt: s.sol_FechaCreacion,
-      status: s.sol_Asignada ? "asignada" : "pendiente",
+      status: s.sol_Cancelacion
+        ? "cancelada"
+        : s.sol_Asignada
+          ? "asignada"
+          : "pendiente",
+      sol_Cancelacion: s.sol_Cancelacion,
       raw: s
     }));
   };
@@ -630,7 +635,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
 
-  const updateSupportSession = async (payload: any) => {
+  const updateSupportSession = async (id: number, payload: any) => {
     const message = await updateSolicitudApoyoAPI(payload);
     if (message.toLowerCase().includes("exitosamente")) {
       await loadSupportSessions();
@@ -638,7 +643,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     return message;
   };
 
-  const cancelSupportSession = async (payload: any) => {
+  const cancelSupportSession = async (id: number, payload: any) => {
     const message = await deleteSolicitudApoyoAPI(payload);
     if (message.toLowerCase().includes("exitosamente")) {
       await loadSupportSessions();

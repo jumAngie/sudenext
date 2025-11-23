@@ -34,6 +34,7 @@ export interface SupportSession {
   previousSessions: boolean;
   preferredTime: string;
   status: 'pendiente' | 'asignada' | 'completada' | 'rechazada';
+  sol_Cancelacion: boolean,
   assignedCounselorId?: string;
   createdAt: string;
   scheduledAt?: string;
