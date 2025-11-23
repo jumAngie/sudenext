@@ -1193,3 +1193,187 @@ BEGIN
 	END CATCH
 END;
 GO
+---------------------------------------------------  USUARIOS  -----------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+
+---LISTAR
+CREATE OR ALTER PROCEDURE Acce.sp_ListarUsuarios
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT 
+		-- Datos principales del usuario
+		usua.usu_ID, 
+		usua.usu_Usuario, 
+		usua.per_ID, 
+		staff.per_Nombres + ' ' + staff.per_Apellidos AS per_Nombres,
+		usua.rol_ID, 
+		rol.rol_Descripcion,
+		usua.usu_Estado,
+
+		-- ======== DATOS DEL USUARIO CREADOR ========
+		usuC.usu_ID AS usu_UsuarioCreacion,
+		usuC.usu_Usuario AS Usuario_C,
+		perC.per_ID AS ID_Creador,
+		(perC.per_Nombres + ' ' + perC.per_Apellidos) AS NombreCompleto_C,
+		usua.usu_FechaCreacion,
+
+		-- ======== DATOS DEL USUARIO MODIFICADOR ========
+		usuM.usu_ID AS usu_UsuarioModificacion,
+		usuM.usu_Usuario AS Usuario_M,
+		perM.per_ID AS ID_Modificador,
+		(perM.per_Nombres + ' ' + perM.per_Apellidos) AS NombreCompleto_M,
+		usua.usu_FechaModificacion,
+
+		-- ======== DATOS DEL USUARIO ELIMINADOR ========
+		usuE.usu_ID AS usu_UsuarioEliminacion,
+		usuE.usu_Usuario AS Usuario_E,
+		perE.per_ID AS ID_Eliminador,
+		(perE.per_Nombres + ' ' + perE.per_Apellidos) AS NombreCompleto_E,
+		usua.usu_FechaEliminacion
+
+	FROM Acce.tbUsuarios usua
+		INNER JOIN Gral.tbPersonal staff ON usua.per_ID = staff.per_ID
+		INNER JOIN Acce.tbRoles	rol		 ON	usua.rol_ID = rol.rol_ID
+		-- JOIN con Usuario Creador
+		INNER JOIN Acce.tbUsuarios usuC ON usua.usu_UsuarioCreacion = usuC.usu_ID
+		INNER JOIN Gral.tbPersonal perC ON usuC.per_ID = perC.per_ID
+
+		-- JOIN con Usuario Modificador
+		LEFT JOIN Acce.tbUsuarios usuM ON usua.usu_UsuarioModificacion = usuM.usu_ID
+		LEFT JOIN Gral.tbPersonal perM ON usuM.per_ID = perM.per_ID
+
+		-- JOIN con Usuario Eliminador
+		LEFT JOIN Acce.tbUsuarios usuE ON usua.usu_UsuarioEliminacion = usuE.usu_ID
+		LEFT JOIN Gral.tbPersonal perE ON usuE.per_ID = perE.per_ID
+
+	WHERE usua.usu_Estado = 1;
+END;
+GO
+
+---CREAR
+CREATE OR ALTER PROCEDURE Acce.sp_CrearUsuario
+	@usu_Usuario NVARCHAR(80),
+	@usu_Contrasena VARCHAR(255),
+	@per_ID	INT,
+	@rol_ID	INT,
+	@usu_UsuarioCreacion INT,
+	@usu_FechaCreacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		-- Validar que no exista duplicado por nombre, apellido y correo
+		IF EXISTS (SELECT 1 FROM Acce.tbUsuarios 
+				   WHERE usu_Usuario = @usu_Usuario
+				   AND usu_Estado = 1)
+		BEGIN
+			SELECT 'Ya existe un usuario con ese correo.' AS MessageStatus;
+			RETURN;
+		END
+
+		DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+		SET @Clave = @usu_Contrasena;
+		SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+
+		INSERT INTO Acce.tbUsuarios
+		(usu_Usuario, usu_Contrasena, per_ID, rol_ID, usu_UsuarioCreacion, usu_FechaCreacion)
+		VALUES
+		(@usu_Usuario, @Pass,			@per_ID, @rol_ID, @usu_UsuarioCreacion,@usu_FechaCreacion);
+
+		SELECT 'Registro creado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al crear el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+----EDITAR
+CREATE OR ALTER PROCEDURE Acce.sp_EditarUsuario
+	@usu_ID		INT,
+	@usu_Usuario NVARCHAR(80),
+	@per_ID	INT,
+	@rol_ID	INT,
+	@usu_UsuarioModificacion INT,
+	@usu_FechaModificacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		
+		UPDATE Acce.tbUsuarios
+			SET usu_Usuario = @usu_Usuario,
+				per_ID = @per_ID,
+				rol_ID =  @rol_ID,
+				usu_UsuarioModificacion = @usu_UsuarioModificacion,
+				usu_FechaModificacion = @usu_FechaModificacion
+		WHERE usu_ID = @usu_ID;
+
+		SELECT 'Registro actualizado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al editar el registro: ', @ErrorMsg) AS MessageStatus;
+	RETURN;
+	END CATCH
+END;
+GO
+---ELIMINAR
+CREATE OR ALTER PROCEDURE Acce.sp_DesactivarUsuario
+	@usu_ID INT,
+	@usu_UsuarioEliminacion INT,
+	@usu_FechaEliminacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+
+		UPDATE Acce.tbUsuarios
+		SET usu_Estado = 0,
+			usu_UsuarioEliminacion = @usu_UsuarioEliminacion,
+			usu_FechaEliminacion = @usu_FechaEliminacion
+		WHERE usu_ID = @usu_ID;
+
+		SELECT 'Registro desactivado exitosamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al desactivar el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+
+-- CAMBIAR CONTRASEÑA
+CREATE OR ALTER PROCEDURE Acce.sp_CambiarContrasenia
+	@usu_ID INT,
+	@usu_Contrasena VARCHAR(255),
+	@usu_UsuarioModificacion INT,
+	@usu_FechaModificacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+
+		DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+		SET @Clave = @usu_Contrasena;
+		SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+
+		UPDATE Acce.tbUsuarios
+		SET usu_Contrasena = @Pass,
+			usu_UsuarioModificacion = @usu_UsuarioModificacion,
+			usu_FechaModificacion = @usu_FechaModificacion
+		WHERE usu_ID = @usu_ID;
+
+		SELECT 'La contraseña se actualizó exitosamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al actualizar el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
