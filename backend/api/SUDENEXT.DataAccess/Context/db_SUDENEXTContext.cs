@@ -494,6 +494,7 @@ public partial class db_SUDENEXTContext : DbContext
 
             entity.ToTable("tbSolicitudApoyo", "Psi");
 
+            entity.Property(e => e.sol_Asignada).HasDefaultValue(false);
             entity.Property(e => e.sol_Asistencia).HasDefaultValue(false);
             entity.Property(e => e.sol_Cancelacion).HasDefaultValue(false);
             entity.Property(e => e.sol_Estado).HasDefaultValue(true);
@@ -557,6 +558,7 @@ public partial class db_SUDENEXTContext : DbContext
 
             entity.ToTable("tbSolicitudCitaOdon", "Odon");
 
+            entity.Property(e => e.sco_Asignada).HasDefaultValue(false);
             entity.Property(e => e.sco_Cancelar).HasDefaultValue(false);
             entity.Property(e => e.sco_Estado).HasDefaultValue(true);
             entity.Property(e => e.sco_FechaCancelacion).HasColumnType("datetime");

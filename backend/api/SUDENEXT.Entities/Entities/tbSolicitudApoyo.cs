@@ -33,6 +33,8 @@ public partial class tbSolicitudApoyo
 
     public bool? sol_Estado { get; set; }
 
+    public bool? sol_Asignada { get; set; }
+
     public virtual tbEstudiantes est { get; set; }
 
     public virtual ICollection<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignada { get; set; } = new List<tbSolicitudApoyoAsignada>();

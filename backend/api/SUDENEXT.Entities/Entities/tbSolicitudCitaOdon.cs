@@ -31,6 +31,8 @@ public partial class tbSolicitudCitaOdon
 
     public bool? sco_Estado { get; set; }
 
+    public bool? sco_Asignada { get; set; }
+
     public virtual tbEstudiantes est { get; set; }
 
     public virtual ICollection<tbSolicitudOdonAsignada> tbSolicitudOdonAsignada { get; set; } = new List<tbSolicitudOdonAsignada>();
