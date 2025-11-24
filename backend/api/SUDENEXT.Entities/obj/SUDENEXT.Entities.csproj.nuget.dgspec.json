@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\SUDENEXT.Entities.csproj": {}
+    "C:\\Users\\tavo1\\OneDrive\\Documentos\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\SUDENEXT.Entities.csproj": {}
   },
   "projects": {
-    "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\SUDENEXT.Entities.csproj": {
+    "C:\\Users\\tavo1\\OneDrive\\Documentos\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\SUDENEXT.Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\SUDENEXT.Entities.csproj",
+        "projectUniqueName": "C:\\Users\\tavo1\\OneDrive\\Documentos\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\SUDENEXT.Entities.csproj",
         "projectName": "SUDENEXT.Entities",
-        "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\SUDENEXT.Entities.csproj",
-        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\obj\\",
+        "projectPath": "C:\\Users\\tavo1\\OneDrive\\Documentos\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\SUDENEXT.Entities.csproj",
+        "packagesPath": "C:\\Users\\tavo1\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\tavo1\\OneDrive\\Documentos\\GitHub\\sudenext\\backend\\api\\SUDENEXT.Entities\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\tavo1\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -67,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
