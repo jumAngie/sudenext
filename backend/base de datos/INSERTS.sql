@@ -187,3 +187,21 @@ SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
 INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
 VALUES						('lucia.garcia@unah.hn',			@Pass,		6, 		1,			1,						GETDATE(),			1);
 GO
+
+---------------------------------------------------  ESTUDIANTES  ----------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------
+GO
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = 'EURO';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('20222000224',	'Cindy Nicole Reyes Arevalo', @Pass, 'nico.reyes@unah.hn', '121212', 'Informática Administrativa',	 1,				1,					GETDATE());
+GO
+
+GO
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = 'DOLAR20';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('20192030658',	'Elmer Isai Alvarez Carbajal', @Pass, 'elmer.alva@unah.hn', '98999520', 'Contaduría Pública y Finanzas',	 0,				1,					GETDATE());
+GO
