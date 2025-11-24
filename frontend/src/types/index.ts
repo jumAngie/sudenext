@@ -13,6 +13,7 @@ export interface Student {
 export interface StaffMember {
   id: string;
   email: string;
+  personalId: number,
   name: string;
   role: UserRole;
   department: string;
@@ -249,4 +250,20 @@ export interface PersonalDDL{
   per_ID: number,
   per_Nombres: string,
   per_Correo: string,
+}
+
+export interface SolicitudApoyoAsignada {
+  sol_ID: number;
+  per_ID: number;
+  spa_Cancel: boolean;
+  usu_UsuarioCreacion: number;
+  spa_FechaCreacion: string;
+}
+
+export interface SolicitudCitaOdonAsignada {
+  sco_ID: number;
+  per_ID: number;
+  sca_Cancel: boolean;
+  usu_UsuarioCreacion: number;
+  sca_FechaCreacion: string;
 }

@@ -151,7 +151,7 @@ export function StaffDashboard() {
         };
       
       case 'consejero':
-        const assignedSessions = supportSessions.filter(s => s.assignedCounselorId === staff.id);
+        const assignedSessions = supportSessions.filter(s => s.assignedCounselorId === staff.personalId);
         return {
           assignedSessions: assignedSessions.length,
           completedSessions: assignedSessions.filter(s => s.status === 'completada').length,
@@ -159,7 +159,7 @@ export function StaffDashboard() {
         };
       
       case 'odontologo':
-        const assignedAppointments = dentalAppointments.filter(a => a.assignedDentistId === staff.id);
+        const assignedAppointments = dentalAppointments.filter(a => a.assignedDentistId === staff.personalId);
         return {
           assignedAppointments: assignedAppointments.length,
           confirmedAppointments: assignedAppointments.filter(a => a.status === 'confirmada').length,
@@ -177,7 +177,7 @@ export function StaffDashboard() {
         };
       
       case 'asesor_academico':
-        const myConsultations = academicConsultations.filter(c => c.advisorId === staff.id);
+        const myConsultations = academicConsultations.filter(c => c.advisorId === staff.personalId);
         return {
           totalConsultations: myConsultations.length,
           completedConsultations: myConsultations.filter(c => c.status === 'completada').length,
@@ -193,7 +193,7 @@ export function StaffDashboard() {
 
   // Get assigned sessions for counselor calendar
   const getAssignedSessions = () => {
-    return supportSessions.filter(s => s.assignedCounselorId === staff.id);
+    return supportSessions.filter(s => s.assignedCounselorId === staff.personalId);
   };
 
   // Get dates with scheduled sessions for calendar

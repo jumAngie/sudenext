@@ -36,5 +36,7 @@ namespace SUDENEXT.Entities.DTO
         public bool? sco_Estado { get; set; }
 
         public bool? sco_Asignada { get; set; }
+        public int? per_ID { get; set; }
+        public string? per_Nombres { get; set; }
     }
 }

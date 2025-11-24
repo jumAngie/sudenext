@@ -278,7 +278,7 @@ export function DownloadReportsPage() {
             return matchesDate && matchesStatus;
           });
 
-          headers = ['Estudiante', 'No. Cuenta', 'Motivo Principal', 'Nivel Emocional', 'Modalidad', 'Consejero Asignado', 'Fecha Creación', 'Estado'];
+          headers = ['Estudiante', 'No. Cuenta', 'Motivo Principal', 'Nivel Emocional', 'Consejero Asignado', 'Fecha Creación', 'Estado'];
           
           summary = {
             'Total Sesiones': data.length,
@@ -292,7 +292,6 @@ export function DownloadReportsPage() {
             session.accountNumber || '',
             session.mainReason ? session.mainReason.substring(0, 50) + (session.mainReason.length > 50 ? '...' : '') : '',
             `${session.emotionalLevel || 0}/5`,
-            session.modality || '',
             session.assignedCounselorName || 'Sin asignar',
             new Date(session.createdAt).toLocaleDateString('es-HN'),
             session.status || ''

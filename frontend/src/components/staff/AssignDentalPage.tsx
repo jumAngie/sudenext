@@ -9,12 +9,14 @@ import { Textarea } from '../ui/textarea';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { useData } from '../../context/DataContext';
+import { useAuth } from "../../context/AuthContext";
 import { DentalAppointment } from '../../types';
-import { 
-  Stethoscope, Clock, Calendar, User, CheckCircle, X, UserPlus, 
+import {
+  Stethoscope, Clock, Calendar, User, CheckCircle, X, UserPlus,
   Edit, AlertTriangle, Eye
 } from 'lucide-react';
-import { toast } from 'sonner@2.0.3';
+import { toast } from "sonner";
+import { getLocalDateTime } from '../../utils/dateHelpers';
 
 // Mock dentists data
 const mockDentists = [
@@ -42,6 +44,11 @@ function getPriorityIcon(priority: string) {
 }
 
 export function AssignDentalPage() {
+
+  const { personalOdontologo, assignDentist } = useData();
+  const { user } = useAuth();
+  const [selectedPersonal, setSelectedPersonal] = useState(null);
+
   const { dentalAppointments, updateDentalAppointment } = useData();
   const [selectedAppointment, setSelectedAppointment] = useState<DentalAppointment | null>(null);
   const [assignedDentist, setAssignedDentist] = useState('');
@@ -64,49 +71,34 @@ export function AssignDentalPage() {
     setViewAppointment(appointment);
   };
 
-  const confirmAssignment = () => {
+  // CONFIRMACIÓN
+  const confirmAssignment = async () => {
     if (!selectedAppointment || !assignedDentist) {
-      toast.error('Debes seleccionar un odontólogo');
+      toast.error("Debes seleccionar un odontólogo.");
       return;
     }
-
-    if (!confirmedDate || !confirmedTime) {
-      toast.error('Debes confirmar la fecha y hora de la cita');
+    const payload = {
+      sco_ID: selectedAppointment.id,
+      per_ID: parseInt(assignedDentist),
+      sca_Cancel: false,
+      usu_UsuarioCreacion: Number(user?.data?.id),
+      sca_FechaCreacion: getLocalDateTime()
+    };
+    const message = await assignDentist(payload);
+    if (!message.toLowerCase().includes("correctamente")) {
+      toast.error(message);
       return;
     }
-
-    const dentist = mockDentists.find(d => d.id === assignedDentist);
-    if (!dentist) return;
-
-    updateDentalAppointment(selectedAppointment.id, {
-      status: 'confirmada',
-      assignedDentistId: assignedDentist,
-      assignedDentistName: dentist.name,
-      preferredDate: confirmedDate,
-      preferredTime: confirmedTime,
-      confirmedAt: new Date().toISOString()
-    });
-
-    toast.success(
-      selectedAppointment.assignedDentistId
-        ? 'Asignación actualizada correctamente'
-        : 'Cita odontológica asignada correctamente'
-    );
+    toast.success(message);
     setSelectedAppointment(null);
   };
 
   const rejectAppointment = () => {
     if (!selectedAppointment) return;
-
     if (!rejectionReason.trim()) {
       toast.error('Debes proporcionar una razón para el rechazo');
       return;
     }
-
-    updateDentalAppointment(selectedAppointment.id, {
-      status: 'cancelada'
-    });
-
     toast.success('Cita rechazada');
     setSelectedAppointment(null);
   };
@@ -336,58 +328,17 @@ export function AssignDentalPage() {
                         <SelectValue placeholder="Selecciona un odontólogo" />
                       </SelectTrigger>
                       <SelectContent>
-                        {mockDentists.map((dentist) => (
-                          <SelectItem key={dentist.id} value={dentist.id}>
+                        {personalOdontologo.map((dentist) => (
+                          <SelectItem key={dentist.per_ID} value={dentist.per_ID}>
                             <div>
-                              <p className="font-medium">{dentist.name}</p>
-                              <p className="text-xs text-gray-500">{dentist.specialty}</p>
+                              <p className="font-medium">{dentist.per_Nombres}</p>
+                              <p className="text-xs text-gray-500">{dentist.per_Correo}</p>
                             </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </div>
-
-                  {/* Date and Time Confirmation */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="confirmedDate">Fecha de la Cita</Label>
-                      <Input
-                        id="confirmedDate"
-                        type="date"
-                        value={confirmedDate}
-                        onChange={(e) => setConfirmedDate(e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="confirmedTime">Hora de la Cita</Label>
-                      <Select value={confirmedTime} onValueChange={setConfirmedTime}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona hora" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="07:00">7:00 AM</SelectItem>
-                          <SelectItem value="07:30">7:30 AM</SelectItem>
-                          <SelectItem value="08:00">8:00 AM</SelectItem>
-                          <SelectItem value="08:30">8:30 AM</SelectItem>
-                          <SelectItem value="09:00">9:00 AM</SelectItem>
-                          <SelectItem value="09:30">9:30 AM</SelectItem>
-                          <SelectItem value="10:00">10:00 AM</SelectItem>
-                          <SelectItem value="10:30">10:30 AM</SelectItem>
-                          <SelectItem value="11:00">11:00 AM</SelectItem>
-                          <SelectItem value="11:30">11:30 AM</SelectItem>
-                          <SelectItem value="13:00">1:00 PM</SelectItem>
-                          <SelectItem value="13:30">1:30 PM</SelectItem>
-                          <SelectItem value="14:00">2:00 PM</SelectItem>
-                          <SelectItem value="14:30">2:30 PM</SelectItem>
-                          <SelectItem value="15:00">3:00 PM</SelectItem>
-                          <SelectItem value="15:30">3:30 PM</SelectItem>
-                          <SelectItem value="16:00">4:00 PM</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
                   {/* Action Buttons */}
                   <div className="flex justify-between pt-4 border-t">
                     {!selectedAppointment.assignedDentistId && (
@@ -540,7 +491,7 @@ export function AssignDentalPage() {
 
               {/* Close Button */}
               <div className="flex justify-end pt-4 border-t">
-                <Button 
+                <Button
                   onClick={() => setViewAppointment(null)}
                   className="bg-[#edba0d] hover:bg-[#d4a40b] text-white"
                 >

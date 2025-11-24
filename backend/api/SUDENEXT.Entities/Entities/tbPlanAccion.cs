@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SUDENEXT.Entities.Entities;
 
@@ -32,6 +33,9 @@ public partial class tbPlanAccion
     public DateTime? pla_FechaEliminacion { get; set; }
 
     public bool? pla_Estado { get; set; }
+
+    [NotMapped]
+    public int spa_Id { get; set; }
 
     public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanes { get; set; } = new List<tbSolicitudesXPlanes>();
 

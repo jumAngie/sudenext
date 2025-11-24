@@ -168,8 +168,10 @@ export function ActionPlansPage() {
   const [showEditModal, setShowEditModal] = useState(false);
 
   const assignedSessions = supportSessions.filter(s => 
-    s.assignedCounselorId === staff.id && s.status === 'asignada'
+    s.assignedCounselorId === staff.personalId && s.status === 'asignada'
   );
+
+  console.log();
 
   const myCounselorPlans = actionPlans.filter(p => p.counselorId === staff.id);
 
@@ -289,7 +291,6 @@ export function ActionPlansPage() {
                   <TableHead>No. Cuenta</TableHead>
                   <TableHead>Motivo Principal</TableHead>
                   <TableHead>Nivel Emocional</TableHead>
-                  <TableHead>Modalidad</TableHead>
                   <TableHead>Hora Preferida</TableHead>
                   <TableHead>Fecha Programada</TableHead>
                   <TableHead className="text-right">Acciones</TableHead>
@@ -311,12 +312,6 @@ export function ActionPlansPage() {
                     </TableCell>
                     <TableCell>
                       {getEmotionalLevelBadge(session.emotionalLevel)}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        <span className="capitalize">{session.modality}</span>
-                      </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">

@@ -179,7 +179,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const userData: User = {
           type: "student",
           data: {
-            id: studentData.est_ID,
+            id: studentData.est_ID, 
             accountNumber: studentData.est_NumeroCuenta,
             name: studentData.est_NombreCompleto,
             email: studentData.est_Correo,
@@ -212,11 +212,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           message: response.message
         };
       }
-      const s = response.staff; // datos reales de la API
+      const s = response.staff;
+      console.log(response.staff);
       const userData: User = {
         type: "staff",
         data: {
-          id: s.usu_ID.toString(),   // <-- debe ser string
+          id: s.usu_ID.toString(),
+          personalId: s.per_ID,
           email: s.per_Correo,
           name: `${s.per_Nombres} ${s.per_Apellidos}`,
           role: mapRoleToUserRole(s.rol_Descripcion),

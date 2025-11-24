@@ -32,6 +32,7 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { useData } from "../../context/DataContext";
+import { useAuth } from "../../context/AuthContext";
 import { SupportSession } from "../../types";
 import {
   Heart,
@@ -45,31 +46,14 @@ import {
   MapPin,
   Eye,
 } from "lucide-react";
-import { toast } from "sonner@2.0.3";
-
-// Mock counselors data
-const mockCounselors = [
-  {
-    id: "staff-5",
-    name: "Psic. Marco Sandoval",
-    specialty: "Ansiedad y Estrés",
-  },
-  {
-    id: "staff-6",
-    name: "Psic. Ana María Flores",
-    specialty: "Depresión y Autoestima",
-  },
-  {
-    id: "staff-7",
-    name: "Psic. Carlos Mendoza",
-    specialty: "Orientación Vocacional",
-  },
-];
+import { toast } from "sonner";
+import { getLocalDateTime } from '../../utils/dateHelpers';
 
 export function AssignCounselorPage() {
-  const { personalConsejero } = useData();
+  const { personalConsejero, assignCounselor } = useData();
+  const { user } = useAuth();
   const [selectedPersonal, setSelectedPersonal] = useState(null);
-  
+
   const { supportSessions, updateSupportSession } = useData();
   const [selectedSession, setSelectedSession] =
     useState<SupportSession | null>(null);
@@ -89,33 +73,29 @@ export function AssignCounselorPage() {
     setViewSession(session);
   };
 
-  const confirmAssignment = () => {
+  // CONFIRMACIÓN
+  const confirmAssignment = async () => {
     if (!selectedSession || !assignedCounselor) {
-      toast.error("Debes seleccionar un consejero");
+      toast.error("Debes seleccionar un consejero.");
       return;
     }
-
-    const counselor = mockCounselors.find(
-      (c) => c.id === assignedCounselor,
-    );
-    if (!counselor) return;
-
-    updateSupportSession(selectedSession.id, {
-      status: "asignada",
-      assignedCounselorId: assignedCounselor,
-      assignedCounselorName: counselor.name,
-      scheduledAt: new Date(
-        Date.now() + 24 * 60 * 60 * 1000,
-      ).toISOString(),
-    });
-
-    toast.success(
-      selectedSession.assignedCounselorId
-        ? "Asignación actualizada correctamente"
-        : "Sesión asignada correctamente"
-    );
+    const payload = {
+      sol_ID: selectedSession.id,
+      per_ID: parseInt(assignedCounselor),
+      spa_Cancel: false,
+      usu_UsuarioCreacion: Number(user?.data?.id),
+      spa_FechaCreacion: getLocalDateTime()
+    };
+    const message = await assignCounselor(payload);
+    if (!message.toLowerCase().includes("correctamente")) {
+      toast.error(message);
+      return;
+    }
+    toast.success(message);
     setSelectedSession(null);
   };
+
+
 
   const rejectSession = () => {
     if (!selectedSession) return;
@@ -388,14 +368,6 @@ export function AssignCounselorPage() {
                       )}
                     </p>
                   </div>
-                  <div>
-                    <span className="text-gray-600">
-                      Modalidad:
-                    </span>
-                    <p className="font-medium">
-                      {selectedSession.modality}
-                    </p>
-                  </div>
                 </div>
                 <div className="mt-3">
                   <span className="text-gray-600">
@@ -563,10 +535,6 @@ export function AssignCounselorPage() {
                     </Badge>
                   </div>
                   <div>
-                    <span className="text-gray-600">Modalidad Preferida:</span>
-                    <p className="font-medium capitalize">{viewSession.modality}</p>
-                  </div>
-                  <div>
                     <span className="text-gray-600">Horario Preferido:</span>
                     <p className="font-medium">{viewSession.preferredTime}</p>
                   </div>
@@ -585,15 +553,6 @@ export function AssignCounselorPage() {
                     {viewSession.mainReason}
                   </p>
                 </div>
-
-                {viewSession.additionalComments && (
-                  <div>
-                    <h4 className="font-medium text-gray-900 mb-2">Comentarios Adicionales</h4>
-                    <p className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg">
-                      {viewSession.additionalComments}
-                    </p>
-                  </div>
-                )}
               </div>
 
               {/* Assignment Information */}
@@ -625,7 +584,7 @@ export function AssignCounselorPage() {
 
               {/* Close Button */}
               <div className="flex justify-end pt-4 border-t">
-                <Button 
+                <Button
                   onClick={() => setViewSession(null)}
                   className="bg-[#004aad] hover:bg-[#003687] text-white"
                 >

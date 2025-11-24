@@ -36,6 +36,7 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
             using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
+            parametros.Add("@spa_ID", item.spa_Id, DbType.String, ParameterDirection.Input);
             parametros.Add("@pla_ResumenSesion", item.pla_ResumenSesion, DbType.String, ParameterDirection.Input);
             parametros.Add("@pla_Objetivo", item.pla_Objetivo, DbType.String, ParameterDirection.Input);
             parametros.Add("@pla_ActividadSug", item.pla_ActividadSug, DbType.String, ParameterDirection.Input);

@@ -75,7 +75,23 @@ import {
   deleteSolicitudApoyoAPI,
 } from "/src/services/solicitudApoyoService.ts";
 
+import {
+  createSolicitudApoyoAsignadaAPI,
+  updateSolicitudApoyoAsignadaAPI,
+  deleteSolicitudApoyoAsignadaAPI,
+} from "/src/services/solicitudApoyoAsignadaService.ts";
+
+import {
+  createSolicitudCitaOdonAsignadaAPI,
+  updateSolicitudCitaOdonAsignadaAPI,
+  deleteSolicitudCitaOdonAsignadaAPI,
+} from "/src/services/solicitudCitaOdonAsignada.ts";
+
 interface DataContextType {
+  // Asignaciones Consejero
+  assignCounselor: (payload: any) => Promise<string>;
+  assignDentist: (payload: any) => Promise<string>;
+
   // Support Sessions (API real)
   supportSessions: SupportSession[];
   addSupportSession: (payload: {
@@ -575,7 +591,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // Generate unique ID
   const generateId = (prefix: string) =>
     `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
   //  ------------------------------------------------------- Sesiones Odontologicas -------------------------------------------------------
   //  ---------------------------------------------------------------------------------------------------------------------
   const mapDental = (data: any[]) => {
@@ -589,6 +604,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       reason: s.sco_Motivo,
       priority: s.sco_Prioridad,
       createdAt: s.sco_FechaCreacion,
+      assignedDentistId: s.per_ID,
+      assignedDentistName: s.per_Nombres,
       status: s.sco_Cancelar
         ? "cancelada"
         : s.sco_Asignada
@@ -647,7 +664,10 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       emotionalLevel: s.sol_MalestarEmocional,
       preferredTime: s.sol_HorarioPref,
       previousSessions: s.sol_Asistencia ? "Sí" : "No",
+      assignedCounselorId: s.per_ID,
+      assignedCounselorName: s.per_Nombres,
       createdAt: s.sol_FechaCreacion,
+      scheduledAt: s.sol_FechaCreacion,
       status: s.sol_Cancelacion
         ? "cancelada"
         : s.sol_Asignada
@@ -1175,10 +1195,36 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     }
     return message;
   };
+  //  ------------------------------------------------------- ASIGNACIÓN DE CONSEJERO -------------------------------------------------------
+  //  ---------------------------------------------------------------------------------------------------------------------
+  const assignCounselor = async (payload: any) => {
+    const message = await createSolicitudApoyoAsignadaAPI(payload);
+
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchSolicitudApoyo();
+      setSupportSessions(mapSessions(data));
+    }
+    return message;
+  };
+
+  //  ------------------------------------------------------- ASIGNACIÓN DE ODONTOLOGO -------------------------------------------------------
+  //  ---------------------------------------------------------------------------------------------------------------------
+  const assignDentist = async (payload: any) => {
+    const message = await createSolicitudCitaOdonAsignadaAPI(payload);
+
+    if (message.toLowerCase().includes("correctamente")) {
+      const data = await fetchSolicitudCitaOdon();
+      setDentalAppointments(mapDental(data));
+    }
+    return message;
+  };
+
 
   return (
     <DataContext.Provider
       value={{
+        assignDentist,
+        assignCounselor,
         supportSessions,
         addSupportSession,
         updateSupportSession,

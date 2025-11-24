@@ -1,4 +1,6 @@
-﻿namespace SUDENEXT.API.Models.ModelsPsicologia
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SUDENEXT.API.Models.ModelsPsicologia
 {
     public class PlanAccionViewModel
     {
@@ -27,5 +29,7 @@
         public DateTime? pla_FechaEliminacion { get; set; }
 
         public bool? pla_Estado { get; set; }
+        [NotMapped]
+        public int spa_Id { get; set; }
     }
 }

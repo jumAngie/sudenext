@@ -860,6 +860,7 @@ GO
 
 ---CREAR
 CREATE OR ALTER PROCEDURE Psi.sp_CrearPlanAccion
+	@spa_Id INT, -- ¡Nuevo Parámetro necesario para la relación!
 	@pla_ResumenSesion NVARCHAR(200),
 	@pla_Objetivo NVARCHAR(200),
 	@pla_ActividadSug NVARCHAR(200),
@@ -870,18 +871,36 @@ CREATE OR ALTER PROCEDURE Psi.sp_CrearPlanAccion
 AS
 BEGIN
 	SET NOCOUNT ON;
+	BEGIN TRANSACTION; -- Iniciamos una transacción para asegurar ambas inserciones
+	
 	BEGIN TRY
-		
+		-- 1. Insertar el Plan de Acción
 		INSERT INTO Psi.tbPlanAccion
-		(pla_ResumenSesion, pla_Objetivo, pla_ActividadSug, pla_FechaSeguimiento, pla_Observacion,usu_UsuarioCreacion,pla_FechaCreacion)
+		(pla_ResumenSesion, pla_Objetivo, pla_ActividadSug, pla_FechaSeguimiento, pla_Observacion, usu_UsuarioCreacion, pla_FechaCreacion)
 		VALUES
-		(@pla_ResumenSesion, @pla_Objetivo, @pla_ActividadSug, @pla_FechaSeguimiento, @pla_Observacion, @usu_UsuarioCreacion,@pla_FechaCreacion);
+		(@pla_ResumenSesion, @pla_Objetivo, @pla_ActividadSug, @pla_FechaSeguimiento, @pla_Observacion, @usu_UsuarioCreacion, @pla_FechaCreacion);
 
-		SELECT 'Registro creado correctamente.' AS MessageStatus;
+		-- 2. Obtener el ID del Plan de Acción recién insertado
+		DECLARE @NuevoPlanAccionId INT = SCOPE_IDENTITY();
+		
+		-- 3. Relacionar el Plan de Acción con la Solicitud Asignada
+		INSERT INTO Psi.tbSolicitudesXPlanes
+		(spa_Id, pla_Id) -- Asegúrate de que los nombres de columna sean correctos
+		VALUES
+		(@spa_Id, @NuevoPlanAccionId);
+		
+		-- Si todo sale bien, confirmamos la transacción
+		COMMIT TRANSACTION;
+
+		SELECT 'Registro creado y relacionado correctamente.' AS MessageStatus, @NuevoPlanAccionId AS pla_Id;
 	END TRY
 	BEGIN CATCH
+		-- Si algo falla, deshacemos ambas inserciones
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+
 		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
-		SELECT CONCAT('Error al crear el registro: ', @ErrorMsg) AS MessageStatus;
+		SELECT CONCAT('Error al crear o relacionar el registro: ', @ErrorMsg) AS MessageStatus;
 		RETURN;
 	END CATCH
 END;
@@ -963,20 +982,24 @@ BEGIN
         sol.sol_ID,
         sol.est_ID,
         est.est_NombreCompleto,
-		est.est_NumeroCuenta,
+        est.est_NumeroCuenta,
         sol.sol_MotivoConsulta,
         sol.sol_MalestarEmocional,
         sol.sol_Asistencia,
         sol.sol_HorarioPref,
-		sol.sol_Cancelacion,
+        sol.sol_Cancelacion,
         sol.sol_Estado,
         sol.sol_FechaCreacion,
         sol.sol_FechaModificacion,
         sol.sol_FechaEliminacion,
-		sol.sol_Asignada
+        sol.sol_Asignada,
+        spa.per_ID,
+        COALESCE(per.per_Nombres + ' ' + per.per_Apellidos, 'No Asignado') AS per_Nombres 
 
     FROM Psi.tbSolicitudApoyo sol
         INNER JOIN Gral.tbEstudiantes est ON sol.est_ID = est.est_ID
+        LEFT JOIN Psi.tbSolicitudApoyoAsignada spa ON sol.sol_ID = spa.sol_ID
+        LEFT JOIN Gral.tbPersonal per ON spa.per_ID = per.per_ID
 END;
 GO
 
@@ -1117,10 +1140,14 @@ BEGIN
 		sco.sco_Cancelar,
         sco.sco_Estado,
         sco.sco_FechaCreacion,
-		sco.sco_Asignada
+		sco.sco_Asignada,
+		sca.per_ID,
+        COALESCE(per.per_Nombres + ' ' + per.per_Apellidos, 'No Asignado') AS per_Nombres 
 
     FROM Odon.tbSolicitudCitaOdon sco
         INNER JOIN Gral.tbEstudiantes est ON sco.est_ID = est.est_ID
+		LEFT JOIN Odon.tbSolicitudOdonAsignada sca ON sca.sco_ID = sco.sco_ID
+        LEFT JOIN Gral.tbPersonal per ON sca.per_ID = per.per_ID
 END;
 GO
 
@@ -2056,6 +2083,10 @@ BEGIN
 		(sol_ID, per_ID,  spa_Cancel, usu_UsuarioCreacion, spa_FechaCreacion)
 		VALUES
 		(@sol_ID, @per_ID, @spa_Cancel, @usu_UsuarioCreacion, @spa_FechaCreacion);
+
+		UPDATE Psi.tbSolicitudApoyo
+		SET	   sol_Asignada = 1
+		WHERE  sol_ID = @sol_ID
 
 		SELECT 'Registro asignado correctamente.' AS MessageStatus;
 	END TRY
