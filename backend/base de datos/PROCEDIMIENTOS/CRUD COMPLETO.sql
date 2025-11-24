@@ -1108,6 +1108,7 @@ BEGIN
         sol.sol_ID,
         sol.est_ID,
         est.est_NombreCompleto,
+		est.est_NumeroCuenta,
         sol.sol_MotivoConsulta,
         sol.sol_MalestarEmocional,
         sol.sol_Asistencia,
@@ -1253,6 +1254,7 @@ BEGIN
         sco.sco_ID,
         sco.est_ID,
         est.est_NombreCompleto,
+		est.est_NumeroCuenta,
         sco.sco_FechaP,
         sco.sco_Hora,
         sco.sco_Motivo,
@@ -1302,7 +1304,7 @@ CREATE OR ALTER PROCEDURE Odon.sp_EditarCitaOdon
 	@sco_Hora	VARCHAR(10),
 	@sco_Motivo NVARCHAR(255),
 	@sco_Prioridad CHAR(1),
-	@sol_FechaModificacion DATETIME
+	@sco_FechaModificacion DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -1313,7 +1315,8 @@ BEGIN
 				sco_FechaP = @sco_FechaP,
 				sco_Hora = @sco_Hora,
 				sco_Motivo = @sco_Motivo,
-				sco_Prioridad = @sco_Prioridad
+				sco_Prioridad = @sco_Prioridad,
+				sco_FechaModificacion = @sco_FechaModificacion
 		WHERE	sco_ID = @sco_ID;
 
 		SELECT 'Registro actualizado correctamente.' AS MessageStatus;

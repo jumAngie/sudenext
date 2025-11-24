@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import { getLocalDateTime } from '../../utils/dateHelpers';
 import { Student } from "../../types";
 
-import { getStatusColor, getEmotionalLevelText, getEmotionalLevelColor } from '../../utils/statusHelpers';
+import { getStatusColor, getEmotionalLevelText, getEmotionalLevelColor, getPriorityText } from '../../utils/statusHelpers';
 import { formatDateTime } from '../../utils/dateHelpers';
 
 interface RequestDetailsModalProps {
@@ -26,7 +26,7 @@ interface RequestDetailsModalProps {
 }
 
 export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestDetailsModalProps) {
-  const { updateSupportSession, updateDentalAppointment, cancelSupportSession } = useData();
+  const { updateSupportSession, updateDentalAppointment, cancelSupportSession, cancelDentalAppointment } = useData();
   const { user } = useAuth();
   const student = user?.data as Student;
 
@@ -96,24 +96,66 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
       toast.success(message);
       setIsEditing(false);
       return;
+    } else {
+      const appointment = request as DentalAppointment;
+
+      if (!editData.reason.trim()) {
+        toast.error("El motivo principal es obligatorio.");
+        return;
+      }
+      const payload = {
+        sco_ID: appointment.id,
+        est_ID: student.id,
+        sco_FechaP: editData.preferredDate,
+        sco_Hora: editData.preferredTime,
+        sco_Motivo: editData.reason,
+        sco_Prioridad: editData.priority,
+        sco_FechaModificacion: getLocalDateTime(),
+      };
+
+      const message = await updateDentalAppointment(appointment.id, payload);
+      console.log(message);
+      console.log(payload);
+      if (!message.toLowerCase().includes("correctamente")) {
+        toast.error(message);
+        return;
+      }
+
+      toast.success(message);
+      setIsEditing(false);
+      return;
     }
   };
 
   const cancelRequest = async () => {
-    const payload = {
-      est_ID: student.id,
-      sol_ID: request.id,
-      sol_Cancelacion: true,
-      sol_FechaCancelacion: getLocalDateTime(),  // usuario del estudiante
-    };
-    const message = await cancelSupportSession(request.id, payload);
-    if (!message.toLowerCase().includes("exitosamente")) {
-      toast.error(message);
-      return;
+    if (type === "support") {
+      const payload = {
+        est_ID: student.id,
+        sol_ID: request.id,
+        sol_Cancelacion: true,
+        sol_FechaCancelacion: getLocalDateTime(),  // usuario del estudiante
+      };
+      const message = await cancelSupportSession(request.id, payload);
+      if (!message.toLowerCase().includes("exitosamente")) {
+        toast.error(message);
+        return;
+      }
+      toast.success("Solicitud cancelada correctamente");
+      onClose();
+    } else {
+      const payload = {
+        sco_ID: request.id,
+        sco_FechaEliminacion: getLocalDateTime(),  // usuario del estudiante
+      };
+      const message = await cancelDentalAppointment(request.id, payload);
+      if (!message.toLowerCase().includes("exitosamente")) {
+        toast.error(message);
+        return;
+      }
+      toast.success("Solicitud cancelada correctamente");
+      onClose();
     }
-    toast.success("Solicitud cancelada correctamente");
-    onClose();
-  };
+  }
 
   const renderSupportDetails = () => {
     const session = request as SupportSession;
@@ -283,9 +325,9 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="baja">Baja - Revisión o limpieza</SelectItem>
-                <SelectItem value="media">Media - Molestia leve</SelectItem>
-                <SelectItem value="alta">Alta - Dolor fuerte o urgencia</SelectItem>
+                <SelectItem value="b">Baja - Revisión o limpieza</SelectItem>
+                <SelectItem value="m">Media - Molestia leve</SelectItem>
+                <SelectItem value="a">Alta - Dolor fuerte o urgencia</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -313,9 +355,10 @@ export function RequestDetailsModal({ isOpen, onClose, request, type }: RequestD
 
         <div>
           <h4 className="font-medium text-gray-900 mb-1">Prioridad</h4>
-          <Badge className={getStatusColor(appointment.priority)}>
-            {appointment.priority.toUpperCase()}
+          <Badge variant="outline" className="text-xs">
+            {getPriorityText(appointment.priority)}
           </Badge>
+
         </div>
 
         {appointment.assignedDentistName && (

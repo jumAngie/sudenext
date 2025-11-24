@@ -36,8 +36,26 @@ export interface SupportSession {
   status: 'pendiente' | 'asignada' | 'completada' | 'rechazada';
   sol_Cancelacion: boolean,
   assignedCounselorId?: string;
+  assignedCounselorName?: string;
   createdAt: string;
   scheduledAt?: string;
+}
+
+export interface DentalAppointment {
+  id: string;
+  studentId: string;
+  studentName: string;
+  accountNumber: string;
+  preferredDate: string;
+  preferredTime: string;
+  reason: string;
+  priority: 'baja' | 'media' | 'alta';
+  status: 'pendiente' | 'confirmada' | 'completada' | 'cancelada';
+  sco_Cancelar: boolean,
+  assignedDentistId?: string;
+  assignedDentistName?: string;
+  createdAt: string;
+  confirmedAt?: string;
 }
 
 export interface ActionPlan {
@@ -51,22 +69,6 @@ export interface ActionPlan {
   followUpDate: string;
   additionalObservations?: string;
   createdAt: string;
-}
-
-export interface DentalAppointment {
-  id: string;
-  studentId: string;
-  studentName: string;
-  accountNumber: string;
-  preferredDate: string;
-  preferredTime: string;
-  reason: string;
-  priority: 'baja' | 'media' | 'alta';
-  status: 'pendiente' | 'confirmada' | 'completada' | 'cancelada';
-  assignedDentistId?: string;
-  assignedDentistName?: string;
-  createdAt: string;
-  confirmedAt?: string;
 }
 
 export interface MedicalCheckIn {

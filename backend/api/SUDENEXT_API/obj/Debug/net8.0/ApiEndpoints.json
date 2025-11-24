@@ -390,6 +390,64 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.SolicitudCitaOdonController",
+    "Method": "Update",
+    "RelativePath": "api/SolicitudCitaOdon/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitudCitaOdonView",
+        "Type": "SUDENEXT.API.Models.ModelsOdontologia.SolicitudCitaOdonViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.SolicitudCitaOdonController",
+    "Method": "Delete",
+    "RelativePath": "api/SolicitudCitaOdon/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitudCitaOdonView",
+        "Type": "SUDENEXT.API.Models.ModelsOdontologia.SolicitudCitaOdonViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.SolicitudCitaOdonController",
+    "Method": "Insert",
+    "RelativePath": "api/SolicitudCitaOdon/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitudCitaOdonView",
+        "Type": "SUDENEXT.API.Models.ModelsOdontologia.SolicitudCitaOdonViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.SolicitudCitaOdonController",
+    "Method": "Index",
+    "RelativePath": "api/SolicitudCitaOdon/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersAcademico.TipoConsultaController",
     "Method": "Update",
     "RelativePath": "api/TipoConsulta/Editar",

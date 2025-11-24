@@ -8,7 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import { Student } from '../../types';
-import { toast } from 'sonner@2.0.3';
+import { toast } from "sonner";
+import { getLocalDateTime } from '../../utils/dateHelpers';
 import { Stethoscope, Calendar, Clock, AlertTriangle } from 'lucide-react';
 
 interface DentalAppointmentModalProps {
@@ -48,7 +49,7 @@ export function DentalAppointmentModal({ isOpen, onClose }: DentalAppointmentMod
       const selectedDate = new Date(formData.preferredDate);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       if (selectedDate < today) {
         newErrors.preferredDate = 'No puedes seleccionar una fecha pasada';
       }
@@ -58,27 +59,29 @@ export function DentalAppointmentModal({ isOpen, onClose }: DentalAppointmentMod
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
-      toast.error('Por favor completa todos los campos obligatorios correctamente');
+      toast.error('Por favor completa todos los campos obligatorios.');
       return;
     }
 
-    addDentalAppointment({
-      studentId: student.id,
-      studentName: student.name,
-      accountNumber: student.accountNumber,
-      preferredDate: formData.preferredDate,
-      preferredTime: formData.preferredTime,
-      reason: formData.reason,
-      priority: formData.priority as 'baja' | 'media' | 'alta',
-      status: 'pendiente'
+    const message = await addDentalAppointment({
+      est_ID: student.id,
+      sco_FechaP: formData.preferredDate,
+      sco_Hora: formData.preferredTime,
+      sco_Motivo: formData.reason,
+      sco_Prioridad: formData.priority as 'baja' | 'media' | 'alta',
+      sco_Estado: true,
+      sco_FechaCreacion: getLocalDateTime()
     });
+    if (!message.toLowerCase().includes("correctamente")) {
+      toast.error(message);
+      return;
+    }
+    toast.success(message);
 
-    toast.success('Solicitud de cita odontológica enviada correctamente');
-    
     // Reset form
     setFormData({
       preferredDate: '',
@@ -86,7 +89,7 @@ export function DentalAppointmentModal({ isOpen, onClose }: DentalAppointmentMod
       reason: '',
       priority: 'media'
     });
-    
+
     setErrors({});
     onClose();
   };

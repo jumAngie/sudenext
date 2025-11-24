@@ -1,5 +1,6 @@
 ﻿using SUDENEXT.DataAccess.Repositories.Acad;
 using SUDENEXT.DataAccess.Repositories.Odon;
+using SUDENEXT.DataAccess.Repositories.Psi;
 using SUDENEXT.Entities.Entities;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,65 @@ namespace SUDENEXT.BussinessLogic.Services.OdontologiaServices
         #endregion
 
         #region Solicitud Odon
+        public ServiceResult ListadoSolicitudCitaOdonCompleto()
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _solicitudCitaOdonRepository.ListadoCompleto();
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult CrearSolicitudCitaOdon(tbSolicitudCitaOdon item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _solicitudCitaOdonRepository.Insert(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EditarSolicitudCitaOdon(tbSolicitudCitaOdon item)
+        {
+
+            var result = new ServiceResult();
+            try
+            {
+                var list = _solicitudCitaOdonRepository.Update(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult EliminarSolicitudCitaOdon(tbSolicitudCitaOdon item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _solicitudCitaOdonRepository.Delete(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Tratamientos

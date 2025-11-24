@@ -90,15 +90,6 @@ export function SupportSessionModal({
       sol_Estado: true,
       sol_FechaCreacion: getLocalDateTime(),
     });
-    console.log("PAYLOAD ENVIADO:", {
-      est_ID: student.id,
-      sol_MotivoConsulta: formData.mainReason,
-      sol_MalestarEmocional: parseInt(formData.emotionalLevel),
-      sol_HorarioPref: formData.preferredTime,
-      sol_Asistencia: false,
-      sol_Estado: true,
-      sol_FechaCreacion: getLocalDateTime(),
-    });
     if (!message.toLowerCase().includes("correctamente")) {
       toast.error(message);
       return;

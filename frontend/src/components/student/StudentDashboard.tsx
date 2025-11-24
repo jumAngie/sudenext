@@ -36,7 +36,7 @@ import { DentalAppointmentModal } from "./DentalAppointmentModal";
 import { RequestDetailsModal } from "./RequestDetailsModal";
 import { NotificationDropdown } from "./NotificationDropdown";
 import { RequestHistoryPage } from "./RequestHistoryPage";
-import { getStatusColor } from "../../utils/statusHelpers";
+import { getStatusColor, getPriorityText } from "../../utils/statusHelpers";
 import { formatDateTime } from "../../utils/dateHelpers";
 import logoSudenext from "figma:asset/fbac00c7ee6746f5326012d41ba2b03e7a9e7f11.png";
 import logoSudecad from "figma:asset/22cd37652b59616ba81f702b45c65f8b7ad8d496.png";
@@ -59,8 +59,6 @@ function StudentDashboardContent() {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5);
 
-    console.log(studentSupportSessions);
-    
   const studentDentalAppointments = dentalAppointments
     .filter((a) => a.studentId === student.id)
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -248,10 +246,6 @@ function StudentDashboardContent() {
                         <Clock className="w-3 h-3" />
                         {session.preferredTime}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        {session.modality}
-                      </span>
                     </div>
                     {session.assignedCounselorName && (
                       <p className="text-xs text-blue-600 mb-2">
@@ -318,8 +312,10 @@ function StudentDashboardContent() {
                         {appointment.preferredTime}
                       </span>
                       <Badge variant="outline" className="text-xs">
-                        {appointment.priority}
+                        {getPriorityText(appointment.priority)}
                       </Badge>
+
+
                     </div>
                     {appointment.assignedDentistName && (
                       <p className="text-xs text-blue-600 mb-2">
@@ -356,14 +352,14 @@ function StudentDashboardContent() {
           <div className="flex items-center gap-4">
             {/* Notifications */}
             <NotificationDropdown />
-            
+
             <div className="text-right">
               <p className="font-medium">{student.name}</p>
               <p className="text-sm opacity-90">{student.accountNumber}</p>
             </div>
             <Button
               variant="outline"
-              className="justify-start text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
+              className="justify-start text-red-600 border-red-200"
               onClick={logout}
             >
               <LogOut className="w-4 h-4 mr-2" />

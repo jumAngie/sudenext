@@ -23,6 +23,13 @@ import {
 } from "/src/services/areaService.ts";
 
 import {
+  fetchSolicitudCitaOdon,
+  createSolicitudCitaOdonAPI,
+  updateSolicitudCitaOdonAPI,
+  deleteSolicitudCitaOdonAPI,
+} from "/src/services/solicitudCitaOdon.ts";
+
+import {
   fetchPersonalSinUsuario,
   fetchPersonal,
   createPersonalAPI,
@@ -68,11 +75,9 @@ import {
 interface DataContextType {
   // Support Sessions (API real)
   supportSessions: SupportSession[];
-  //fetchSupportSessions: () => Promise<void>;
   addSupportSession: (payload: {
     est_ID: number;
     sol_MotivoConsulta: string;
-    sol_ResumenSesion: string;
     sol_MalestarEmocional: number;
     sol_HorarioPref: string;
     sol_Asistencia: boolean;
@@ -83,7 +88,6 @@ interface DataContextType {
   updateSupportSession: (payload: {
     sol_ID: number;
     sol_MotivoConsulta: string;
-    sol_ResumenSesion: string;
     sol_MalestarEmocional: number;
     sol_HorarioPref: string;
     sol_FechaModificacion: string;
@@ -102,13 +106,32 @@ interface DataContextType {
 
   // Dental Appointments
   dentalAppointments: DentalAppointment[];
-  addDentalAppointment: (
-    appointment: Omit<DentalAppointment, "id" | "createdAt">
-  ) => void;
-  updateDentalAppointment: (
-    id: string,
-    updates: Partial<DentalAppointment>
-  ) => void;
+  addDentalAppointment: (payload: {
+    est_ID: number;
+    sco_FechaP: string;
+    sco_Hora: string;
+    sol_MalestarEmocional: number;
+    sco_Motivo: string;
+    sco_Prioridad: string;
+    sco_Estado: boolean;
+    sco_FechaCreacion: string;
+  }) => Promise<string>;
+
+  updateDentalAppointment: (payload: {
+    sco_ID: number;
+    est_ID: number;
+    sco_FechaP: string;
+    sco_Hora: string;
+    sol_MalestarEmocional: number;
+    sco_Motivo: string;
+    sco_Prioridad: string;
+    sco_FechaModificacion: string;
+  }) => Promise<string>;
+
+  cancelDentalAppointment: (payload: {
+    sco_ID: number;
+    sco_FechaEliminacion: string;
+  }) => Promise<string>;
 
   // Dental Treatments
   dentalTreatments: DentalTreatment[];
@@ -382,47 +405,6 @@ const getCurrentMonthDates = () => {
 // Mock initial data
 const dates = getCurrentMonthDates();
 
-const initialDentalAppointments: DentalAppointment[] = [
-  {
-    id: "dental-1",
-    studentId: "student-3",
-    studentName: "Elmer Isai Alvarez Carbajal",
-    accountNumber: "20210001123",
-    preferredDate: "2024-01-25",
-    preferredTime: "10:00",
-    reason: "Dolor en muela del juicio",
-    priority: "alta",
-    status: "pendiente",
-    createdAt: "2024-01-16T11:00:00Z",
-  },
-  {
-    id: "dental-2",
-    studentId: "student-4",
-    studentName: "Juan David Molina Sagastume",
-    accountNumber: "20240128910",
-    preferredDate: "2024-01-28",
-    preferredTime: "14:00",
-    reason: "Limpieza dental de rutina",
-    priority: "baja",
-    status: "confirmada",
-    assignedDentistId: "staff-2",
-    assignedDentistName: "Sherlyn Nicole Monje",
-    createdAt: "2024-01-18T09:30:00Z",
-  },
-  {
-    id: "dental-3",
-    studentId: "student-9",
-    studentName: "Mario Deniel Hernandez",
-    accountNumber: "20222000200",
-    preferredDate: "2024-02-02",
-    preferredTime: "09:00",
-    reason: "Revisión de ortodoncia",
-    priority: "media",
-    status: "pendiente",
-    createdAt: "2024-01-22T10:15:00Z",
-  },
-];
-
 const initialMedicalCheckIns: MedicalCheckIn[] = [
   {
     id: "medical-1",
@@ -566,13 +548,11 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [personnel, setPersonnel] = useState<Personnel[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
   const [supportSessions, setSupportSessions] = useState<SupportSession[]>([]);
+  const [dentalAppointments, setDentalAppointments] = useState<DentalAppointment[]>([]);
 
   // NO FUNCIONALES
 
   const [actionPlans, setActionPlans] = useState<ActionPlan[]>([]);
-  const [dentalAppointments, setDentalAppointments] = useState<
-    DentalAppointment[]
-  >(initialDentalAppointments);
   const [dentalTreatments, setDentalTreatments] = useState<DentalTreatment[]>(
     initialDentalTreatments
   );
@@ -587,6 +567,64 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const generateId = (prefix: string) =>
     `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
+  //  ------------------------------------------------------- Sesiones Odontologicas -------------------------------------------------------
+  //  ---------------------------------------------------------------------------------------------------------------------
+  const mapDental = (data: any[]) => {
+    return data.map((s) => ({
+      id: s.sco_ID,
+      studentId: s.est_ID,
+      accountNumber: s.est_NumeroCuenta,
+      studentName: s.est_NombreCompleto,
+      preferredDate: s.sco_FechaP,
+      preferredTime: s.sco_Hora,
+      reason: s.sco_Motivo,
+      priority: s.sco_Prioridad,
+      createdAt: s.sco_FechaCreacion,
+      status: s.sco_Cancelar
+        ? "cancelada"
+        : s.sco_Asignada
+          ? "asignada"
+          : "pendiente",
+      sco_Cancelar: s.sco_Cancelar,
+      raw: s
+    }));
+  };
+
+  const loadDentalAppointments = async () => {
+    try {
+      const data = await fetchSolicitudCitaOdon();
+      const mapped = mapDental(data);
+      setDentalAppointments(mapped);
+    } catch (err) {
+      console.error("Error cargando las sesiones", err);
+    }
+  };
+
+  // Dental Appointments
+  const addDentalAppointment = async (payload: any) => {
+    const message = await createSolicitudCitaOdonAPI(payload);
+    if (message.toLowerCase().includes("exitosamente")) {
+      await loadDentalAppointments();
+    }
+    return message;
+  };
+
+  const updateDentalAppointment = async (id: number, payload: any) => {
+    const message = await updateSolicitudCitaOdonAPI(payload);
+    if (message.toLowerCase().includes("exitosamente")) {
+      await loadDentalAppointments();
+    }
+    return message;
+  };
+
+  const cancelDentalAppointment = async (id: number, payload: any) => {
+    const message = await deleteSolicitudCitaOdonAPI(payload);
+    if (message.toLowerCase().includes("exitosamente")) {
+      await loadDentalAppointments();
+    }
+    return message;
+  };
+
 
   //  ------------------------------------------------------- Sesiones de Apoyo -------------------------------------------------------
   //  ---------------------------------------------------------------------------------------------------------------------
@@ -595,6 +633,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       id: s.sol_ID,
       studentId: s.est_ID,
       studentName: s.est_NombreCompleto,
+      accountNumber: s.est_NumeroCuenta,
       mainReason: s.sol_MotivoConsulta,
       emotionalLevel: s.sol_MalestarEmocional,
       preferredTime: s.sol_HorarioPref,
@@ -623,6 +662,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     loadSupportSessions();
+    loadDentalAppointments();
   }, []);
 
 
@@ -659,29 +699,6 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       createdAt: new Date().toISOString(),
     };
     setActionPlans((prev) => [...prev, newPlan]);
-  };
-
-  // Dental Appointments
-  const addDentalAppointment = (
-    appointment: Omit<DentalAppointment, "id" | "createdAt">
-  ) => {
-    const newAppointment: DentalAppointment = {
-      ...appointment,
-      id: generateId("dental"),
-      createdAt: new Date().toISOString(),
-    };
-    setDentalAppointments((prev) => [...prev, newAppointment]);
-  };
-
-  const updateDentalAppointment = (
-    id: string,
-    updates: Partial<DentalAppointment>
-  ) => {
-    setDentalAppointments((prev) =>
-      prev.map((appointment) =>
-        appointment.id === id ? { ...appointment, ...updates } : appointment
-      )
-    );
   };
 
   // Medical Check-ins
@@ -1128,6 +1145,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         dentalAppointments,
         addDentalAppointment,
         updateDentalAppointment,
+        cancelDentalAppointment,
         dentalTreatments,
         addDentalTreatment,
         updateDentalTreatment,

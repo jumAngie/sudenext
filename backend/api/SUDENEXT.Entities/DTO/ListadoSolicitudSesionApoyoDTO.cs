@@ -13,6 +13,7 @@ namespace SUDENEXT.Entities.DTO
         public int? est_ID { get; set; }
 
         public string est_NombreCompleto { get; set; }
+        public string est_NumeroCuenta { get; set; }
 
         public string sol_MotivoConsulta { get; set; }
 

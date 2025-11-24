@@ -59,3 +59,12 @@ export const getStatusIcon = (status: string) => {
     default: return '📋';
   }
 };
+
+export const getPriorityText = (priority: string) => {
+  const map: Record<string, string> = {
+    b: "BAJA",
+    m: "MEDIA",
+    a: "ALTA"
+  };
+  return map[priority.toLowerCase()] || "N/A";
+};
