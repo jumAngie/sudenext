@@ -60,5 +60,21 @@ namespace SUDENEXT.API.Controllers.ControllersGeneral
             listado.Data = _mapper.Map<IEnumerable<PersonalViewModel>>(listado.Data);
             return Ok(listado);
         }
+
+        [HttpGet("PersonalOdontoloDDL")]
+        public IActionResult IndexOdontolo()
+        {
+            var listado = _generalService.ListarPersonalOdontologo();
+            listado.Data = _mapper.Map<IEnumerable<PersonalViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
+        [HttpGet("PersonalConsejeroDDL")]
+        public IActionResult IndexConsejero()
+        {
+            var listado = _generalService.ListarPersonalConsejero();
+            listado.Data = _mapper.Map<IEnumerable<PersonalViewModel>>(listado.Data);
+            return Ok(listado);
+        }
     }
 }

@@ -12,7 +12,8 @@ import {
   SystemUser,
   ConsultationType,
   TreatmentType,
-  PersonalSinUsuario
+  PersonalSinUsuario,
+  PersonalDDL
 } from "../types";
 
 import {
@@ -31,6 +32,8 @@ import {
 
 import {
   fetchPersonalSinUsuario,
+  fetchPersonal_Consejero,
+  fetchPersonal_Odontologo,
   fetchPersonal,
   createPersonalAPI,
   updatePersonalAPI,
@@ -309,6 +312,9 @@ interface DataContextType {
 
   // Personnel
   personalSinUsuario: PersonalSinUsuario[];
+  personalConsejero: PersonalDDL[];
+  personalOdontologo: PersonalDDL[];
+
   personnel: Personnel[];
   addPersonnel: (payload: {
     per_Nombres: string;
@@ -545,6 +551,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [consultationTypes, setConsultationTypes] = useState<ConsultationType[]>([]);
   const [systemUsers, setSystemUsers] = useState<SystemUser[]>([]);
   const [personalSinUsuario, setPersonalSinUsuario] = useState<PersonalSinUsuario[]>([]);
+  const [personalConsejero, setPersonalConsejero] = useState<PersonalDDL[]>([]);
+  const [personalOdontologo, setPersonalOdontologo] = useState<PersonalDDL[]>([]);
+
   const [personnel, setPersonnel] = useState<Personnel[]>([]);
   const [roles, setRoles] = useState<Role[]>([]);
   const [supportSessions, setSupportSessions] = useState<SupportSession[]>([]);
@@ -1013,6 +1022,40 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    const loadPersonalConsejero = async () => {
+      try {
+        const data = await fetchPersonal_Consejero();
+        const formatted = data.map((a: any) => ({
+          per_ID: a.per_ID,
+          per_Nombres: a.per_Nombres,
+          per_Correo: a.per_Correo
+        }));
+        setPersonalConsejero(formatted);
+      } catch (err) {
+        console.error("Error cargando el personal", err);
+      }
+    };
+    loadPersonalConsejero();
+  }, []);
+
+  useEffect(() => {
+    const loadPersonalOdontologo = async () => {
+      try {
+        const data = await fetchPersonal_Odontologo();
+        const formatted = data.map((a: any) => ({
+          per_ID: a.per_ID,
+          per_Nombres: a.per_Nombres,
+          per_Correo: a.per_Correo
+        }));
+        setPersonalOdontologo(formatted);
+      } catch (err) {
+        console.error("Error cargando el personal", err);
+      }
+    };
+    loadPersonalOdontologo();
+  }, []);
+
+  useEffect(() => {
     const loadPersonal = async () => {
       try {
         const data = await fetchPersonal();
@@ -1164,6 +1207,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         updatePersonnel,
         deletePersonnel,
         personalSinUsuario,
+        personalConsejero,
+        personalOdontologo,
         roles,
         addRole,
         updateRole,

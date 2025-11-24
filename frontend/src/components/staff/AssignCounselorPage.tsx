@@ -67,6 +67,9 @@ const mockCounselors = [
 ];
 
 export function AssignCounselorPage() {
+  const { personalConsejero } = useData();
+  const [selectedPersonal, setSelectedPersonal] = useState(null);
+  
   const { supportSessions, updateSupportSession } = useData();
   const [selectedSession, setSelectedSession] =
     useState<SupportSession | null>(null);
@@ -226,7 +229,6 @@ export function AssignCounselorPage() {
                   <TableHead>No. Cuenta</TableHead>
                   <TableHead>Motivo Principal</TableHead>
                   <TableHead>Nivel Emocional</TableHead>
-                  <TableHead>Modalidad</TableHead>
                   <TableHead>Consejero Asignado</TableHead>
                   <TableHead>Fecha Solicitud</TableHead>
                   <TableHead>Estado</TableHead>
@@ -265,14 +267,6 @@ export function AssignCounselorPage() {
                           session.emotionalLevel,
                         )}
                       </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        <span className="capitalize">
-                          {session.modality}
-                        </span>
-                      </div>
                     </TableCell>
                     <TableCell>
                       {session.assignedCounselorName ? (
@@ -440,17 +434,17 @@ export function AssignCounselorPage() {
                         <SelectValue placeholder="Selecciona un consejero" />
                       </SelectTrigger>
                       <SelectContent>
-                        {mockCounselors.map((counselor) => (
+                        {personalConsejero.map((counselor) => (
                           <SelectItem
-                            key={counselor.id}
-                            value={counselor.id}
+                            key={counselor.per_ID}
+                            value={counselor.per_ID}
                           >
                             <div>
                               <p className="font-medium">
-                                {counselor.name}
+                                {counselor.per_Nombres}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {counselor.specialty}
+                                {counselor.per_Correo}
                               </p>
                             </div>
                           </SelectItem>

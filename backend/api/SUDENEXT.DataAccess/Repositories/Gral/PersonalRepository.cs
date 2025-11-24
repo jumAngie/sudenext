@@ -69,6 +69,34 @@ namespace SUDENEXT.DataAccess.Repositories.Gral
             return db.Query<tbPersonal>(ScriptsDataBase.DDL_ListarPersonal_SinUsuario, null, commandType: CommandType.StoredProcedure);
         }
 
+        public IEnumerable<tbPersonal> DDL_PersonalConsejero()
+        {
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            var parametros = new DynamicParameters();
+            return db.Query<tbPersonal>(ScriptsDataBase.DDL_Consejeros, null, commandType: CommandType.StoredProcedure);
+        }
+
+        public IEnumerable<tbPersonal> DDL_PersonalOdontologo()
+        {
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            var parametros = new DynamicParameters();
+            return db.Query<tbPersonal>(ScriptsDataBase.DDL_Odontologo, null, commandType: CommandType.StoredProcedure);
+        }
+
+        public IEnumerable<tbPersonal> DDL_PersonalMedico()
+        {
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            var parametros = new DynamicParameters();
+            return db.Query<tbPersonal>(ScriptsDataBase.DDL_Medico, null, commandType: CommandType.StoredProcedure);
+        }
+
+        public IEnumerable<tbPersonal> DDL_PersonalAsesor()
+        {
+            using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
+            var parametros = new DynamicParameters();
+            return db.Query<tbPersonal>(ScriptsDataBase.DDL_Asesor, null, commandType: CommandType.StoredProcedure);
+        }
+
         public RequestStatus Update(tbPersonal item)
         {
             using var db = new SqlConnection(SUDENEXTContext.ConnectionString);

@@ -191,6 +191,26 @@
   },
   {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
+    "Method": "IndexConsejero",
+    "RelativePath": "api/Personal/PersonalConsejeroDDL",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
+    "Method": "IndexOdontolo",
+    "RelativePath": "api/Personal/PersonalOdontoloDDL",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.PersonalController",
     "Method": "IndexSinUsuario",
     "RelativePath": "api/Personal/PersonalSinUsuarioDDL",
     "HttpMethod": "GET",

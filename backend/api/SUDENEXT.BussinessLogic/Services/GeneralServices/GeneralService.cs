@@ -185,6 +185,34 @@ namespace SUDENEXT.BussinessLogic.Services.GeneralServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult ListarPersonalOdontologo()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _personalRepository.DDL_PersonalOdontologo();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ListarPersonalConsejero()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _personalRepository.DDL_PersonalConsejero();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
     }

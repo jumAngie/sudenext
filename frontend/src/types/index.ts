@@ -244,3 +244,9 @@ export interface PersonalSinUsuario {
   per_Nombres: string,
   per_Correo: string,
 }
+
+export interface PersonalDDL{
+  per_ID: number,
+  per_Nombres: string,
+  per_Correo: string,
+}

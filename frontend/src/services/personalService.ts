@@ -13,6 +13,32 @@ export async function fetchPersonalSinUsuario() {
   return json.data;
 }
 
+// DDL Consejero
+export async function fetchPersonal_Consejero() {
+  const res = await fetch(`${API_URL}/Personal/PersonalConsejeroDDL`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  });
+  if (!res.ok) {
+    throw new Error("Error al obtener los registros");
+  }
+  const json = await res.json();
+  return json.data;
+}
+
+// DDL Odontologo
+export async function fetchPersonal_Odontologo() {
+  const res = await fetch(`${API_URL}/Personal/PersonalOdontoloDDL`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  });
+  if (!res.ok) {
+    throw new Error("Error al obtener los registros");
+  }
+  const json = await res.json();
+  return json.data;
+}
+
 // LISTAR
 export async function fetchPersonal() {
   const res = await fetch(`${API_URL}/Personal/Listar`, {

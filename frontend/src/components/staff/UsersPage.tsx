@@ -416,7 +416,7 @@ export function UsersPage() {
                           <Pencil className="w-3 h-3 mr-1" />
                           Editar
                         </Button>
-                        {Number(authUser?.data?.id) !== userSystem.usu_ID && (
+                        {Number(authUser?.data?.id) !== userSystem.usu_ID && userSystem.usu_Estado && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -743,7 +743,7 @@ export function UsersPage() {
                 }
               }}
             >
-              Sí, Eliminar
+              Sí, Desactivar
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

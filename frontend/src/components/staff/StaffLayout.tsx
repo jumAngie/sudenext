@@ -184,12 +184,12 @@ const menuItems: MenuItem[] = [
     icon: <Stethoscope className="w-4 h-4" />,
     roles: ["administrador", "odontologo"],
     items: [
-      {
+      /*{
         id: "dental-appointments-list",
         label: "Listado de Citas Odontológicas",
         icon: <List className="w-4 h-4" />,
         roles: ["administrador"]
-      },
+      },*/
       {
         id: "dental-treatment",
         label: "Registrar Tratamiento",
@@ -219,12 +219,12 @@ const menuItems: MenuItem[] = [
     icon: <Heart className="w-4 h-4" />,
     roles: ["administrador", "consejero"],
     items: [
-      {
+     /* {
         id: "support-sessions-list",
         label: "Listado de Sesiones de Apoyo",
         icon: <List className="w-4 h-4" />,
         roles: ["administrador"]
-      },
+      },*/
       {
         id: "assign-counselor",
         label: "Asignar Consejero",
