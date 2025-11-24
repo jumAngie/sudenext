@@ -1968,3 +1968,298 @@ BEGIN
 	END CATCH
 END;
 GO
+---------------------------------------------------  SolicitudesXPlanes  -----------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+---LISTAR
+--CREATE OR ALTER PROCEDURE Psi.sp_ListarSolicitudesXPlanes
+--AS
+--BEGIN
+--	SET NOCOUNT ON;
+
+--	SELECT 
+--		-- Datos principales del área
+--		rol.rol_ID,
+--		rol.rol_Descripcion,
+--		rol.rol_Estado,
+
+--		-- ======== DATOS DEL USUARIO CREADOR ========
+--		usuC.usu_ID AS usu_UsuarioCreacion,
+--		usuC.usu_Usuario AS Usuario_C,
+--		perC.per_ID AS ID_Creador,
+--		(perC.per_Nombres + ' ' + perC.per_Apellidos) AS NombreCompleto_C,
+--		rol.rol_FechaCreacion,
+
+--		-- ======== DATOS DEL USUARIO MODIFICADOR ========
+--		usuM.usu_ID AS usu_UsuarioModificacion,
+--		usuM.usu_Usuario AS Usuario_M,
+--		perM.per_ID AS ID_Modificador,
+--		(perM.per_Nombres + ' ' + perM.per_Apellidos) AS NombreCompleto_M,
+--		rol.rol_FechaModificacion,
+
+--		-- ======== DATOS DEL USUARIO ELIMINADOR ========
+--		usuE.usu_ID AS usu_UsuarioEliminacion,
+--		usuE.usu_Usuario AS Usuario_E,
+--		perE.per_ID AS ID_Eliminador,
+--		(perE.per_Nombres + ' ' + perE.per_Apellidos) AS NombreCompleto_E,
+--		rol.rol_FechaEliminacion
+
+--	FROM Acce.tbRoles rol
+--		-- JOIN con Usuario Creador
+--		INNER JOIN Acce.tbUsuarios usuC ON rol.usu_UsuarioCreacion = usuC.usu_ID
+--		INNER JOIN Gral.tbPersonal perC ON usuC.per_ID = perC.per_ID
+
+--		-- JOIN con Usuario Modificador
+--		LEFT JOIN Acce.tbUsuarios usuM ON rol.usu_UsuarioModificacion = usuM.usu_ID
+--		LEFT JOIN Gral.tbPersonal perM ON usuM.per_ID = perM.per_ID
+
+--		-- JOIN con Usuario Eliminador
+--		LEFT JOIN Acce.tbUsuarios usuE ON rol.usu_UsuarioEliminacion = usuE.usu_ID
+--		LEFT JOIN Gral.tbPersonal perE ON usuE.per_ID = perE.per_ID
+
+--	WHERE rol.rol_Estado = 1;
+--END;
+--GO
+
+---CREAR
+CREATE OR ALTER PROCEDURE Psi.sp_CrearSolicitudesXPlanes
+	@spa_ID INT,
+	@pla_ID INT,
+	@usu_UsuarioCreacion INT,
+	@spl_FechaCreacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+
+		INSERT INTO Psi.tbSolicitudesXPlanes
+		(spa_ID, pla_ID, usu_UsuarioCreacion, spl_FechaCreacion)
+		VALUES
+		(@spa_ID, @pla_ID, @usu_UsuarioCreacion, @spl_FechaCreacion);
+
+		SELECT 'Registro creado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al crear el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+----EDITAR
+CREATE OR ALTER PROCEDURE Psi.sp_EditarSolicitudesXPlanes
+	@spl_ID	INT,
+	@spa_ID INT,
+	@pla_ID INT,
+	@usu_UsuarioModificacion INT,
+	@spl_FechaModificacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		
+		UPDATE Psi.tbSolicitudesXPlanes
+		SET spa_ID = @spa_ID,
+			pla_ID = @pla_ID,
+			usu_UsuarioModificacion = @usu_UsuarioModificacion,
+			spl_FechaModificacion = @spl_FechaModificacion
+		WHERE spl_ID = @spl_ID;
+
+		SELECT 'Registro actualizado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al editar el registro: ', @ErrorMsg) AS MessageStatus;
+	RETURN;
+	END CATCH
+END;
+GO
+---ELIMINAR
+CREATE OR ALTER PROCEDURE Psi.sp_EliminarSolicitudesXPlanes
+	@spl_ID	INT,
+	@usu_UsuarioEliminacion INT,
+	@spl_FechaEliminacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+
+		UPDATE Psi.tbSolicitudesXPlanes
+		SET spl_Estado = 0,
+			usu_UsuarioEliminacion = @usu_UsuarioEliminacion,
+			spl_FechaEliminacion = @spl_FechaEliminacion
+		WHERE spl_ID = @spl_ID;
+
+		SELECT 'Registro eliminado exitosamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al eliminar el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+
+---------------------------------------------------  CREAR ASIGNACIÓN DE ODONTOLOGO  -------------------------------------
+----------------------------------------------------------------------------------------------------------------
+---CREAR
+CREATE OR ALTER PROCEDURE Odon.sp_CrearSolicitudOdonAsignada
+	@sco_ID INT, 
+	@per_ID	INT, 
+	@sca_Cancel BIT,
+	@usu_UsuarioCreacion INT,
+	@sca_FechaCreacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		INSERT INTO Odon.tbSolicitudOdonAsignada
+		(sco_ID, per_ID,  sca_Cancel, usu_UsuarioCreacion, sca_FechaCreacion)
+		VALUES
+		(@sco_ID, @per_ID, @sca_Cancel, @usu_UsuarioCreacion, @sca_FechaCreacion);
+
+		SELECT 'Registro asignado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al crear el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+----EDITAR
+CREATE OR ALTER PROCEDURE Odon.sp_EditarSolicitudOdonAsignada
+	@sca_ID INT,
+	@sco_ID INT, 
+	@per_ID	INT, 
+	@sca_Cancel BIT,
+	@usu_UsuarioModificacion INT,
+	@sca_FechaModificacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		
+		UPDATE Odon.tbSolicitudOdonAsignada
+		SET sco_ID = @sco_ID,
+			per_ID = @per_ID,
+			sca_Cancel = @sca_Cancel,
+			usu_UsuarioModificacion = @usu_UsuarioModificacion,
+			sca_FechaModificacion = @sca_FechaModificacion
+		WHERE sca_ID = @sca_ID;
+
+		SELECT 'Registro actualizado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al editar el registro: ', @ErrorMsg) AS MessageStatus;
+	RETURN;
+	END CATCH
+END;
+GO
+---ELIMINAR
+CREATE OR ALTER PROCEDURE Odon.sp_EliminarSolicitudOdonAsignada
+	@sca_ID INT,
+	@usu_UsuarioEliminacion INT,
+	@sca_FechaEliminacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+
+		UPDATE Odon.tbSolicitudOdonAsignada
+		SET sca_Cancel = 0,
+			usu_UsuarioEliminacion = @usu_UsuarioEliminacion,
+			sca_FechaEliminacion = @sca_FechaEliminacion
+		WHERE sca_ID = @sca_ID;
+
+		SELECT 'Registro cancelado exitosamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al eliminar el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+---------------------------------------------------  CREAR ASIGNACIÓN DE CONSEJERO  -------------------------------------
+----------------------------------------------------------------------------------------------------------------
+---CREAR
+CREATE OR ALTER PROCEDURE Psi.sp_CrearSolicitudApoyoAsignada
+	@sol_ID INT, 
+	@per_ID	INT, 
+	@spa_Cancel BIT,
+	@usu_UsuarioCreacion INT,
+	@spa_FechaCreacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		INSERT INTO Psi.tbSolicitudApoyoAsignada
+		(sol_ID, per_ID,  spa_Cancel, usu_UsuarioCreacion, spa_FechaCreacion)
+		VALUES
+		(@sol_ID, @per_ID, @spa_Cancel, @usu_UsuarioCreacion, @spa_FechaCreacion);
+
+		SELECT 'Registro asignado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al crear el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+----EDITAR
+CREATE OR ALTER PROCEDURE Psi.sp_EditarSolicitudApoyoAsignada
+	@spa_ID INT,
+	@sol_ID INT, 
+	@per_ID	INT, 
+	@spa_Cancel BIT,
+	@usu_UsuarioModificacion INT,
+	@spa_FechaModificacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		
+		UPDATE Psi.tbSolicitudApoyoAsignada
+		SET sol_ID = @sol_ID,
+			per_ID = @per_ID,
+			spa_Cancel = @spa_Cancel,
+			usu_UsuarioModificacion = @usu_UsuarioModificacion,
+			spa_FechaModificacion = @spa_FechaModificacion
+		WHERE spa_ID = @spa_ID;
+
+		SELECT 'Registro actualizado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al editar el registro: ', @ErrorMsg) AS MessageStatus;
+	RETURN;
+	END CATCH
+END;
+GO
+---ELIMINAR
+CREATE OR ALTER PROCEDURE Psi.sp_EliminarSolicitudApoyoAsignada
+	@spa_ID INT,
+	@usu_UsuarioEliminacion INT,
+	@spa_FechaEliminacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+
+		UPDATE Psi.tbSolicitudApoyoAsignada
+		SET spa_Cancel = 0,
+			usu_UsuarioEliminacion = @usu_UsuarioEliminacion,
+			spa_FechaEliminacion = @spa_FechaEliminacion
+		WHERE spa_ID = @spa_ID;
+
+		SELECT 'Registro cancelado exitosamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al eliminar el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO

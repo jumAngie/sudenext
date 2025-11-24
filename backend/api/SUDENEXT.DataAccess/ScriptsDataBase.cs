@@ -74,6 +74,10 @@ namespace SUDENEXT.DataAccess
         public static string CrearSolicitudCitaOdon = "Odon.sp_CrearCitaOdon";
         public static string EditarSolicitudCitaOdon = "Odon.sp_EditarCitaOdon";
         public static string EliminarSolicitudCitaOdon = "Odon.sp_EliminarCitaOdon";
+
+        public static string CrearSolicitudOdonAsignada = "Odon.sp_CrearSolicitudOdonAsignada";
+        public static string EditarSolicitudOdonAsignada = "Odon.sp_EditarSolicitudOdonAsignada";
+        public static string EliminarSolicitudOdonAsignada = "Odon.sp_EliminarSolicitudOdonAsignada";
         #endregion
 
         #region Psi
@@ -88,6 +92,14 @@ namespace SUDENEXT.DataAccess
         public static string EliminarSolicitudApoyo = "Psi.sp_EliminarSolicitudApoyo";
 
         public static string ListarSolicitudApoyoEstudiante = "Psi.sp_ListarSolicitudApoyo_Estudiante";
+
+        public static string CrearSolicitudApoyoAsignada = "Psi.sp_CrearSolicitudApoyoAsignada";
+        public static string EditarSolicitudApoyoAsignada = "Psi.sp_EditarSolicitudApoyoAsignada";
+        public static string EliminarSolicitudApoyoAsignada = "Psi.sp_EliminarSolicitudApoyoAsignada";
+
+        public static string CrearSolicitudesXPlanes = "Psi.sp_CrearSolicitudesXPlanes";
+        public static string EditarSolicitudesXPlanes = "Psi.sp_EditarSolicitudesXPlanes";
+        public static string EliminarSolicitudesXPlanes = "Psi.sp_EliminarSolicitudesXPlanes";
         #endregion
     }
 }
