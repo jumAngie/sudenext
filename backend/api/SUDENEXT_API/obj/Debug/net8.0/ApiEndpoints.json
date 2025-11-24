@@ -410,6 +410,54 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.SolicitudApoyoAsignadaController",
+    "Method": "Update",
+    "RelativePath": "api/SolicitudApoyoAsignada/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitudApoyoAsignada",
+        "Type": "SUDENEXT.API.Models.ModelsPsicologia.SolicitudApoyoAsignadaViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.SolicitudApoyoAsignadaController",
+    "Method": "Delete",
+    "RelativePath": "api/SolicitudApoyoAsignada/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitudApoyoAsignada",
+        "Type": "SUDENEXT.API.Models.ModelsPsicologia.SolicitudApoyoAsignadaViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersPsicologia.SolicitudApoyoAsignadaController",
+    "Method": "Insert",
+    "RelativePath": "api/SolicitudApoyoAsignada/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "solicitudApoyoAsignada",
+        "Type": "SUDENEXT.API.Models.ModelsPsicologia.SolicitudApoyoAsignadaViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.SolicitudCitaOdonController",
     "Method": "Update",
     "RelativePath": "api/SolicitudCitaOdon/Editar",
@@ -465,6 +513,54 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.SolicitudCitaOdonAsignadaController",
+    "Method": "Update",
+    "RelativePath": "api/SolicitudCitaOdonAsignada/Editar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "odonAsignadaViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsOdontologia.SolicitudCitaOdonAsignadaViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.SolicitudCitaOdonAsignadaController",
+    "Method": "Delete",
+    "RelativePath": "api/SolicitudCitaOdonAsignada/Eliminar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "odonAsignadaViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsOdontologia.SolicitudCitaOdonAsignadaViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.SolicitudCitaOdonAsignadaController",
+    "Method": "Insert",
+    "RelativePath": "api/SolicitudCitaOdonAsignada/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "odonAsignadaViewModel",
+        "Type": "SUDENEXT.API.Models.ModelsOdontologia.SolicitudCitaOdonAsignadaViewModel",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {

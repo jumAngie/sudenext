@@ -15,14 +15,17 @@ namespace SUDENEXT.BussinessLogic.Services.OdontologiaServices
         private readonly DiagnosticoOdonRepository _diagnosticoOdonRepository;
         private readonly SolicitudCitaOdonRepository _solicitudCitaOdonRepository;
         private readonly TratamientosRepository _tratamientosRepository;
+        private readonly SolicitudCitaOdonAsignadaRepository _solicitudCitaOdonAsignadaRepository;
 
         public  OdontologiaService(DiagnosticoOdonRepository diagnosticoOdonRepository,
                 SolicitudCitaOdonRepository solicitudCitaOdonRepository,
-                TratamientosRepository tratamientosRepository)
+                TratamientosRepository tratamientosRepository,
+                SolicitudCitaOdonAsignadaRepository solicitudCitaOdonAsignadaRepository)
         {
             _diagnosticoOdonRepository = diagnosticoOdonRepository;
             _solicitudCitaOdonRepository = solicitudCitaOdonRepository;
             _tratamientosRepository = tratamientosRepository;
+            _solicitudCitaOdonAsignadaRepository = solicitudCitaOdonAsignadaRepository;
         }
 
         #region Diagnostico Odon
@@ -143,6 +146,52 @@ namespace SUDENEXT.BussinessLogic.Services.OdontologiaServices
             try
             {
                 var list = _tratamientosRepository.Delete(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Solicitud Odon Asignada
+        public ServiceResult CrearSolicitudCitaOdonAsignada(tbSolicitudOdonAsignada item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _solicitudCitaOdonAsignadaRepository.Insert(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EditarSolicitudCitaOdonAsignada(tbSolicitudOdonAsignada item)
+        {
+
+            var result = new ServiceResult();
+            try
+            {
+                var list = _solicitudCitaOdonAsignadaRepository.Update(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult EliminarSolicitudCitaOdonAsignada(tbSolicitudOdonAsignada item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _solicitudCitaOdonAsignadaRepository.Delete(item);
                 return result.Ok(list);
             }
             catch (Exception ex)

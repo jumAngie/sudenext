@@ -47,11 +47,13 @@ namespace SUDENEXT.BussinessLogic
             services.AddScoped<DiagnosticoOdonRepository>();
             services.AddScoped<SolicitudCitaOdonRepository>();
             services.AddScoped<TratamientosRepository>();
+            services.AddScoped<SolicitudCitaOdonAsignadaRepository>();
 
             // Psicologia
             services.AddScoped<PlanAccionRepository>();
             services.AddScoped<SolicitudApoyoRepository>();
             services.AddScoped<SolicitudesXPlanesRepository>();
+            services.AddScoped<SolicitudApoyoAsignadaRepository>();
 
         }
 

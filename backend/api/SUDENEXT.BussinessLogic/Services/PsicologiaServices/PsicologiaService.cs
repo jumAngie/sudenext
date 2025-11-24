@@ -14,14 +14,17 @@ namespace SUDENEXT.BussinessLogic.Services.PsicologiaServices
         private readonly PlanAccionRepository _planAccionRepository;
         private readonly SolicitudApoyoRepository _solicitudApoyoRepository;
         private readonly SolicitudesXPlanesRepository _solicitudesXPlanesRepository;
+        private readonly SolicitudApoyoAsignadaRepository _solicitudApoyoAsignadaRepository;
 
         public PsicologiaService(PlanAccionRepository planAccionRepository,
                                  SolicitudApoyoRepository solicitudApoyoRepository,
-                                 SolicitudesXPlanesRepository solicitudesXPlanesRepository)
+                                 SolicitudesXPlanesRepository solicitudesXPlanesRepository,
+                                 SolicitudApoyoAsignadaRepository solicitudApoyoAsignadaRepository)
         {
             _planAccionRepository = planAccionRepository;
             _solicitudApoyoRepository = solicitudApoyoRepository;
             _solicitudesXPlanesRepository = solicitudesXPlanesRepository;
+            _solicitudApoyoAsignadaRepository = solicitudApoyoAsignadaRepository;
         }
 
 
@@ -166,6 +169,52 @@ namespace SUDENEXT.BussinessLogic.Services.PsicologiaServices
         #endregion
 
         #region SolicitudesXPlanes
+        #endregion
+
+        #region Solicitudes Asignadas
+        public ServiceResult CrearSolicitudApoyoAsignada(tbSolicitudApoyoAsignada item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _solicitudApoyoAsignadaRepository.Insert(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EditarSolicitudApoyoAsignada(tbSolicitudApoyoAsignada item)
+        {
+
+            var result = new ServiceResult();
+            try
+            {
+                var list = _solicitudApoyoAsignadaRepository.Update(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult EliminarSolicitudApoyoAsignada(tbSolicitudApoyoAsignada item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _solicitudApoyoAsignadaRepository.Delete(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
 

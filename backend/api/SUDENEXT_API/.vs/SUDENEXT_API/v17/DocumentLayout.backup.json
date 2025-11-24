@@ -3,8 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B3222012-D49A-4127-AC07-877FDA63F06B}|SUDENEXT.API.csproj|c:\\users\\pc\\documents\\github\\sudenext\\backend\\api\\sudenext_api\\controllers\\controllersgeneral\\personalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B3222012-D49A-4127-AC07-877FDA63F06B}|SUDENEXT.API.csproj|solutionrelative:controllers\\controllersgeneral\\personalcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F69B3896-E708-43A0-BF8D-AB9F075FA171}|..\\SUDENEXT.BussinessLogic\\SUDENEXT.BussinessLogic.csproj|c:\\users\\pc\\documents\\github\\sudenext\\backend\\api\\sudenext.bussinesslogic\\serviceconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B3222012-D49A-4127-AC07-877FDA63F06B}|SUDENEXT.API.csproj|c:\\users\\pc\\documents\\github\\sudenext\\backend\\api\\sudenext_api\\controllers\\controllersodontologia\\solicitudcitaodonasignadacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B3222012-D49A-4127-AC07-877FDA63F06B}|SUDENEXT.API.csproj|solutionrelative:controllers\\controllersodontologia\\solicitudcitaodonasignadacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B3222012-D49A-4127-AC07-877FDA63F06B}|SUDENEXT.API.csproj|c:\\users\\pc\\documents\\github\\sudenext\\backend\\api\\sudenext_api\\controllers\\controllerspsicologia\\solicitudapoyoasignadacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B3222012-D49A-4127-AC07-877FDA63F06B}|SUDENEXT.API.csproj|solutionrelative:controllers\\controllerspsicologia\\solicitudapoyoasignadacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,14 +30,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PersonalController.cs",
-              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\Controllers\\ControllersGeneral\\PersonalController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ControllersGeneral\\PersonalController.cs",
-              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\Controllers\\ControllersGeneral\\PersonalController.cs",
-              "RelativeToolTip": "Controllers\\ControllersGeneral\\PersonalController.cs",
-              "ViewState": "AgIAADoAAAAAAAAAAADwv0oAAABBAAAAAAAAAA==",
+              "Title": "ServiceConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.BussinessLogic\\ServiceConfiguration.cs",
+              "RelativeDocumentMoniker": "..\\SUDENEXT.BussinessLogic\\ServiceConfiguration.cs",
+              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.BussinessLogic\\ServiceConfiguration.cs",
+              "RelativeToolTip": "..\\SUDENEXT.BussinessLogic\\ServiceConfiguration.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAgwDcAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-24T04:51:06.59Z",
+              "WhenOpened": "2025-11-24T06:11:07.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SolicitudCitaOdonAsignadaController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\Controllers\\ControllersOdontologia\\SolicitudCitaOdonAsignadaController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ControllersOdontologia\\SolicitudCitaOdonAsignadaController.cs",
+              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\Controllers\\ControllersOdontologia\\SolicitudCitaOdonAsignadaController.cs",
+              "RelativeToolTip": "Controllers\\ControllersOdontologia\\SolicitudCitaOdonAsignadaController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-24T06:10:24.121Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SolicitudApoyoAsignadaController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\Controllers\\ControllersPsicologia\\SolicitudApoyoAsignadaController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ControllersPsicologia\\SolicitudApoyoAsignadaController.cs",
+              "ToolTip": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\Controllers\\ControllersPsicologia\\SolicitudApoyoAsignadaController.cs",
+              "RelativeToolTip": "Controllers\\ControllersPsicologia\\SolicitudApoyoAsignadaController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-24T06:10:21.034Z",
               "EditorCaption": ""
             }
           ]
