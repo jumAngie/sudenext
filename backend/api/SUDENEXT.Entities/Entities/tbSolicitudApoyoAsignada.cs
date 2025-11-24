@@ -33,6 +33,8 @@ public partial class tbSolicitudApoyoAsignada
 
     public virtual tbSolicitudApoyo sol { get; set; }
 
+    public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanes { get; set; } = new List<tbSolicitudesXPlanes>();
+
     public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
 
     public virtual tbUsuarios usu_UsuarioEliminacionNavigation { get; set; }

@@ -33,6 +33,8 @@ public partial class tbSolicitudOdonAsignada
 
     public virtual tbSolicitudCitaOdon sco { get; set; }
 
+    public virtual ICollection<tbDiagnosticoOdonto> tbDiagnosticoOdonto { get; set; } = new List<tbDiagnosticoOdonto>();
+
     public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
 
     public virtual tbUsuarios usu_UsuarioEliminacionNavigation { get; set; }

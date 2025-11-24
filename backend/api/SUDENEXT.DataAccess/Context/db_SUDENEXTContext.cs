@@ -153,9 +153,9 @@ public partial class db_SUDENEXTContext : DbContext
             entity.Property(e => e.usu_UsuarioEliminacion).HasDefaultValueSql("(NULL)");
             entity.Property(e => e.usu_UsuarioModificacion).HasDefaultValueSql("(NULL)");
 
-            entity.HasOne(d => d.est).WithMany(p => p.tbDiagnosticoOdonto)
-                .HasForeignKey(d => d.est_ID)
-                .HasConstraintName("FK_Odon_tbTratamientoDiagnosticado_est_ID_Gral_tbEstudiantes_est_ID");
+            entity.HasOne(d => d.sca).WithMany(p => p.tbDiagnosticoOdonto)
+                .HasForeignKey(d => d.sca_ID)
+                .HasConstraintName("FK_Odon_tbTratamientoDiagnosticado_sca_ID_Odon_tbtbSolicitudOdonAsignada_sca_ID");
 
             entity.HasOne(d => d.tra).WithMany(p => p.tbDiagnosticoOdonto)
                 .HasForeignKey(d => d.tra_ID)
@@ -637,9 +637,9 @@ public partial class db_SUDENEXTContext : DbContext
                 .HasForeignKey(d => d.pla_ID)
                 .HasConstraintName("FK_Psi_SolicitudesXPlanes_pla_ID_Psi_tbPlanAccion_pla_ID");
 
-            entity.HasOne(d => d.sol).WithMany(p => p.tbSolicitudesXPlanes)
-                .HasForeignKey(d => d.sol_ID)
-                .HasConstraintName("FK_Psi_SolicitudesXPlanes_sol_ID_Psi_tbSolicitudApoyo_sol_ID");
+            entity.HasOne(d => d.spa).WithMany(p => p.tbSolicitudesXPlanes)
+                .HasForeignKey(d => d.spa_ID)
+                .HasConstraintName("FK_Psi_SolicitudesXPlanes_spa_ID_Psi_tbSolicitudApoyoAsignada_spa_ID");
 
             entity.HasOne(d => d.usu_UsuarioCreacionNavigation).WithMany(p => p.tbSolicitudesXPlanesusu_UsuarioCreacionNavigation)
                 .HasForeignKey(d => d.usu_UsuarioCreacion)

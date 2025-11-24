@@ -356,7 +356,7 @@ CREATE TABLE Odon.tbTratamientos
 CREATE TABLE Odon.tbDiagnosticoOdonto
 (
 	trd_ID				INT IDENTITY(1,1),
-	est_ID				INT,
+	sca_ID				INT,
 	tra_ID				INT,
 	trd_Descripcion		NVARCHAR(MAX)	NOT NULL,
 	trd_Diagnostico		NVARCHAR(255)	NOT NULL,
@@ -376,7 +376,7 @@ CREATE TABLE Odon.tbDiagnosticoOdonto
 	trd_Estado 				        BIT DEFAULT 1
 
 	CONSTRAINT PK_Odon_tbTratamientoDiagnosticado_trd_ID PRIMARY KEY(trd_ID),
-	CONSTRAINT FK_Odon_tbTratamientoDiagnosticado_est_ID_Gral_tbEstudiantes_est_ID FOREIGN KEY(est_ID) REFERENCES Gral.tbEstudiantes(est_ID),
+	CONSTRAINT FK_Odon_tbTratamientoDiagnosticado_sca_ID_Odon_tbtbSolicitudOdonAsignada_sca_ID FOREIGN KEY(sca_ID) REFERENCES Odon.tbSolicitudOdonAsignada(sca_ID),
 	CONSTRAINT FK_odon_tbTratamientoDiagnosticado_tra_ID_Odon_tbTratamientos_tra_ID	FOREIGN KEY(tra_ID) REFERENCES Odon.tbTratamientos(tra_ID),
 	CONSTRAINT FK_Odon_tbDiagnosticoOdonto_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
     CONSTRAINT FK_Odon_tbDiagnosticoOdonto_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),
@@ -479,7 +479,7 @@ CREATE TABLE Psi.tbSolicitudesXPlanes
 (
 
 	spl_ID	INT IDENTITY(1,1),
-	sol_ID	INT,
+	spa_ID	INT,
 	pla_ID	INT,
 	
 	usu_UsuarioCreacion				INT NOT NULL,
@@ -491,7 +491,7 @@ CREATE TABLE Psi.tbSolicitudesXPlanes
 	spl_Estado 				        BIT DEFAULT 1
 
 	CONSTRAINT PK_Psi_SolicitudesXPlanes_spl_ID PRIMARY KEY(spl_ID),
-	CONSTRAINT FK_Psi_SolicitudesXPlanes_sol_ID_Psi_tbSolicitudApoyo_sol_ID FOREIGN KEY(sol_ID) REFERENCES Psi.tbSolicitudApoyo(sol_ID),
+	CONSTRAINT FK_Psi_SolicitudesXPlanes_spa_ID_Psi_tbSolicitudApoyoAsignada_spa_ID FOREIGN KEY(spa_ID) REFERENCES Psi.tbSolicitudApoyoAsignada(spa_ID),
 	CONSTRAINT FK_Psi_SolicitudesXPlanes_pla_ID_Psi_tbPlanAccion_pla_ID	FOREIGN KEY (pla_ID) REFERENCES Psi.tbPlanAccion (pla_ID),
 	CONSTRAINT FK_Psi_SolicitudesXPlanes_UsuarioCreacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioCreacion) REFERENCES Acce.tbUsuarios(usu_ID),
     CONSTRAINT FK_Psi_SolicitudesXPlanes_UsuarioModificacion_Acce_tbUsuarios_usu_ID FOREIGN KEY(usu_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usu_ID),

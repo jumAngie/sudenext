@@ -9,7 +9,7 @@ public partial class tbSolicitudesXPlanes
 {
     public int spl_ID { get; set; }
 
-    public int? sol_ID { get; set; }
+    public int? spa_ID { get; set; }
 
     public int? pla_ID { get; set; }
 
@@ -29,7 +29,7 @@ public partial class tbSolicitudesXPlanes
 
     public virtual tbPlanAccion pla { get; set; }
 
-    public virtual tbSolicitudApoyo sol { get; set; }
+    public virtual tbSolicitudApoyoAsignada spa { get; set; }
 
     public virtual tbUsuarios usu_UsuarioCreacionNavigation { get; set; }
 

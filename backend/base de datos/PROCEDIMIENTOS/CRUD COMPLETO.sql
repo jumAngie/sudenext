@@ -1,5 +1,181 @@
 USE SUDENEXT
 GO
+---------------------------------------------------  DIAGNOSTICO ODONTOLOGICO  -------------------------------------
+----------------------------------------------------------------------------------------------------------------
+---LISTAR
+CREATE OR ALTER PROCEDURE Odon.sp_ListarDiagnosticoOdon
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT 
+		-- Datos principales
+		trd.trd_ID,
+		trd.sca_ID,
+		est.est_NombreCompleto,
+		per.per_Nombres + per.per_Apellidos AS per_Nombres,
+		trd.tra_ID,
+		tra.tra_Descripcion,
+		trd.trd_Descripcion,
+		trd.trd_Diagnostico,
+		trd.trd_Duracion,
+		trd.trd_Costo, 
+		trd.trd_Seguimiento, 
+		trd.trd_FechaSeg, 
+		trd.trd_Instrucciones, 
+		trd.trd_Observaciones, 
+		trd.trd_Estado,
+
+		-- ======== DATOS DEL USUARIO CREADOR ========
+		usuC.usu_ID AS usu_UsuarioCreacion,
+		usuC.usu_Usuario AS Usuario_C,
+		perC.per_ID AS ID_Creador,
+		(perC.per_Nombres + ' ' + perC.per_Apellidos) AS NombreCompleto_C,
+		trd.trd_FechaCreacion,
+
+		-- ======== DATOS DEL USUARIO MODIFICADOR ========
+		usuM.usu_ID AS usu_UsuarioModificacion,
+		usuM.usu_Usuario AS Usuario_M,
+		perM.per_ID AS ID_Modificador,
+		(perM.per_Nombres + ' ' + perM.per_Apellidos) AS NombreCompleto_M,
+		trd.trd_FechaModificacion,
+
+		-- ======== DATOS DEL USUARIO ELIMINADOR ========
+		usuE.usu_ID AS usu_UsuarioEliminacion,
+		usuE.usu_Usuario AS Usuario_E,
+		perE.per_ID AS ID_Eliminador,
+		(perE.per_Nombres + ' ' + perE.per_Apellidos) AS NombreCompleto_E,
+		trd.trd_FechaEliminacion
+
+	FROM Odon.tbDiagnosticoOdonto trd
+		INNER JOIN Odon.tbSolicitudOdonAsignada sca ON trd.sca_ID = sca.sca_ID
+		INNER JOIN Odon.tbSolicitudCitaOdon sco ON sca.sco_ID = sco.sco_ID
+		INNER JOIN Gral.tbEstudiantes est ON sco.est_ID = est.est_ID
+		INNER JOIN Gral.tbPersonal per ON sca.per_ID = per.per_ID
+		
+		INNER JOIN Odon.tbTratamientos tra ON trd.tra_ID = tra.tra_ID
+		-- JOIN con Usuario Creador
+		INNER JOIN Acce.tbUsuarios usuC ON trd.usu_UsuarioCreacion = usuC.usu_ID
+		INNER JOIN Gral.tbPersonal perC ON usuC.per_ID = perC.per_ID
+
+		-- JOIN con Usuario Modificador
+		LEFT JOIN Acce.tbUsuarios usuM ON trd.usu_UsuarioModificacion = usuM.usu_ID
+		LEFT JOIN Gral.tbPersonal perM ON usuM.per_ID = perM.per_ID
+
+		-- JOIN con Usuario Eliminador
+		LEFT JOIN Acce.tbUsuarios usuE ON trd.usu_UsuarioEliminacion = usuE.usu_ID
+		LEFT JOIN Gral.tbPersonal perE ON usuE.per_ID = perE.per_ID
+
+	WHERE trd.trd_Estado = 1;
+END;
+GO
+
+---CREAR
+CREATE OR ALTER PROCEDURE Odon.sp_CrearDiagnosticoOdon
+	@sca_ID INT, 
+	@tra_ID INT, 
+	@trd_Descripcion	NVARCHAR(MAX), 
+	@trd_Diagnostico	NVARCHAR(255), 
+	@trd_Duracion		INT, 
+	@trd_Costo			DECIMAL(10,2), 
+	@trd_Seguimiento	BIT, 
+	@trd_FechaSeg		DATE, 
+	@trd_Instrucciones	NVARCHAR(255), 
+	@trd_Observaciones	NVARCHAR(255),
+	@usu_UsuarioCreacion INT,
+	@trd_FechaCreacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		INSERT INTO Odon.tbDiagnosticoOdonto
+		(sca_ID, tra_ID, trd_Descripcion, 
+		trd_Diagnostico, trd_Duracion, trd_Costo, 
+		trd_Seguimiento, trd_FechaSeg, trd_Instrucciones, 
+		trd_Observaciones, usu_UsuarioCreacion, trd_FechaCreacion)
+		VALUES
+		(@sca_ID, @tra_ID, @trd_Descripcion, 
+		@trd_Diagnostico, @trd_Duracion, @trd_Costo, 
+		@trd_Seguimiento,@trd_FechaSeg, @trd_Instrucciones, 
+		@trd_Observaciones, @usu_UsuarioCreacion, @trd_FechaCreacion);
+
+		SELECT 'Registro creado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al crear el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
+----EDITAR
+CREATE OR ALTER PROCEDURE Odon.sp_EditarDiagnosticoOdon
+	@trd_ID INT,
+	@sca_ID INT, 
+	@tra_ID INT, 
+	@trd_Descripcion	NVARCHAR(MAX), 
+	@trd_Diagnostico	NVARCHAR(255), 
+	@trd_Duracion		INT, 
+	@trd_Costo			DECIMAL(10,2), 
+	@trd_Seguimiento	BIT, 
+	@trd_FechaSeg		DATE, 
+	@trd_Instrucciones	NVARCHAR(255), 
+	@trd_Observaciones	NVARCHAR(255),
+	@usu_UsuarioModificacion INT,
+	@trd_FechaModificacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+		
+		UPDATE Odon.tbDiagnosticoOdonto
+		SET tra_ID = @tra_ID,
+			sca_ID = @sca_ID,
+			trd_Descripcion = @trd_Descripcion,
+			trd_Diagnostico = @trd_Diagnostico,
+			trd_Duracion = @trd_Duracion,
+			trd_Costo = @trd_Costo,
+			trd_Seguimiento = @trd_Seguimiento,
+			trd_FechaSeg = @trd_FechaSeg,
+			trd_Instrucciones = @trd_Instrucciones,
+			usu_UsuarioModificacion = @usu_UsuarioModificacion,
+			trd_FechaModificacion = @trd_FechaModificacion
+		WHERE trd_ID = @trd_ID;
+
+		SELECT 'Registro actualizado correctamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al editar el registro: ', @ErrorMsg) AS MessageStatus;
+	RETURN;
+	END CATCH
+END;
+GO
+---ELIMINAR
+CREATE OR ALTER PROCEDURE Odon.sp_EliminarDiagnosticoOdon
+	@trd_ID INT,
+	@usu_UsuarioEliminacion INT,
+	@trd_FechaEliminacion DATETIME
+AS
+BEGIN
+	SET NOCOUNT ON;
+	BEGIN TRY
+
+		UPDATE Odon.tbDiagnosticoOdonto
+		SET trd_Estado = 0,
+			usu_UsuarioEliminacion = @usu_UsuarioEliminacion,
+			trd_FechaEliminacion = @trd_FechaEliminacion
+		WHERE trd_ID = @trd_ID;
+
+		SELECT 'Registro eliminado exitosamente.' AS MessageStatus;
+	END TRY
+	BEGIN CATCH
+		DECLARE @ErrorMsg NVARCHAR(4000) = ERROR_MESSAGE();
+		SELECT CONCAT('Error al eliminar el registro: ', @ErrorMsg) AS MessageStatus;
+		RETURN;
+	END CATCH
+END;
+GO
 ---------------------------------------------------  DIAGNOSTICOS MÉDICOS  -------------------------------------
 ----------------------------------------------------------------------------------------------------------------
 

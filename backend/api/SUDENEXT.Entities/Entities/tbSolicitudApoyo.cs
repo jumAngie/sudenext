@@ -36,6 +36,4 @@ public partial class tbSolicitudApoyo
     public virtual tbEstudiantes est { get; set; }
 
     public virtual ICollection<tbSolicitudApoyoAsignada> tbSolicitudApoyoAsignada { get; set; } = new List<tbSolicitudApoyoAsignada>();
-
-    public virtual ICollection<tbSolicitudesXPlanes> tbSolicitudesXPlanes { get; set; } = new List<tbSolicitudesXPlanes>();
 }

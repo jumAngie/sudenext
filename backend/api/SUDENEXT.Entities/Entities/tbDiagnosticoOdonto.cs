@@ -9,7 +9,7 @@ public partial class tbDiagnosticoOdonto
 {
     public int trd_ID { get; set; }
 
-    public int? est_ID { get; set; }
+    public int? sca_ID { get; set; }
 
     public int? tra_ID { get; set; }
 
@@ -23,7 +23,7 @@ public partial class tbDiagnosticoOdonto
 
     public bool? trd_Seguimiento { get; set; }
 
-    public DateOnly? trd_FechaSeg { get; set; }
+    public DateTime? trd_FechaSeg { get; set; }
 
     public string trd_Instrucciones { get; set; }
 
@@ -43,7 +43,7 @@ public partial class tbDiagnosticoOdonto
 
     public bool? trd_Estado { get; set; }
 
-    public virtual tbEstudiantes est { get; set; }
+    public virtual tbSolicitudOdonAsignada sca { get; set; }
 
     public virtual tbTratamientos tra { get; set; }
 

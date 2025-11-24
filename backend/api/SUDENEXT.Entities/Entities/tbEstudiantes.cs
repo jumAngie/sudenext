@@ -39,8 +39,6 @@ public partial class tbEstudiantes
 
     public virtual ICollection<tbConsultasAcademicas> tbConsultasAcademicas { get; set; } = new List<tbConsultasAcademicas>();
 
-    public virtual ICollection<tbDiagnosticoOdonto> tbDiagnosticoOdonto { get; set; } = new List<tbDiagnosticoOdonto>();
-
     public virtual ICollection<tbDiagnosticosMedicos> tbDiagnosticosMedicos { get; set; } = new List<tbDiagnosticosMedicos>();
 
     public virtual ICollection<tbSolicitudApoyo> tbSolicitudApoyo { get; set; } = new List<tbSolicitudApoyo>();
