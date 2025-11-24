@@ -144,12 +144,12 @@ const menuItems: MenuItem[] = [
         icon: <Building2 className="w-4 h-4" />,
         roles: ["administrador"]
       },
-      {
+      /*{
         id: "personnel",
         label: "Personal",
         icon: <UsersRound className="w-4 h-4" />,
         roles: ["administrador"]
-      }
+      }*/
     ]
   },
 

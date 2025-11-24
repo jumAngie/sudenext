@@ -93,24 +93,10 @@ function SessionDetailModal({ isOpen, onClose, sessions, selectedDate }: Session
                     
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="font-medium text-gray-700">Modalidad:</span>
-                        <p className="text-gray-600 capitalize flex items-center gap-1">
-                          <MapPin className="w-3 h-3" />
-                          {session.modality}
-                        </p>
-                      </div>
-                      <div>
                         <span className="font-medium text-gray-700">Nivel emocional:</span>
                         <p className="text-gray-600">{session.emotionalLevel}/5</p>
                       </div>
                     </div>
-
-                    {session.additionalComments && (
-                      <div>
-                        <span className="text-sm font-medium text-gray-700">Comentarios:</span>
-                        <p className="text-sm text-gray-600">{session.additionalComments}</p>
-                      </div>
-                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -159,6 +145,7 @@ export function StaffDashboard() {
         };
       
       case 'odontologo':
+        console.log(dentalAppointments);
         const assignedAppointments = dentalAppointments.filter(a => a.assignedDentistId === staff.personalId);
         return {
           assignedAppointments: assignedAppointments.length,

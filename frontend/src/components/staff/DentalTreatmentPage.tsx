@@ -103,12 +103,12 @@ export function DentalTreatmentPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   
   const staff = user?.data as StaffMember;
-  const dentistId = staff.id;
+  const dentistId = staff.personalId;
   const dentistName = staff.name;
 
   // Get appointments assigned to current dentist
   const assignedAppointments = dentalAppointments.filter(
-    appointment => appointment.assignedDentistId === dentistId && appointment.status === 'confirmada'
+    appointment => appointment.assignedDentistId === dentistId
   );
 
   // Get treatments performed by current dentist

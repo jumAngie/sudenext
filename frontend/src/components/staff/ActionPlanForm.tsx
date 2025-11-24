@@ -5,7 +5,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { SupportSession } from '../../types';
-import { Plus, Minus, Save } from 'lucide-react';
+import { Save } from 'lucide-react';
 import { toast } from 'sonner@2.0.3';
 import { getMinDate } from '../../utils/dateHelpers';
 
@@ -13,97 +13,58 @@ interface ActionPlanFormProps {
   session: SupportSession | null;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => void;
+  onSubmit: (payload: any) => void; // aquí enviarás el payload directo al SP
 }
 
 export function ActionPlanForm({ session, isOpen, onClose, onSubmit }: ActionPlanFormProps) {
   const [formData, setFormData] = useState({
-    sessionSummary: '',
-    objectives: [''],
-    suggestedActivities: [''],
-    followUpDate: '',
-    additionalObservations: ''
+    sessionSummary: "",
+    objective: "",
+    suggestedActivity: "",
+    followUpDate: "",
+    observation: ""
   });
-
-  const addObjective = () => {
-    setFormData(prev => ({
-      ...prev,
-      objectives: [...prev.objectives, '']
-    }));
-  };
-
-  const removeObjective = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      objectives: prev.objectives.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateObjective = (index: number, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      objectives: prev.objectives.map((obj, i) => i === index ? value : obj)
-    }));
-  };
-
-  const addActivity = () => {
-    setFormData(prev => ({
-      ...prev,
-      suggestedActivities: [...prev.suggestedActivities, '']
-    }));
-  };
-
-  const removeActivity = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      suggestedActivities: prev.suggestedActivities.filter((_, i) => i !== index)
-    }));
-  };
-
-  const updateActivity = (index: number, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      suggestedActivities: prev.suggestedActivities.map((act, i) => i === index ? value : act)
-    }));
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    // Validaciones
     if (!formData.sessionSummary.trim()) {
-      toast.error('El resumen de la sesión es obligatorio');
+      toast.error("El resumen de la sesión es obligatorio.");
       return;
     }
-    
-    const validObjectives = formData.objectives.filter(obj => obj.trim());
-    if (validObjectives.length === 0) {
-      toast.error('Debes agregar al menos un objetivo');
+    if (!formData.objective.trim()) {
+      toast.error("El objetivo es obligatorio.");
       return;
     }
-
-    const validActivities = formData.suggestedActivities.filter(act => act.trim());
-    if (validActivities.length === 0) {
-      toast.error('Debes agregar al menos una actividad sugerida');
+    if (!formData.suggestedActivity.trim()) {
+      toast.error("La actividad sugerida es obligatoria.");
       return;
     }
-
     if (!formData.followUpDate) {
-      toast.error('La fecha de seguimiento es obligatoria');
+      toast.error("La fecha de seguimiento es obligatoria.");
+      return;
+    }
+    if (!formData.observation.trim()) {
+      toast.error("La observación es obligatoria.");
       return;
     }
 
     onSubmit({
-      ...formData,
-      objectives: validObjectives,
-      suggestedActivities: validActivities
+      pla_ResumenSesion: formData.sessionSummary,
+      pla_Objetivo: formData.objective,
+      pla_ActividadSug: formData.suggestedActivity,
+      pla_FechaSeguimiento: formData.followUpDate,
+      pla_Observacion: formData.observation
     });
 
+    // Limpiar formulario
     setFormData({
-      sessionSummary: '',
-      objectives: [''],
-      suggestedActivities: [''],
-      followUpDate: '',
-      additionalObservations: ''
+      sessionSummary: "",
+      objective: "",
+      suggestedActivity: "",
+      followUpDate: "",
+      observation: ""
     });
   };
 
@@ -115,106 +76,72 @@ export function ActionPlanForm({ session, isOpen, onClose, onSubmit }: ActionPla
         <DialogHeader>
           <DialogTitle>Crear Plan de Acción - {session.studentName}</DialogTitle>
           <DialogDescription>
-            Documenta los resultados de la sesión y define el plan de seguimiento
+            Documenta los resultados de la sesión y crea un plan de seguimiento.
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Session Summary */}
+
+          {/* Resumen de Sesión */}
           <div className="space-y-2">
-            <Label htmlFor="sessionSummary">Resumen de la sesión *</Label>
+            <Label>Resumen de la sesión *</Label>
             <Textarea
-              id="sessionSummary"
-              placeholder="Describe lo que se trabajó en la sesión..."
-              value={formData.sessionSummary}
-              onChange={(e) => setFormData(prev => ({ ...prev, sessionSummary: e.target.value }))}
               rows={4}
+              placeholder="Describe lo trabajado en la sesión..."
+              value={formData.sessionSummary}
+              onChange={(e) =>
+                setFormData({ ...formData, sessionSummary: e.target.value })
+              }
             />
           </div>
 
-          {/* Objectives */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label>Objetivos acordados con el estudiante *</Label>
-              <Button type="button" onClick={addObjective} size="sm" variant="outline">
-                <Plus className="w-4 h-4 mr-1" />
-                Agregar
-              </Button>
-            </div>
-            {formData.objectives.map((objective, index) => (
-              <div key={index} className="flex gap-2">
-                <Input
-                  placeholder={`Objetivo ${index + 1}`}
-                  value={objective}
-                  onChange={(e) => updateObjective(index, e.target.value)}
-                  className="flex-1"
-                />
-                {formData.objectives.length > 1 && (
-                  <Button
-                    type="button"
-                    onClick={() => removeObjective(index)}
-                    size="sm"
-                    variant="outline"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </Button>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Activities */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label>Actividades sugeridas *</Label>
-              <Button type="button" onClick={addActivity} size="sm" variant="outline">
-                <Plus className="w-4 h-4 mr-1" />
-                Agregar
-              </Button>
-            </div>
-            {formData.suggestedActivities.map((activity, index) => (
-              <div key={index} className="flex gap-2">
-                <Input
-                  placeholder={`Actividad ${index + 1}`}
-                  value={activity}
-                  onChange={(e) => updateActivity(index, e.target.value)}
-                  className="flex-1"
-                />
-                {formData.suggestedActivities.length > 1 && (
-                  <Button
-                    type="button"
-                    onClick={() => removeActivity(index)}
-                    size="sm"
-                    variant="outline"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </Button>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Follow-up Date */}
+          {/* Objetivo */}
           <div className="space-y-2">
-            <Label htmlFor="followUpDate">Fecha sugerida para seguimiento *</Label>
+            <Label>Objetivo *</Label>
             <Input
-              id="followUpDate"
-              type="date"
-              value={formData.followUpDate}
-              onChange={(e) => setFormData(prev => ({ ...prev, followUpDate: e.target.value }))}
-              min={getMinDate()}
+              placeholder="Objetivo principal de seguimiento"
+              value={formData.objective}
+              onChange={(e) =>
+                setFormData({ ...formData, objective: e.target.value })
+              }
             />
           </div>
 
-          {/* Additional Observations */}
+          {/* Actividad sugerida */}
           <div className="space-y-2">
-            <Label htmlFor="additionalObservations">Observaciones adicionales (opcional)</Label>
+            <Label>Actividad sugerida *</Label>
+            <Input
+              placeholder="Ej: Realizar ejercicios de respiración diaria"
+              value={formData.suggestedActivity}
+              onChange={(e) =>
+                setFormData({ ...formData, suggestedActivity: e.target.value })
+              }
+            />
+          </div>
+
+          {/* Fecha de seguimiento */}
+          <div className="space-y-2">
+            <Label>Fecha de seguimiento *</Label>
+            <Input
+              type="date"
+              min={getMinDate()}
+              value={formData.followUpDate}
+              onChange={(e) =>
+                setFormData({ ...formData, followUpDate: e.target.value })
+              }
+            />
+          </div>
+
+          {/* Observaciones */}
+          <div className="space-y-2">
+            <Label>Observaciones *</Label>
             <Textarea
-              id="additionalObservations"
-              placeholder="Observaciones del profesional..."
-              value={formData.additionalObservations}
-              onChange={(e) => setFormData(prev => ({ ...prev, additionalObservations: e.target.value }))}
               rows={3}
+              placeholder="Notas u observaciones sobre la sesión"
+              value={formData.observation}
+              onChange={(e) =>
+                setFormData({ ...formData, observation: e.target.value })
+              }
             />
           </div>
 
