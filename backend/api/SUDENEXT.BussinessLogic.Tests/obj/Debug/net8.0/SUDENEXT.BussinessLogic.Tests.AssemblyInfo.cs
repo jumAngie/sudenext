@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SUDENEXT.BussinessLogic.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c56f7811f647e899062ae2c831d95b686463ef3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42cdab14aa42e5929ce84f3b73e921cdf4c8aaee")]
 [assembly: System.Reflection.AssemblyProductAttribute("SUDENEXT.BussinessLogic.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SUDENEXT.BussinessLogic.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
