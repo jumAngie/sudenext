@@ -11747,19 +11747,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC\\.nuget\\packages\\": {}
+    "C:\\Users\\angie\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\SUDENEXT.API.csproj",
+      "projectUniqueName": "C:\\Users\\angie\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\SUDENEXT.API.csproj",
       "projectName": "SUDENEXT.API",
-      "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\SUDENEXT.API.csproj",
-      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\obj\\",
+      "projectPath": "C:\\Users\\angie\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\SUDENEXT.API.csproj",
+      "packagesPath": "C:\\Users\\angie\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\angie\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT_API\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\angie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -11774,8 +11779,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.BussinessLogic\\SUDENEXT.BussinessLogic.csproj": {
-              "projectPath": "C:\\Users\\PC\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.BussinessLogic\\SUDENEXT.BussinessLogic.csproj"
+            "C:\\Users\\angie\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.BussinessLogic\\SUDENEXT.BussinessLogic.csproj": {
+              "projectPath": "C:\\Users\\angie\\Documents\\GitHub\\sudenext\\backend\\api\\SUDENEXT.BussinessLogic\\SUDENEXT.BussinessLogic.csproj"
             }
           }
         }
@@ -11861,7 +11866,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

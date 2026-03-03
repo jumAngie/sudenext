@@ -13,7 +13,7 @@ namespace SUDENEXT.DataAccess.Repositories.Acce
 {
     public class UsuariosRepository : IRepository<tbUsuarios>
     {
-        public UsuariosLoginResult Login(tbUsuarios item)
+        public virtual UsuariosLoginResult Login(tbUsuarios item)
         {
             using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
             var parametros = new DynamicParameters();

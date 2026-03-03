@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUDENEXT.API", "SUDENEXT.API.csproj", "{B3222012-D49A-4127-AC07-877FDA63F06B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUDENEXT.API", "SUDENEXT.API.csproj", "{B3222012-D49A-4127-AC07-877FDA63F06B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUDENEXT.Entities", "..\SUDENEXT.Entities\SUDENEXT.Entities.csproj", "{5ED56434-95EA-4ED8-AB4C-BD8E38F8D29A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUDENEXT.Entities", "..\SUDENEXT.Entities\SUDENEXT.Entities.csproj", "{5ED56434-95EA-4ED8-AB4C-BD8E38F8D29A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUDENEXT.DataAccess", "..\SUDENEXT.DataAccess\SUDENEXT.DataAccess.csproj", "{D7A67E38-5210-42DD-A227-3AFB6929A34E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUDENEXT.DataAccess", "..\SUDENEXT.DataAccess\SUDENEXT.DataAccess.csproj", "{D7A67E38-5210-42DD-A227-3AFB6929A34E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUDENEXT.BussinessLogic", "..\SUDENEXT.BussinessLogic\SUDENEXT.BussinessLogic.csproj", "{F69B3896-E708-43A0-BF8D-AB9F075FA171}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUDENEXT.BussinessLogic", "..\SUDENEXT.BussinessLogic\SUDENEXT.BussinessLogic.csproj", "{F69B3896-E708-43A0-BF8D-AB9F075FA171}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUDENEXT.BussinessLogic.Tests", "..\SUDENEXT.BussinessLogic.Tests\SUDENEXT.BussinessLogic.Tests.csproj", "{1E2C64D8-596F-48A0-8B83-A7868678F952}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F69B3896-E708-43A0-BF8D-AB9F075FA171}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F69B3896-E708-43A0-BF8D-AB9F075FA171}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F69B3896-E708-43A0-BF8D-AB9F075FA171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E2C64D8-596F-48A0-8B83-A7868678F952}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E2C64D8-596F-48A0-8B83-A7868678F952}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E2C64D8-596F-48A0-8B83-A7868678F952}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E2C64D8-596F-48A0-8B83-A7868678F952}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
