@@ -21,8 +21,8 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir('backend/api/SUDENEXT_API') {
-                    bat 'dotnet restore'
-                    bat 'dotnet build'
+                    bat 'dotnet restore "SUDENEXT_API.sln"'
+                    bat 'dotnet build "SUDENEXT_API.sln"'
                 }
             }
         }
