@@ -20,7 +20,7 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('backend/api') {
+                dir('backend/api/SUDENEXT_API') {
                     bat 'dotnet restore'
                     bat 'dotnet build'
                 }
