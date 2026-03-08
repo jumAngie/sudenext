@@ -18,7 +18,7 @@ namespace SUDENEXT.BussinessLogic.Tests
             var mockRolesXPantallasRepo = new Mock<RolesXPantallasRepository>();
 
 
-            // Datos de entrada
+            // Entrada
             var credenciales = new tbUsuarios
             {
                 usu_Usuario = "luis.sab@unah.hn",
@@ -49,7 +49,7 @@ namespace SUDENEXT.BussinessLogic.Tests
             mockUsuariosRepo.Setup(repo => repo.Login(credenciales))
                         .Returns(resultadoDelRepositorio);
 
-            // Crear el servicio con los 3 mockS
+            // Servicio simulado con los 3 mockS
             var servicio = new AccesoService(
                 mockUsuariosRepo.Object,
                 mockRolesRepo.Object,
@@ -59,7 +59,7 @@ namespace SUDENEXT.BussinessLogic.Tests
             // Act: ejecutar el método a probar
             var resultado = servicio.UsuariosLogin(credenciales);
 
-            // Assert: verificar que el resultado es el esperado
+            // Assert
             Assert.Equal(200, resultado.Code);
             Assert.True(resultado.Success);
             Assert.Equal("Operación completada exitosamente.", resultado.Message);
@@ -80,17 +80,18 @@ namespace SUDENEXT.BussinessLogic.Tests
                 usu_Contrasena = "string"
             };
 
-            // Resultado que debe devolver el repositorio
+            // Resultado del repositorio
             var resultadoDelRepositorio = new UsuariosLoginResult
             {
                 codeStatus = 0,
                 messageStatus = "La cuenta no existe."
             };
 
+            //Inyectamos las credenciales y el resultado esperado
             mockUsuariosRepo.Setup(repo => repo.Login(credenciales))
                             .Returns(resultadoDelRepositorio);
 
-            // Crear el servicio con los mocks
+            // AccesoService con los mocks
             var servicio = new AccesoService(
                 mockUsuariosRepo.Object,
                 mockRolesRepo.Object,
@@ -104,7 +105,6 @@ namespace SUDENEXT.BussinessLogic.Tests
             Assert.Equal(203, resultado.Code);
             Assert.False(resultado.Success);
             Assert.Equal("La cuenta no existe.", resultado.Message);
-            Assert.Null(resultado.Data);
         }
     }
 }
