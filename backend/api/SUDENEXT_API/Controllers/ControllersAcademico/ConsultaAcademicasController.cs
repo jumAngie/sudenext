@@ -14,7 +14,7 @@ namespace SUDENEXT.API.Controllers.ControllersAcademico
     {
         private readonly AcademicoService _academicoService;
         private readonly IMapper _mapper;
-
+        int prueba = ;
         public ConsultaAcademicasController(AcademicoService academicoService, IMapper mapper)
         {
             _academicoService = academicoService;
