@@ -27,14 +27,22 @@ pipeline {
             }
         }
 
+        stage('Tests Backend') {
+            steps {
+                dir('backend/api/SUDENEXT_API') {
+                    bat 'dotnet test "SUDENEXT_API.sln"'
+                }
+            }
+        }
+
     }
 
     post {
         success {
-            echo 'Build completado correctamente'
+            echo 'Build y pruebas completadas correctamente'
         }
         failure {
-            echo 'El build falló'
+            echo 'El pipeline falló'
         }
     }
 }
