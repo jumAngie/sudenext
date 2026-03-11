@@ -60,7 +60,7 @@ namespace SUDENEXT.BussinessLogic.Tests
             var resultado = servicio.UsuariosLogin(credenciales);
 
             // Assert
-            Assert.Equal(200, resultado.Code);
+            Assert.Equal(201, resultado.Code);
             Assert.True(resultado.Success);
             Assert.Equal("Operación completada exitosamente.", resultado.Message);
         }
