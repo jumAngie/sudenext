@@ -213,3 +213,11 @@ SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
 INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
 VALUES						  ('20212020506',	'Gerson David Franco Lobo', @Pass, 'ger.davd@unah.hn', '99012265', 'Informática Administrativa',	 1,				1,					GETDATE());
 GO
+
+GO
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = 'jasser';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('',	'', @Pass, '@unah.hn', '99012265', 'Informática Administrativa',	 1,				1,					GETDATE());
+GO

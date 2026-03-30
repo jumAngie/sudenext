@@ -31,7 +31,7 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
             throw new NotImplementedException();
         }
 
-        public RequestStatus Insert(tbPlanAccion item)
+        public virtual RequestStatus Insert(tbPlanAccion item)
         {
             using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
             RequestStatus result = new RequestStatus();
@@ -53,7 +53,7 @@ namespace SUDENEXT.DataAccess.Repositories.Psi
         {
             throw new NotImplementedException();
         }
-        public IEnumerable<ListadoPlanAccionDTO> ListadoCompleto()
+        public virtual IEnumerable<ListadoPlanAccionDTO> ListadoCompleto()
         {
             using var db = new SqlConnection(SUDENEXTContext.ConnectionString);
             var parametros = new DynamicParameters();
