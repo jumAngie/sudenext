@@ -9,16 +9,15 @@ namespace SUDENEXT.BussinessLogic.Tests
 {
     public class UsuariosLogin
     {
+        // Inicio de la prueba unitaria 1
         [Fact]
         public void UsuariosLogin_CredencialesCorrectas_RetornaOkConUsuario()
         {
-            // Arrange
+            // Arrange: Preparar las dependencias y objetos válidos
             var mockUsuariosRepo = new Mock<UsuariosRepository>();
             var mockRolesRepo = new Mock<RolesRepository>();
             var mockRolesXPantallasRepo = new Mock<RolesXPantallasRepository>();
 
-
-            // Entrada
             var credenciales = new tbUsuarios
             {
                 usu_Usuario = "luis.sab@unah.hn",
@@ -49,7 +48,6 @@ namespace SUDENEXT.BussinessLogic.Tests
             mockUsuariosRepo.Setup(repo => repo.Login(credenciales))
                         .Returns(resultadoDelRepositorio);
 
-            // Servicio simulado con los 3 mockS
             var servicio = new AccesoService(
                 mockUsuariosRepo.Object,
                 mockRolesRepo.Object,
@@ -59,12 +57,12 @@ namespace SUDENEXT.BussinessLogic.Tests
             // Act: ejecutar el método a probar
             var resultado = servicio.UsuariosLogin(credenciales);
 
-            // Assert
+            // Assert: Verificar que lo devuelto sea correcto
             Assert.Equal(200, resultado.Code);
             Assert.True(resultado.Success);
             Assert.Equal("Operación completada exitosamente.", resultado.Message);
         }
-
+        // Fin de la prueba unitaria 1
         [Fact]
         public void UsuariosLogin_CredencialesInvalidas_RetornaForbidden()
         {

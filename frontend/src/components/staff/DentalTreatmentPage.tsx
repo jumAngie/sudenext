@@ -32,7 +32,7 @@ const TREATMENT_TYPES = [
 ];
 
 // Common procedures
-const COMMON_PROCEDURES = [
+/*const COMMON_PROCEDURES = [
   'Limpieza supragingival',
   'Limpieza subgingival',
   'Pulido dental',
@@ -46,10 +46,10 @@ const COMMON_PROCEDURES = [
   'Examen clínico',
   'Diagnóstico',
   'Instrucciones de higiene'
-];
+];*/
 
 // Common materials
-const COMMON_MATERIALS = [
+/*const COMMON_MATERIALS = [
   'Resina compuesta',
   'Amalgama dental',
   'Pasta profiláctica',
@@ -60,7 +60,7 @@ const COMMON_MATERIALS = [
   'Eugenol',
   'Óxido de zinc',
   'Cemento temporal'
-];
+];*/
 
 interface TreatmentFormData {
   appointmentId: string;
@@ -101,6 +101,7 @@ export function DentalTreatmentPage() {
   const [selectedTreatment, setSelectedTreatment] = useState<DentalTreatment | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const { treatmentTypes } = useData();
   
   const staff = user?.data as StaffMember;
   const dentistId = staff.personalId;
@@ -175,11 +176,6 @@ export function DentalTreatmentPage() {
     // Validate required fields
     if (!formData.treatmentType || !formData.diagnosis || !formData.treatmentDescription) {
       toast.error('Por favor completa todos los campos requeridos');
-      return;
-    }
-
-    if (formData.proceduresPerformed.length === 0) {
-      toast.error('Debes seleccionar al menos un procedimiento realizado');
       return;
     }
 
@@ -323,7 +319,7 @@ export function DentalTreatmentPage() {
         </Card>
 
         {/* Treatment Form */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
           {/* Basic Information */}
           <Card>
             <CardHeader>
@@ -392,57 +388,11 @@ export function DentalTreatmentPage() {
                   <Label htmlFor="cost">Costo (L.)</Label>
                   <Input
                     id="cost"
-                    type="number"
+                    type="text"
                     placeholder="150"
                     value={formData.cost || ''}
                     onChange={(e) => handleFormChange('cost', parseFloat(e.target.value) || 0)}
                   />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Procedures and Materials */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-[#004aad]">Procedimientos y Materiales</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <Label className="after:content-['*'] after:text-red-500 after:ml-1">
-                  Procedimientos Realizados
-                </Label>
-                <div className="max-h-48 overflow-y-auto border rounded-lg p-3 space-y-2">
-                  {COMMON_PROCEDURES.map((procedure) => (
-                    <div key={procedure} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`procedure-${procedure}`}
-                        checked={formData.proceduresPerformed.includes(procedure)}
-                        onCheckedChange={() => handleProcedureToggle(procedure)}
-                      />
-                      <Label htmlFor={`procedure-${procedure}`} className="text-sm font-normal cursor-pointer">
-                        {procedure}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <Label>Materiales Utilizados</Label>
-                <div className="max-h-40 overflow-y-auto border rounded-lg p-3 space-y-2">
-                  {COMMON_MATERIALS.map((material) => (
-                    <div key={material} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`material-${material}`}
-                        checked={formData.materialsUsed.includes(material)}
-                        onCheckedChange={() => handleMaterialToggle(material)}
-                      />
-                      <Label htmlFor={`material-${material}`} className="text-sm font-normal cursor-pointer">
-                        {material}
-                      </Label>
-                    </div>
-                  ))}
                 </div>
               </div>
             </CardContent>

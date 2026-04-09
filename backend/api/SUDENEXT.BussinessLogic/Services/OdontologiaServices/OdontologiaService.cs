@@ -29,6 +29,34 @@ namespace SUDENEXT.BussinessLogic.Services.OdontologiaServices
         }
 
         #region Diagnostico Odon
+        public ServiceResult ListadoDiagnosticoOdonto()
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _diagnosticoOdonRepository.ListadoCompleto();
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+
+        }
+        public ServiceResult CrearDiagnosticoOdon(tbDiagnosticoOdonto item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _diagnosticoOdonRepository.Insert(item);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Solicitud Odon

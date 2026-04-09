@@ -203,7 +203,7 @@ DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
 SET @Clave = 'DOLAR20';
 SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
 INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
-VALUES						  ('20192030658',	'Elmer Isai Alvarez Carbajal', @Pass, 'elmer.alva@unah.hn', '98999520', 'Contaduría Pública y Finanzas',	 0,				1,					GETDATE());
+VALUES						  ('20192030658',	'Elmer Isai Alvarez Carbajal', @Pass, 'elmer.alva@unah.hn', '98999520', 'Contaduría Pública y Finanzas',	 1,				1,					GETDATE());
 GO
 
 GO
@@ -216,8 +216,71 @@ GO
 
 GO
 DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
-SET @Clave = 'jasser';
+SET @Clave = '1234567890';
 SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
 INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
-VALUES						  ('',	'', @Pass, '@unah.hn', '99012265', 'Informática Administrativa',	 1,				1,					GETDATE());
+VALUES						  ('20212021070',	'Jasser Evelio George Martínez', @Pass, 'jasser.george@unah.hn', '96138057', 'Informática Administrativa',	 1,				1,					GETDATE());
+GO
+
+------------------------------------------------------ NUEVOS REGISTROS 070426 ------------------------------
+-------------------------------------------------------------------------------------------------------------
+INSERT INTO Gral.tbPersonal (per_Nombres, per_Apellidos, per_EstadoCivil, per_Sexo, per_FechaNac, per_Telefono, per_Direccion, per_Correo, are_ID, usu_UsuarioCreacion, per_FechaCreacion)
+VALUES ('Carmen Eugenia', 'Salgado Agüero', 'SL', 'F', '1994-03-05', 99887777, 'Colonia El Carmen, San Pedro Sula', 'carmen.salgado@unah.edu.hn', 1, 1, GETDATE());
+GO
+
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = '12345';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Acce.tbUsuarios	(usu_Usuario,     usu_Contrasena,		per_ID,		rol_ID,   usu_UsuarioCreacion, usu_FechaCreacion, usu_Estado)
+VALUES						('carmen.salgado@unah.edu.hn',			@Pass,		12, 		2,			1,						GETDATE(),			1);
+GO
+
+------------------------------------------------------ NUEVOS REGISTROS ESTUDIANTES 070426 ------------------------------
+-------------------------------------------------------------------------------------------------------------
+GO
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = '12345';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('20222030660',	'Luis Mario Aguilera Valle', @Pass, 'laguilerav@unah.hn', '99773766', 'Informática Administrativa',	 1,				1,					GETDATE());
+GO
+
+GO
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = '12345';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('20222000024',	'Miriam Alicia Rojas Funez', @Pass, 'miriam.rojas@unah.hn', '99968209', 'Informática Administrativa',	 1,				1,					GETDATE());
+GO
+
+GO
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = '12345';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('20142005396',	'Lilian Joseline Roque Ramos', @Pass, 'lilian.roque@unah.hn', '88541410', 'Informática Administrativa',	 1,				1,					GETDATE());
+GO
+
+GO
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = '12345';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('20212030835',	'Denis Roberto Garcia Ordoñez', @Pass, 'drgarciao@unah.hn', '98960415', 'Informática Administrativa',	 1,				1,					GETDATE());
+GO
+
+GO
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = '12345';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('20202001374',	'Mariela Estefanny Sabillon Andino', @Pass, 'msabillona@unah.hn', '94631863', 'Informática Administrativa',	 1,				1,					GETDATE());
+GO
+
+GO
+DECLARE @Pass AS VARCHAR(255), @Clave AS VARCHAR(255);
+SET @Clave = '12345';
+SET @Pass = CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', @Clave), 2)
+INSERT INTO Gral.tbEstudiantes(est_NumeroCuenta,	est_NombreCompleto,		est_Contra,	est_Correo,				est_Celular, est_Carrera,				est_EstadoM, usu_UsuarioCreacion, est_FechaCreacion)
+VALUES						  ('20222030492',	'Mario Deniel Hernandez Serrano', @Pass, 'mdhernandezs@unah.hn', '87395774', 'Informática Administrativa',	 1,				1,					GETDATE());
 GO

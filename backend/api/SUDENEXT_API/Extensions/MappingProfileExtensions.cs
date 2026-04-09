@@ -50,6 +50,9 @@ namespace SUDENEXT.API.Extensions
             CreateMap<ListadoSolicitudCitaOdonViewModel, ListadoSolicitudOdontologicaDTO>().ReverseMap();
 
             CreateMap<SolicitudCitaOdonAsignadaViewModel, tbSolicitudOdonAsignada>().ReverseMap();
+
+            CreateMap<DiagnosticoOdontoViewModel, tbDiagnosticoOdonto>().ReverseMap();
+            CreateMap<ListadoDiagnosticoOdontoViewModel, ListadoDiagnosticoOdontoDTO>().ReverseMap();
             #endregion
 
             #region Psicología

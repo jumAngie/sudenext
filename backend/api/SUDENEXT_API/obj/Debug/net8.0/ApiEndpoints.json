@@ -116,6 +116,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.DiagnosticoOdontoController",
+    "Method": "Insert",
+    "RelativePath": "api/DiagnosticoOdonto/Insertar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "diagnosticoOdontoView",
+        "Type": "SUDENEXT.API.Models.ModelsOdontologia.DiagnosticoOdontoViewModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SUDENEXT.API.Controllers.ControllersOdontologia.DiagnosticoOdontoController",
+    "Method": "Index",
+    "RelativePath": "api/DiagnosticoOdonto/Listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SUDENEXT.API.Controllers.ControllersGeneral.EstudiantesController",
     "Method": "InicioSesion",
     "RelativePath": "api/Estudiantes/Login",

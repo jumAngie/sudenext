@@ -78,6 +78,11 @@ namespace SUDENEXT.DataAccess
         public static string CrearSolicitudOdonAsignada = "Odon.sp_CrearSolicitudOdonAsignada";
         public static string EditarSolicitudOdonAsignada = "Odon.sp_EditarSolicitudOdonAsignada";
         public static string EliminarSolicitudOdonAsignada = "Odon.sp_EliminarSolicitudOdonAsignada";
+
+        public static string ListarDiagnosticoOdon = "Odon.sp_ListarDiagnosticoOdon";
+        public static string CrearDiagnosticoOdon = "Odon.sp_CrearDiagnosticoOdon";
+        public static string EditarDiagnosticoOdon = "Odon.sp_EditarDiagnosticoOdon";
+        public static string EliminarDiagnosticoOdon = "Odon.sp_EliminarDiagnosticoOdon";
         #endregion
 
         #region Psi

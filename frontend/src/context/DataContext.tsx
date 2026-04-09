@@ -237,6 +237,8 @@ interface DataContextType {
 
   // Tipo Tratamiento
   treatmentTypes: TreatmentType[];
+
+
   addTreatmentType: (payload: {
     tra_Descripcion: string;
     usu_UsuarioCreacion: number;
